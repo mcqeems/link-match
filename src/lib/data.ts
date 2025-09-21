@@ -8,7 +8,6 @@ const prisma = new PrismaClient();
 // function wait(ms: number) {
 //   return new Promise((resolve) => setTimeout(resolve, ms));
 // }
-
 // Usage:
 //   await wait(2000);
 
@@ -32,4 +31,14 @@ export async function fetchProfileInfo() {
   });
 
   return response;
+}
+
+export async function getCategories() {
+  try {
+    const categories = await prisma.categories.findMany();
+    return categories;
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+    throw new Error('Could not fetch categories.');
+  }
 }
