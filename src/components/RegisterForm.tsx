@@ -1,15 +1,14 @@
 'use client';
 
-import { useFormState } from 'react-dom';
 import { signUpWithEmail } from '@/lib/actions';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useActionState, useEffect } from 'react';
 
 const initialState = { error: null as string | null, success: false };
 
 export default function SignUpForm() {
   const router = useRouter();
-  const [state, formAction] = useFormState(signUpWithEmail, initialState);
+  const [state, formAction] = useActionState(signUpWithEmail, initialState);
 
   useEffect(() => {
     if (state.success) router.push('/dashboard');

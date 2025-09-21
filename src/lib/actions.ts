@@ -4,8 +4,11 @@ import { auth } from './auth';
 import { redirect } from 'next/navigation';
 import { headers } from 'next/headers';
 import { BetterAuthError } from 'better-auth';
+import { PrismaClient } from '@/generated/prisma';
 
 type AuthState = { error: string | null; success: boolean };
+
+const prisma = new PrismaClient();
 
 // Helper untuk mengubah ReadonlyHeaders menjadi objek biasa
 function headersToObject(headers: Headers): Record<string, string> {
@@ -63,6 +66,14 @@ export async function signUpWithEmail(_prevState: AuthState, formData: FormData)
 
     if (response instanceof BetterAuthError) {
       return { error: response.message, success: false };
+    }
+
+    if (response && response.user) {
+      await prisma.profile.create({
+        data: {
+          user_id: response.user.id,
+        },
+      });
     }
 
     return { error: null, success: true };
