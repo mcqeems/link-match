@@ -25,6 +25,7 @@ export async function fetchProfileInfo() {
           roles: {
             select: { name: true },
           },
+          image_url: true,
         },
       },
     },

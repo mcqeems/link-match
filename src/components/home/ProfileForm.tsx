@@ -76,8 +76,8 @@ export default function ProfileForm({
   const currentCategoryName = categories.find((c) => c.id === profileInfo?.category_id)?.name || '';
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 ">
-      <div className="bg-primary rounded-xl p-6 w-full max-w-4xl shadow-lg overflow-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 overflow-auto">
+      <div className="bg-primary rounded-xl p-6 w-full max-w-4xl shadow-lg">
         <h2 className="text-xl font-bold mb-4">Selamat datang di LinkMatch!</h2>
         <p className="mb-6">
           Untuk melanjutkan penggunaan terhadap aplikasi kami, silahkan mengisi informasi berikut ini terlebih dahulu
@@ -121,8 +121,8 @@ export default function ProfileForm({
                 <input
                   type="radio"
                   name="role"
-                  value="Recruiter"
-                  defaultChecked={profileInfo?.role === 'Recruiter'}
+                  value="recruiter"
+                  defaultChecked={profileInfo?.role === 'recruiter'}
                   className="h-4 w-4 text-blue-600 focus:ring-blue-500"
                 />
                 <span className="ml-2 text-gray-700">Recruiter</span>
@@ -131,11 +131,11 @@ export default function ProfileForm({
                 <input
                   type="radio"
                   name="role"
-                  value="Talenta"
-                  defaultChecked={profileInfo?.role === 'Talenta'}
+                  value="talenta"
+                  defaultChecked={profileInfo?.role === 'talenta'}
                   className="h-4 w-4 text-blue-600 focus:ring-blue-500"
                 />
-                <span className="ml-2 text-gray-700">Talenta</span>
+                <span className="ml-2 text-gray-700">Talent</span>
               </label>
             </div>
           </div>

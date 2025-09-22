@@ -12,7 +12,6 @@ type AuthState = { error: string | null; success: boolean };
 
 const prisma = new PrismaClient();
 
-// Konfigurasi S3 Client
 const s3Client = new S3Client({
   region: process.env.AWS_S3_REGION,
   credentials: {
@@ -21,7 +20,6 @@ const s3Client = new S3Client({
   },
 });
 
-// Helper untuk mengubah ReadonlyHeaders menjadi objek biasa
 function headersToObject(headers: Headers): Record<string, string> {
   const obj: Record<string, string> = {};
   headers.forEach((value, key) => {
@@ -43,6 +41,7 @@ async function uploadImageToS3(file: File): Promise<string> {
     Key: fileName,
     Body: buffer,
     ContentType: file.type,
+    ACL: 'public-read',
   });
 
   try {
@@ -113,7 +112,7 @@ export async function signUpWithEmail(_prevState: AuthState, formData: FormData)
 
     return { error: null, success: true };
   } catch (err: unknown) {
-    const msg = err instanceof BetterAuthError ? err.message : 'Terjadi kesalahan saat pendaftaran. Silakan coba lagi.';
+    const msg = err instanceof BetterAuthError ? err.message : 'Terjadi kesalahan saat pendaftaran.';
     return { error: msg, success: false };
   }
 }
@@ -135,7 +134,7 @@ export async function postProfileInfo(formData: FormData) {
     return { error: 'User not authenticated', success: false };
   }
 
-  const role = formData.get('role') as string;
+  const roleName = formData.get('role') as string;
   const headline = formData.get('headline') as string;
   const description = formData.get('description') as string;
   const experiences = formData.get('experiences') as string;
@@ -150,7 +149,16 @@ export async function postProfileInfo(formData: FormData) {
   let categoryId: number | undefined = undefined;
 
   try {
-    // 1. Handle Category
+    if (!roleName) {
+      return { error: 'Role harus dipilih.', success: false };
+    }
+    const roleRecord = await prisma.roles.findUnique({
+      where: { name: roleName },
+    });
+    if (!roleRecord) {
+      return { error: `Role "${roleName}" tidak ditemukan di database.`, success: false };
+    }
+
     if (categoryName) {
       const categories = await getCategories();
       const selectedCategory = categories.find((c) => c.name === categoryName);
@@ -161,18 +169,30 @@ export async function postProfileInfo(formData: FormData) {
       }
     }
 
-    // 2. Handle Image Upload
     if (imageFile && imageFile.size > 0) {
-      const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg'];
-      if (!allowedTypes.includes(imageFile.type)) {
-        return { error: 'Invalid image type. Only PNG, JPG, JPEG are allowed.', success: false };
-      }
       imageUrl = await uploadImageToS3(imageFile);
     }
 
-    // 3. Update Profile in Database
+    const updateUser: any = {
+      roles: {
+        connect: {
+          id: roleRecord.id,
+        },
+      },
+    };
+
+    if (imageUrl) {
+      updateUser.image_url = imageUrl;
+    }
+
+    await prisma.user.update({
+      where: {
+        id: session.user.id,
+      },
+      data: updateUser,
+    });
+
     const updateData: any = {
-      role,
       headline,
       description,
       experiences,
@@ -181,13 +201,8 @@ export async function postProfileInfo(formData: FormData) {
       instagram,
       github,
     };
-
     if (categoryId) {
       updateData.category_id = categoryId;
-    }
-
-    if (imageUrl) {
-      updateData.image_url = imageUrl;
     }
 
     await prisma.profile.update({

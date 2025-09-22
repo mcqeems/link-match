@@ -21,16 +21,17 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
+    --color-base-100: #11171a;
     --background: #080b0c;
     --foreground: #f7f8f8;
-    --primary: #4d8899;
-    --secondary: #245865;
-    --accent: #237e95;
+    --primary: #2b5069;
+    --secondary: #1c2229;
+    --accent: #232931;
   }
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-inter);
 }

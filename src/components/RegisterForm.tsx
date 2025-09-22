@@ -2,35 +2,50 @@
 
 import { signUpWithEmail } from '@/lib/actions';
 import { useRouter } from 'next/navigation';
-import { useActionState, useEffect } from 'react';
+import { useActionState, useEffect, useState } from 'react';
 
 const initialState = { error: null as string | null, success: false };
 
 export default function SignUpForm() {
   const router = useRouter();
   const [state, formAction] = useActionState(signUpWithEmail, initialState);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (state.success) router.push('/dashboard');
+    if (state.success) router.push('/');
   }, [state.success, router]);
 
   return (
-    <form action={formAction} className="space-y-4">
-      <label>
-        Name
-        <input name="name" type="text" required />
-      </label>
-      <label>
-        Email
-        <input name="email" type="email" required />
-      </label>
-      <label>
-        Password
-        <input name="password" type="password" required />
-      </label>
-      <button type="submit">Sign Up</button>
+    <div className="flex flex-col h-screen justify-center items-center">
+      <h1 className="font-mono font-bold md:text-5xl text-2xl mb-2">Register</h1>
+      <p className="mb-2 md:mb-4">Create your account.</p>
+      <form
+        onSubmit={() => {
+          setIsLoading(true);
+        }}
+        action={formAction}
+        className="space-y-4 flex flex-col w-full max-w-xl bg-secondary p-4 rounded-lg"
+      >
+        <label className="font-bold">Name</label>
+        <input className="input w-full" name="name" type="text" required />
 
-      {state.error && <p className="text-red-500 mt-2">{state.error}</p>}
-    </form>
+        <label className="font-bold">Email</label>
+        <input className="input w-full" name="email" type="email" required />
+
+        <label className="font-bold">Password</label>
+        <input className="input w-full" name="password" type="password" required minLength={6} />
+
+        <button
+          className="btn btn-sm md:btn-md bg-primary hover:bg-primary/75 max-w-[200px] self-center"
+          type="submit"
+          disabled={isLoading}
+        >
+          {isLoading ? <span className="loading loading-spinner loading-md"></span> : null}
+          Sign Up
+        </button>
+
+        {state.error && <p className="text-red-500 mt-2 text-center">{state.error}</p>}
+      </form>
+    </div>
   );
 }
