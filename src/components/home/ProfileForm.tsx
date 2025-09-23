@@ -6,6 +6,7 @@ import { postProfileInfo } from '@/lib/actions';
 import type { categories } from '@/generated/prisma';
 import { useState } from 'react';
 import { redirect } from 'next/navigation';
+import Select from 'react-select';
 
 type FormState = {
   error: string | null;
@@ -35,7 +36,7 @@ function SubmitButton() {
 
   return (
     <button type="submit" disabled={pending} className="btn btn-sm md:btn-md bg-primary hover:bg-primary/75">
-      {pending ? <span className="loading loading-spinner loading-md"></span> : 'Simpan Profil'}
+      {pending ? <span className="loading loading-spinner loading-md"></span> : 'Simpan'}
     </button>
   );
 }
@@ -57,6 +58,15 @@ export default function ProfileForm({
   const [page, setPage] = useState(1);
   const [role, setRole] = useState('');
   const [imagePreview, setImagePreview] = useState<string | null>(profileInfo?.image_url || null);
+  const [clientError, setClientError] = useState<string | null>(null);
+
+  const categoryOptions = categories.map((cat) => ({
+    value: cat.name,
+    label: cat.name,
+  }));
+
+  const currentCategoryName = categories.find((c) => c.id === profileInfo?.category_id)?.name || '';
+  const defaultCategory = categoryOptions.find((option) => option.value === currentCategoryName);
 
   const incrementPage = () => {
     if (role === 'recruiter') {
@@ -87,6 +97,17 @@ export default function ProfileForm({
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      // ▼▼▼ TAMBAHKAN VALIDASI UKURAN FILE DI SINI ▼▼▼
+      const MAX_SIZE = 2 * 1024 * 1024; // 2MB
+      if (file.size > MAX_SIZE) {
+        setClientError('Ukuran file tidak boleh melebihi 2MB.');
+        setImagePreview(null); // Hapus preview jika file terlalu besar
+        e.target.value = ''; // Reset input file
+        return;
+      }
+      // ▲▲▲ AKHIR VALIDASI ▲▲▲
+
+      setClientError(null); // Hapus pesan error jika file valid
       setImagePreview(URL.createObjectURL(file));
     }
   };
@@ -94,8 +115,6 @@ export default function ProfileForm({
   const redirectHome = () => {
     redirect('/');
   };
-
-  const currentCategoryName = categories.find((c) => c.id === profileInfo?.category_id)?.name || '';
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 overflow-auto">
@@ -108,16 +127,16 @@ export default function ProfileForm({
         <form action={formAction} className="space-y-6 rounded-lg p-8 shadow-md bg-accent">
           {/* Tambahkan input tersembunyi ini */}
           <input type="hidden" name="role" value={role} />
-
           {/* Pesan Status Form */}
-          {state.error && <div className="rounded-md bg-red-400 p-3 text-black text-center">{state.error}</div>}
+          {(state.error || clientError) && (
+            <div className="rounded-md bg-red-400 p-3 text-black text-center">{clientError || state.error}</div>
+          )}{' '}
           {state.success && (
             <div className="rounded-md bg-green-200 p-3 text-white text-center">
               Terima kasih telah mengisi!
               {redirectHome()}
             </div>
           )}
-
           {page === 1 ? (
             <div className="space-y-2 flex flex-col">
               <label className="block font-medium ">Saya seorang:</label>
@@ -152,7 +171,6 @@ export default function ProfileForm({
               {nextButton()}
             </div>
           ) : null}
-
           {page === 2 ? (
             <div className="space-y-5 flex flex-col">
               <div>
@@ -173,20 +191,39 @@ export default function ProfileForm({
                 <label htmlFor="category" className="mb-2 block font-medium ">
                   Kategori
                 </label>
-                <input
+                <Select
                   id="category"
                   name="category"
-                  type="text"
-                  list="category-list"
-                  defaultValue={currentCategoryName}
-                  placeholder="cth: Web Developer"
-                  className="w-full rounded-md input"
+                  options={categoryOptions}
+                  defaultValue={defaultCategory}
+                  isSearchable
+                  placeholder="Web Developer"
+                  unstyled // Tambahkan properti ini untuk menghapus gaya bawaan
+                  classNames={{
+                    // Kontrol (bagian input utama)
+                    control: (state) =>
+                      `input w-full flex items-center text-foreground rounded-md transition-all duration-300 ${
+                        state.isFocused ? 'border-primary ring-2 ring-primary/50' : 'border-border'
+                      }`,
+                    // Teks placeholder
+                    placeholder: () => 'text-white/50',
+                    // Nilai yang dipilih
+                    singleValue: () => 'text-foreground',
+                    // Kontainer dropdown
+                    menu: () => 'bg-background border border-primary rounded-md mt-1 shadow-lg',
+                    // Setiap item di dropdown
+                    option: (state) =>
+                      `p-2 cursor-pointer transition-colors duration-200 ${state.isFocused ? 'bg-primary/50' : ''} ${
+                        state.isSelected ? 'bg-primary text-white' : 'text-foreground'
+                      }`,
+                    // Input teks saat mencari
+                    input: () => 'text-foreground',
+                    // Menghapus indikator dropdown default
+                    dropdownIndicator: () => 'text-gray-400 hover:text-gray-600',
+                    // Menghapus garis pemisah
+                    indicatorSeparator: () => 'hidden',
+                  }}
                 />
-                <datalist id="category-list">
-                  {categories.map((cat) => (
-                    <option key={cat.id} value={cat.name} />
-                  ))}
-                </datalist>
               </div>
 
               <div>
@@ -274,7 +311,6 @@ export default function ProfileForm({
               {nextButton()}
             </div>
           ) : null}
-
           {page === 3 ? (
             <div className="flex flex-col gap-4">
               <div className="flex md:flex-row flex-col-reverse md:justify-between justify-center items-center md:items-start md:gap-4 gap-2">

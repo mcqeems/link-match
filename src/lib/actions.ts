@@ -125,6 +125,8 @@ export async function signOut() {
   redirect('/sign-in');
 }
 
+const MAX_FILE_SIZE = 2 * 1024 * 1024;
+
 export async function postProfileInfo(formData: FormData) {
   const currentHeaders = await headers();
   const session = await auth.api.getSession({
@@ -144,6 +146,10 @@ export async function postProfileInfo(formData: FormData) {
   const instagram = formData.get('instagram') as string;
   const github = formData.get('github') as string;
   const imageFile = formData.get('image') as File | null;
+
+  if (imageFile && imageFile.size > MAX_FILE_SIZE) {
+    return { error: 'Ukuran file tidak boleh melebihi 2MB.', success: false };
+  }
 
   let imageUrl: string | undefined = undefined;
   let categoryId: number | undefined = undefined;
