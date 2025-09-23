@@ -33,11 +33,7 @@ function SubmitButton() {
   const { pending } = useFormStatus();
 
   return (
-    <button
-      type="submit"
-      disabled={pending}
-      className="mt-4 w-full rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:bg-gray-400"
-    >
+    <button type="submit" disabled={pending} className="btn btn-sm md:btn-md bg-primary hover:bg-primary/75">
       {pending ? <span className="loading loading-spinner loading-md"></span> : 'Simpan Profil'}
     </button>
   );
@@ -76,7 +72,7 @@ export default function ProfileForm({
 
   const nextButton = () => {
     return (
-      <button className="btn btn-sm md:btn-md bg-primary hover:bg-primary/75 self-end" onClick={incrementPage}>
+      <button className="btn btn-sm md:btn-md bg-primary hover:bg-primary/75 mt-5" onClick={incrementPage}>
         Next
       </button>
     );
@@ -92,14 +88,13 @@ export default function ProfileForm({
           Untuk melanjutkan penggunaan terhadap aplikasi kami, silahkan mengisi informasi berikut ini terlebih dahulu
           ya!
         </p>
-        <form action={formAction} className="space-y-6 rounded-lg bg-secondary p-8 shadow-md ">
+        <form action={formAction} className="space-y-6 rounded-lg p-8 shadow-md bg-accent">
           {/* Pesan Status Form */}
           {state.error && <div className="rounded-md bg-red-100 p-3 text-red-700 text-center">{state.error}</div>}
 
-          {/* Input Role (Radio) */}
           {page === 1 ? (
-            <div className="space-y-2">
-              <label className="block font-medium text-gray-700">Saya seorang:</label>
+            <div className="space-y-2 flex flex-col">
+              <label className="block font-medium ">Saya seorang:</label>
               <div className="flex items-center gap-x-6">
                 <label className="flex items-center">
                   <input
@@ -110,9 +105,9 @@ export default function ProfileForm({
                     onClick={() => {
                       setRole('recruiter');
                     }}
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500"
+                    className="radio bg-primary border-primary/20 checked:bg-primary-75 checked:text-primary checked:border-primary"
                   />
-                  <span className="ml-2 text-gray-700">Recruiter</span>
+                  <span className="ml-2 ">Recruiter</span>
                 </label>
                 <label className="flex items-center">
                   <input
@@ -123,9 +118,9 @@ export default function ProfileForm({
                     onClick={() => {
                       setRole('talenta');
                     }}
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500"
+                    className="radio bg-primary border-primary/20 checked:bg-primary-75 checked:text-primary checked:border-primary"
                   />
-                  <span className="ml-2 text-gray-700">Talent</span>
+                  <span className="ml-2 ">Talent</span>
                 </label>
               </div>
               {nextButton()}
@@ -133,10 +128,9 @@ export default function ProfileForm({
           ) : null}
 
           {page === 2 ? (
-            // Semua input untuk page 2 sekarang ada di dalam satu div ini
-            <div className="space-y-6">
+            <div className="space-y-5 flex flex-col">
               <div>
-                <label htmlFor="headline" className="mb-2 block font-medium text-gray-700">
+                <label htmlFor="headline" className="mb-2 block font-medium ">
                   Headline
                 </label>
                 <input
@@ -145,12 +139,12 @@ export default function ProfileForm({
                   type="text"
                   defaultValue={profileInfo?.headline || ''}
                   placeholder="Full Stack Developer"
-                  className="w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500"
+                  className="w-full rounded-md input"
                 />
               </div>
 
               <div>
-                <label htmlFor="category" className="mb-2 block font-medium text-gray-700">
+                <label htmlFor="category" className="mb-2 block font-medium ">
                   Kategori
                 </label>
                 <input
@@ -160,7 +154,7 @@ export default function ProfileForm({
                   list="category-list"
                   defaultValue={currentCategoryName}
                   placeholder="cth: Web Developer"
-                  className="w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500"
+                  className="w-full rounded-md input"
                 />
                 <datalist id="category-list">
                   {categories.map((cat) => (
@@ -170,7 +164,7 @@ export default function ProfileForm({
               </div>
 
               <div>
-                <label htmlFor="description" className="mb-2 block font-medium text-gray-700">
+                <label htmlFor="description" className="mb-2 block font-medium ">
                   Deskripsi
                 </label>
                 <textarea
@@ -179,12 +173,12 @@ export default function ProfileForm({
                   rows={4}
                   defaultValue={profileInfo?.description || ''}
                   placeholder="Ceritakan tentang diri Anda..."
-                  className="w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500"
+                  className="w-full rounded-md input"
                 ></textarea>
               </div>
 
               <div>
-                <label htmlFor="experiences" className="mb-2 block font-medium text-gray-700">
+                <label htmlFor="experiences" className="mb-2 block font-medium ">
                   Pengalaman
                 </label>
                 <textarea
@@ -193,13 +187,13 @@ export default function ProfileForm({
                   rows={4}
                   defaultValue={profileInfo?.experiences || ''}
                   placeholder="Sebutkan pengalaman relevan Anda..."
-                  className="w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500"
+                  className="w-full rounded-md input"
                 ></textarea>
               </div>
 
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <div>
-                  <label htmlFor="website" className="mb-2 block font-medium text-gray-700">
+                  <label htmlFor="website" className="mb-2 block font-medium ">
                     Website
                   </label>
                   <input
@@ -208,11 +202,11 @@ export default function ProfileForm({
                     type="url"
                     defaultValue={profileInfo?.website || ''}
                     placeholder="https://your-personal-website.com"
-                    className="w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500"
+                    className="w-full rounded-md input"
                   />
                 </div>
                 <div>
-                  <label htmlFor="linkedin" className="mb-2 block font-medium text-gray-700">
+                  <label htmlFor="linkedin" className="mb-2 block font-medium ">
                     LinkedIn
                   </label>
                   <input
@@ -221,11 +215,11 @@ export default function ProfileForm({
                     type="url"
                     defaultValue={profileInfo?.linkedin || ''}
                     placeholder="https://linkedin.com/in/"
-                    className="w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500"
+                    className="w-full rounded-md input"
                   />
                 </div>
                 <div>
-                  <label htmlFor="instagram" className="mb-2 block font-medium text-gray-700">
+                  <label htmlFor="instagram" className="mb-2 block font-medium ">
                     Instagram
                   </label>
                   <input
@@ -234,11 +228,11 @@ export default function ProfileForm({
                     type="url"
                     defaultValue={profileInfo?.instagram || ''}
                     placeholder="https://instagram.com/"
-                    className="w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500"
+                    className="w-full rounded-md input"
                   />
                 </div>
                 <div>
-                  <label htmlFor="github" className="mb-2 block font-medium text-gray-700">
+                  <label htmlFor="github" className="mb-2 block font-medium ">
                     GitHub
                   </label>
                   <input
@@ -247,38 +241,34 @@ export default function ProfileForm({
                     type="url"
                     defaultValue={profileInfo?.github || ''}
                     placeholder="https://github.com/"
-                    className="w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500"
+                    className="w-full rounded-md input"
                   />
                 </div>
               </div>
+              {nextButton()}
             </div>
           ) : null}
 
-          {/* Input Gambar */}
-
           {page === 3 ? (
-            <>
-              <div>
-                <label htmlFor="image" className="mb-2 block font-medium text-gray-700">
-                  Foto Profil
-                </label>
-                {profileInfo?.image_url && (
-                  <img
-                    src={profileInfo.image_url}
-                    alt="Current profile"
-                    className="mb-4 h-24 w-24 rounded-full object-cover"
-                  />
-                )}
-                <input
-                  type="file"
-                  id="image"
-                  name="image"
-                  accept="image/png, image/jpeg, image/jpg"
-                  className="w-full text-sm text-gray-500 file:mr-4 file:rounded-full file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-blue-700 hover:file:bg-blue-100"
-                />
+            <div className="flex flex-col gap-4">
+              <div className="flex md:flex-row flex-col-reverse md:justify-between justify-center items-center md:items-start md:gap-4 gap-2">
+                <div>
+                  <label htmlFor="image" className="mb-2 block font-medium">
+                    Foto Profil
+                  </label>
+
+                  <fieldset className="fieldset">
+                    <legend className="fieldset-legend">Pick a file</legend>
+                    <input type="file" id="image" accept="image/png, image/jpeg, image/jpg" className="file-input" />
+                    <label className="label">Max size 2MB</label>
+                  </fieldset>
+                </div>
+                <div className="w-full h-[130px]  max-w-[130px] border border-dashed border-primary">
+                  {/* Image preview after upload */}
+                </div>
               </div>
               <SubmitButton />
-            </>
+            </div>
           ) : null}
         </form>
       </div>
