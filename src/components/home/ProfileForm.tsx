@@ -5,6 +5,7 @@ import { useActionState } from 'react';
 import { postProfileInfo } from '@/lib/actions';
 import type { categories } from '@/generated/prisma';
 import { useState } from 'react';
+import { redirect } from 'next/navigation';
 
 type FormState = {
   error: string | null;
@@ -55,6 +56,7 @@ export default function ProfileForm({
   const [state, formAction] = useActionState(postProfileInfoAction, initialState);
   const [page, setPage] = useState(1);
   const [role, setRole] = useState('');
+  const [imagePreview, setImagePreview] = useState<string | null>(profileInfo?.image_url || null);
 
   const incrementPage = () => {
     if (role === 'recruiter') {
@@ -72,10 +74,25 @@ export default function ProfileForm({
 
   const nextButton = () => {
     return (
-      <button className="btn btn-sm md:btn-md bg-primary hover:bg-primary/75 mt-5" onClick={incrementPage}>
+      <button
+        type="button"
+        className="btn btn-sm md:btn-md bg-primary hover:bg-primary/75 mt-5"
+        onClick={incrementPage}
+      >
         Next
       </button>
     );
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImagePreview(URL.createObjectURL(file));
+    }
+  };
+
+  const redirectHome = () => {
+    redirect('/');
   };
 
   const currentCategoryName = categories.find((c) => c.id === profileInfo?.category_id)?.name || '';
@@ -89,8 +106,17 @@ export default function ProfileForm({
           ya!
         </p>
         <form action={formAction} className="space-y-6 rounded-lg p-8 shadow-md bg-accent">
+          {/* Tambahkan input tersembunyi ini */}
+          <input type="hidden" name="role" value={role} />
+
           {/* Pesan Status Form */}
-          {state.error && <div className="rounded-md bg-red-100 p-3 text-red-700 text-center">{state.error}</div>}
+          {state.error && <div className="rounded-md bg-red-400 p-3 text-black text-center">{state.error}</div>}
+          {state.success && (
+            <div className="rounded-md bg-green-200 p-3 text-white text-center">
+              Terima kasih telah mengisi!
+              {redirectHome()}
+            </div>
+          )}
 
           {page === 1 ? (
             <div className="space-y-2 flex flex-col">
@@ -99,7 +125,7 @@ export default function ProfileForm({
                 <label className="flex items-center">
                   <input
                     type="radio"
-                    name="role"
+                    name="role-selector"
                     value="recruiter"
                     defaultChecked={profileInfo?.role === 'recruiter'}
                     onClick={() => {
@@ -112,7 +138,7 @@ export default function ProfileForm({
                 <label className="flex items-center">
                   <input
                     type="radio"
-                    name="role"
+                    name="role-selector"
                     value="talenta"
                     defaultChecked={profileInfo?.role === 'talenta'}
                     onClick={() => {
@@ -259,12 +285,23 @@ export default function ProfileForm({
 
                   <fieldset className="fieldset">
                     <legend className="fieldset-legend">Pick a file</legend>
-                    <input type="file" id="image" accept="image/png, image/jpeg, image/jpg" className="file-input" />
+                    <input
+                      type="file"
+                      id="image"
+                      name="image"
+                      accept="image/png, image/jpeg, image/jpg"
+                      className="file-input"
+                      onChange={handleImageChange}
+                    />
                     <label className="label">Max size 2MB</label>
                   </fieldset>
                 </div>
-                <div className="w-full h-[130px]  max-w-[130px] border border-dashed border-primary">
-                  {/* Image preview after upload */}
+                <div className="w-full h-[130px] max-w-[130px] border border-dashed border-primary flex justify-center items-center">
+                  {imagePreview ? (
+                    <img src={imagePreview} alt="Pratinjau foto profil" className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="text-xs text-center p-2 text-gray-500">Image Preview</span>
+                  )}
                 </div>
               </div>
               <SubmitButton />

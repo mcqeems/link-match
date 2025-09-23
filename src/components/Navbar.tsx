@@ -45,7 +45,7 @@ export default async function Navbar() {
         {session ? (
           <div className="dropdown dropdown-end">
             <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
-              <div className="w-10 rounded-full">
+              <div className="w-10 rounded-full border border-primary-light">
                 <Image alt="Profile Image" src={profileImage} width={40} height={40} />
               </div>
             </div>
@@ -54,7 +54,7 @@ export default async function Navbar() {
                 <Link href="/profile">Profile</Link>
               </li>
               <li>
-                <Link href="/settings">Settings</Link>
+                <Link href="/messages">Messages</Link>
               </li>
               <li>
                 <button onClick={signOut}>Logout</button>

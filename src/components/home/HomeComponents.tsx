@@ -1,3 +1,7 @@
 export default async function HomeComponents() {
-  return <div>Home Components</div>;
+  return (
+    <div className="h-dvh flex justify-center items-center ">
+      <p className="text-4xl">Home</p>
+    </div>
+  );
 }

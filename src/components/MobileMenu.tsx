@@ -58,8 +58,8 @@ export default function MobileMenu({ session, onSignOut }: { session: any; onSig
                 </Link>
               </li>
               <li>
-                <Link href="/settings" onClick={() => setOpen(false)}>
-                  Settings
+                <Link href="/messages" onClick={() => setOpen(false)}>
+                  Messages
                 </Link>
               </li>
               <li>

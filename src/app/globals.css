@@ -7,6 +7,7 @@
   --primary: #4d8899;
   --secondary: #245865;
   --accent: #237e95;
+  --primary-light: #345a74;
 }
 
 @theme inline {
@@ -15,6 +16,7 @@
   --color-primary: var(--primary);
   --color-secondary: var(--secondary);
   --color-accent: var(--accent);
+  --color-primary-light: var(--primary-light);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -27,6 +29,7 @@
     --primary: #2b5069;
     --secondary: #1c2229;
     --accent: #232931;
+    --primary-light: #345a74;
   }
 }
 
