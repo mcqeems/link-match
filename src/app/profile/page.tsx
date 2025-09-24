@@ -23,7 +23,7 @@ export default async function Profile() {
   }
 
   return (
-    <div className="h-dvh flex justify-center items-center ">
+    <div className="my-24">
       <ProfilePage />
     </div>
   );

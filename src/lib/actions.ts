@@ -8,6 +8,7 @@ import { PrismaClient } from '@/generated/prisma';
 import { getCategories } from './data';
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 
+type FormState = { error: string | null; success: boolean };
 type AuthState = { error: string | null; success: boolean };
 
 const prisma = new PrismaClient();
@@ -127,7 +128,7 @@ export async function signOut() {
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024;
 
-export async function postProfileInfo(formData: FormData) {
+export async function postProfileInfo(_prevState: FormState, formData: FormData): Promise<FormState> {
   const currentHeaders = await headers();
   const session = await auth.api.getSession({
     headers: currentHeaders,

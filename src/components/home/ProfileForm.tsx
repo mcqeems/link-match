@@ -1,11 +1,10 @@
 'use client';
 
 import { useFormStatus } from 'react-dom';
-import { useActionState } from 'react';
+import { useActionState, useEffect, useState } from 'react';
 import { postProfileInfo } from '@/lib/actions';
 import type { categories } from '@/generated/prisma';
-import { useState } from 'react';
-import { redirect } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import Select from 'react-select';
 
 type FormState = {
@@ -49,16 +48,22 @@ export default function ProfileForm({
   categories: categories[];
 }) {
   const initialState: FormState = { error: null, success: false };
-
-  const postProfileInfoAction = async (prevState: FormState, formData: FormData) => {
-    return postProfileInfo(formData);
-  };
-
-  const [state, formAction] = useActionState(postProfileInfoAction, initialState);
+  // Perbaiki signature action agar sesuai dengan useActionState
+  const [state, formAction] = useActionState(postProfileInfo, initialState);
   const [page, setPage] = useState(1);
-  const [role, setRole] = useState('');
+  const [role, setRole] = useState(profileInfo?.User.roles?.name || '');
   const [imagePreview, setImagePreview] = useState<string | null>(profileInfo?.image_url || null);
   const [clientError, setClientError] = useState<string | null>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (state.success) {
+      // Pindahkan redirect ke dalam useEffect untuk menghindari error
+      router.push('/');
+      // refresh agar data baru muncul
+      router.refresh();
+    }
+  }, [state.success, router]);
 
   const categoryOptions = categories.map((cat) => ({
     value: cat.name,
@@ -97,23 +102,16 @@ export default function ProfileForm({
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      // ▼▼▼ TAMBAHKAN VALIDASI UKURAN FILE DI SINI ▼▼▼
       const MAX_SIZE = 2 * 1024 * 1024; // 2MB
       if (file.size > MAX_SIZE) {
         setClientError('Ukuran file tidak boleh melebihi 2MB.');
-        setImagePreview(null); // Hapus preview jika file terlalu besar
+        setImagePreview(null);
         e.target.value = '';
         return;
       }
-      // ▲▲▲ AKHIR VALIDASI ▲▲▲
-
-      setClientError(null); // Hapus pesan error jika file valid
+      setClientError(null);
       setImagePreview(URL.createObjectURL(file));
     }
-  };
-
-  const redirectHome = () => {
-    redirect('/');
   };
 
   return (
@@ -125,19 +123,18 @@ export default function ProfileForm({
           ya!
         </p>
         <form action={formAction} className="space-y-6 rounded-lg p-8 shadow-md bg-accent">
-          {/* Tambahkan input tersembunyi ini */}
           <input type="hidden" name="role" value={role} />
-          {/* Pesan Status Form */}
           {(state.error || clientError) && (
             <div className="rounded-md bg-red-400 p-3 text-black text-center">{clientError || state.error}</div>
-          )}{' '}
+          )}
           {state.success && (
             <div className="rounded-md bg-green-200 p-3 text-white text-center">
-              Terima kasih telah mengisi!
-              {redirectHome()}
+              Terima kasih telah mengisi! Anda akan dialihkan...
             </div>
           )}
-          {page === 1 ? (
+
+          {/* Semua input field harus ada di dalam form, kita hanya akan menampilkannya secara kondisional */}
+          <div style={{ display: page === 1 ? 'block' : 'none' }}>
             <div className="space-y-2 flex flex-col">
               <label className="block font-medium ">Saya seorang:</label>
               <div className="flex items-center gap-x-6">
@@ -146,7 +143,7 @@ export default function ProfileForm({
                     type="radio"
                     name="role-selector"
                     value="recruiter"
-                    defaultChecked={profileInfo?.role === 'recruiter'}
+                    defaultChecked={role === 'recruiter'}
                     onClick={() => {
                       setRole('recruiter');
                     }}
@@ -159,7 +156,7 @@ export default function ProfileForm({
                     type="radio"
                     name="role-selector"
                     value="talenta"
-                    defaultChecked={profileInfo?.role === 'talenta'}
+                    defaultChecked={role === 'talenta'}
                     onClick={() => {
                       setRole('talenta');
                     }}
@@ -170,8 +167,9 @@ export default function ProfileForm({
               </div>
               {nextButton()}
             </div>
-          ) : null}
-          {page === 2 ? (
+          </div>
+
+          <div style={{ display: page === 2 ? 'block' : 'none' }}>
             <div className="space-y-5 flex flex-col">
               <div>
                 <label htmlFor="headline" className="mb-2 block font-medium ">
@@ -198,29 +196,21 @@ export default function ProfileForm({
                   defaultValue={defaultCategory}
                   isSearchable
                   placeholder="Web Developer"
-                  unstyled // Tambahkan properti ini untuk menghapus gaya bawaan
+                  unstyled
                   classNames={{
-                    // Kontrol (bagian input utama)
                     control: (state) =>
                       `input w-full flex items-center text-foreground rounded-md transition-all duration-300 ${
                         state.isFocused ? 'border-primary ring-2 ring-primary/50' : 'border-border'
                       }`,
-                    // Teks placeholder
                     placeholder: () => 'text-white/50',
-                    // Nilai yang dipilih
                     singleValue: () => 'text-foreground',
-                    // Kontainer dropdown
                     menu: () => 'bg-background border border-primary rounded-md mt-1 shadow-lg',
-                    // Setiap item di dropdown
                     option: (state) =>
                       `p-2 cursor-pointer transition-colors duration-200 ${state.isFocused ? 'bg-primary/50' : ''} ${
                         state.isSelected ? 'bg-primary text-white' : 'text-foreground'
                       }`,
-                    // Input teks saat mencari
                     input: () => 'text-foreground',
-                    // Menghapus indikator dropdown default
                     dropdownIndicator: () => 'text-gray-400 hover:text-gray-600',
-                    // Menghapus garis pemisah
                     indicatorSeparator: () => 'hidden',
                   }}
                 />
@@ -310,8 +300,9 @@ export default function ProfileForm({
               </div>
               {nextButton()}
             </div>
-          ) : null}
-          {page === 3 ? (
+          </div>
+
+          <div style={{ display: page === 3 ? 'block' : 'none' }}>
             <div className="flex flex-col gap-4">
               <div className="flex md:flex-row flex-col-reverse md:justify-between justify-center items-center md:items-start md:gap-4 gap-2">
                 <div>
@@ -342,7 +333,7 @@ export default function ProfileForm({
               </div>
               <SubmitButton />
             </div>
-          ) : null}
+          </div>
         </form>
       </div>
     </div>

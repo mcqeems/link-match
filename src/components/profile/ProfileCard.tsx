@@ -1,5 +1,3 @@
-// src/components/profile/ProfileCard.tsx
-
 import { fetchProfileInfo } from '@/lib/data';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -13,6 +11,7 @@ import {
   IconEdit,
   IconUserCircle,
 } from '@tabler/icons-react';
+import ExpandableText from './ExpandableText';
 
 // Tipe untuk props, tetap sama
 interface PropsTypes {
@@ -71,7 +70,7 @@ export async function PersonalCard() {
   const { name, email, image_url, roles } = User;
 
   return (
-    <div className="card bg-secondary shadow-xl w-full max-w-4xl mx-auto">
+    <div className="card bg-secondary shadow-xl w-full max-w-4xl mx-auto my-auto">
       <div className="card-body p-6 md:p-10">
         {/* Bagian Header Profil */}
         <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
@@ -89,12 +88,12 @@ export async function PersonalCard() {
           <div className="flex-grow text-center md:text-left">
             <div className="flex flex-col md:flex-row items-center justify-center md:justify-between gap-2">
               <h1 className="card-title text-3xl font-bold">{name}</h1>
-              <Link href="/profile/edit" className="btn btn-primary btn-outline btn-sm">
+              <Link href="/profile/edit" className="btn btn-outline btn-accent  btn-sm">
                 <IconEdit size={16} />
                 Edit Profil
               </Link>
             </div>
-            <p className="text-xl text-primary-light mt-1">{headline || 'Headline belum diatur'}</p>
+            <p className="text-xl text-white/75 mt-1">{headline || 'Headline belum diatur'}</p>
             <p className="text-sm text-base-content/70">{email}</p>
             {roles?.name && (
               <div className="mt-3">
@@ -113,21 +112,17 @@ export async function PersonalCard() {
             <IconInfoCircle />
             Tentang Saya
           </h2>
-          <p className="text-base-content/80 whitespace-pre-wrap">
-            {description || 'Pengguna ini belum menambahkan deskripsi.'}
-          </p>
+          <ExpandableText text={description} maxLength={300} placeholder="Pengguna ini belum menambahkan deskripsi." />
         </div>
 
-        {/* Bagian Pengalaman */}
         <div>
           <h2 className="text-2xl font-semibold mb-3 flex items-center gap-2">
             <IconBriefcase />
             Pengalaman
           </h2>
-          <p className="text-base-content/80 whitespace-pre-wrap">
-            {experiences || 'Pengguna ini belum menambahkan pengalaman.'}
-          </p>
+          <ExpandableText text={experiences} maxLength={300} placeholder="Pengguna ini belum menambahkan pengalaman." />
         </div>
+        {/* ▲▲▲ AKHIR PERUBAHAN ▲▲▲ */}
       </div>
     </div>
   );

@@ -24,12 +24,12 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --color-base-100: #11171a;
-    --background: #080b0c;
+    --background: #11171a;
     --foreground: #f7f8f8;
     --primary: #2b5069;
     --secondary: #1c2229;
     --accent: #232931;
-    --primary-light: #345a74;
+    --primary-light: #406e8d;
   }
 }
 
