@@ -102,7 +102,7 @@ export default function ProfileForm({
       if (file.size > MAX_SIZE) {
         setClientError('Ukuran file tidak boleh melebihi 2MB.');
         setImagePreview(null); // Hapus preview jika file terlalu besar
-        e.target.value = ''; // Reset input file
+        e.target.value = '';
         return;
       }
       // ▲▲▲ AKHIR VALIDASI ▲▲▲
