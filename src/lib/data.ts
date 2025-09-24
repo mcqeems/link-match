@@ -26,6 +26,8 @@ export async function fetchProfileInfo() {
             select: { name: true },
           },
           image_url: true,
+          name: true,
+          email: true,
         },
       },
     },

@@ -1,5 +1,5 @@
 import ProfileStarter from '@/components/home/ProfileStarter';
-import HomeComponents from '@/components/home/HomeComponents';
+import HomePage from '@/components/home/HomePage';
 import { fetchProfileInfo } from '@/lib/data';
 import { headers } from 'next/headers';
 import { auth } from '@/lib/auth';
@@ -18,5 +18,5 @@ export default async function Home() {
     }
   }
 
-  return <HomeComponents />;
+  return <HomePage />;
 }

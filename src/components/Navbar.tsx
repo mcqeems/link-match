@@ -4,7 +4,7 @@ import { headers } from 'next/headers';
 import { auth } from '@/lib/auth';
 import Link from 'next/link';
 import Image from 'next/image';
-import MobileMenu from './MobileMenu'; // import komponen client di atas
+import MobileMenu from './MobileMenu';
 
 export default async function Navbar() {
   const currentHeaders = await headers();

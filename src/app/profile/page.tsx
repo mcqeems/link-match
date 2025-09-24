@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 import { fetchProfileInfo } from '@/lib/data';
 import { headers } from 'next/headers';
 import { auth } from '@/lib/auth';
+import ProfilePage from '@/components/profile/ProfilePage';
 
 export default async function Profile() {
   const currentHeaders = await headers();
@@ -23,7 +24,7 @@ export default async function Profile() {
 
   return (
     <div className="h-dvh flex justify-center items-center ">
-      <p className="text-4xl">Profile</p>
+      <ProfilePage />
     </div>
   );
 }
