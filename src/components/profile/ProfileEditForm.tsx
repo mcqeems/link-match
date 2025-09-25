@@ -53,17 +53,17 @@ function SubmitButton() {
   const { pending } = useFormStatus();
 
   return (
-    <button type="submit" disabled={pending} className="btn btn-primary btn-sm md:btn-md">
+    <button type="submit" disabled={pending} className="btn btn-success btn-sm md:btn-md">
       {pending ? <span className="loading loading-spinner loading-md"></span> : 'Simpan Perubahan'}
     </button>
   );
 }
 
-export default function ProfileEditForm({ 
-  profileInfo, 
-  categories 
-}: { 
-  profileInfo: ProfileInfoType; 
+export default function ProfileEditForm({
+  profileInfo,
+  categories,
+}: {
+  profileInfo: ProfileInfoType;
   categories: CategoryType[];
 }) {
   const initialState: FormState = { error: null, success: false };
@@ -134,10 +134,10 @@ export default function ProfileEditForm({
               <IconUser />
               Informasi Pribadi
             </h2>
-            
-            <div className="flex flex-col md:flex-row items-start gap-6">
+
+            <div className="flex flex-col md:flex-row justify-evenly gap-6">
               {/* Profile Image */}
-              <div className="flex flex-col items-center space-y-4">
+              <div className="flex flex-col items-center space-y-4 w-full">
                 <div className="avatar">
                   <div className="w-32 h-32 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
                     <Image
@@ -149,26 +149,24 @@ export default function ProfileEditForm({
                     />
                   </div>
                 </div>
-                <div className="form-control w-full max-w-xs">
-                  <label className="label">
-                    <span className="label-text">Foto Profil</span>
-                  </label>
+                <div className="flex flex-col gap-2 flex flex-col w-full max-w-fit">
+                  <div className="badge badge-accent self-center mb-2">Foto Profil</div>
                   <input
                     type="file"
                     name="image"
                     accept="image/png, image/jpeg, image/jpg"
-                    className="file-input file-input-bordered file-input-primary w-full max-w-xs"
+                    className="file-input file- w-full max-w-xs"
                     onChange={handleImageChange}
                   />
                   <label className="label">
-                    <span className="label-text-alt">Max 2MB</span>
+                    <span className="label-text-alt">* Max 2MB</span>
                   </label>
                 </div>
               </div>
 
               {/* Basic Info */}
-              <div className="flex-1 space-y-4">
-                <div className="form-control">
+              <div className="w-full space-y-4">
+                <div className="flex flex-col gap-2">
                   <label className="label">
                     <span className="label-text font-medium">Nama Lengkap</span>
                   </label>
@@ -176,28 +174,23 @@ export default function ProfileEditForm({
                     type="text"
                     name="name"
                     defaultValue={profileInfo.User.name || ''}
-                    className="input input-bordered input-primary"
+                    className="input w-full"
                     placeholder="Masukkan nama lengkap"
                   />
                 </div>
 
-                <div className="form-control">
+                <div className="flex flex-col gap-2">
                   <label className="label">
                     <span className="label-text font-medium">Email</span>
                   </label>
-                  <input
-                    type="email"
-                    value={profileInfo.User.email}
-                    className="input input-bordered input-disabled"
-                    disabled
-                  />
+                  <input type="email" value={profileInfo.User.email} className="input border w-full" disabled />
                 </div>
 
-                <div className="form-control">
+                <div className="flex flex-col gap-2">
                   <label className="label">
                     <span className="label-text font-medium">Role</span>
                   </label>
-                  <select name="role" defaultValue={profileInfo.User.roles?.name || ''} className="select select-bordered select-primary">
+                  <select name="role" defaultValue={profileInfo.User.roles?.name || ''} className="select w-full">
                     <option value="">Pilih Role</option>
                     <option value="talenta">Talent</option>
                     <option value="recruiter">Recruiter</option>
@@ -217,7 +210,7 @@ export default function ProfileEditForm({
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="form-control">
+              <div className="flex flex-col gap-2">
                 <label className="label">
                   <span className="label-text font-medium">Headline</span>
                 </label>
@@ -225,12 +218,12 @@ export default function ProfileEditForm({
                   type="text"
                   name="headline"
                   defaultValue={profileInfo.headline || ''}
-                  className="input input-bordered input-primary"
+                  className="input w-full"
                   placeholder="Full Stack Developer"
                 />
               </div>
 
-              <div className="form-control">
+              <div className="flex flex-col gap-2">
                 <label className="label">
                   <span className="label-text font-medium">Kategori</span>
                 </label>
@@ -242,10 +235,7 @@ export default function ProfileEditForm({
                   placeholder="Pilih kategori"
                   unstyled
                   classNames={{
-                    control: (state) =>
-                      `input input-bordered input-primary w-full flex items-center min-h-[3rem] ${
-                        state.isFocused ? 'input-primary' : ''
-                      }`,
+                    control: (state) => `input   w-full flex items-center min-h-[3rem] ${state.isFocused ? '' : ''}`,
                     placeholder: () => 'text-base-content/50',
                     singleValue: () => 'text-base-content',
                     menu: () => 'bg-base-100 border border-primary rounded-box mt-1 shadow-lg z-50',
@@ -261,7 +251,7 @@ export default function ProfileEditForm({
               </div>
             </div>
 
-            <div className="form-control">
+            <div className="flex flex-col gap-2">
               <label className="label">
                 <span className="label-text font-medium">Deskripsi</span>
               </label>
@@ -269,7 +259,7 @@ export default function ProfileEditForm({
                 name="description"
                 rows={4}
                 defaultValue={profileInfo.description || ''}
-                className="textarea textarea-bordered textarea-primary"
+                className="textarea w-full "
                 placeholder="Ceritakan tentang diri Anda..."
               ></textarea>
             </div>
@@ -284,7 +274,7 @@ export default function ProfileEditForm({
               Pengalaman
             </h2>
 
-            <div className="form-control">
+            <div className="flex flex-col gap-2">
               <label className="label">
                 <span className="label-text font-medium">Pengalaman Kerja</span>
               </label>
@@ -292,7 +282,7 @@ export default function ProfileEditForm({
                 name="experiences"
                 rows={4}
                 defaultValue={profileInfo.experiences || ''}
-                className="textarea textarea-bordered textarea-primary"
+                className="textarea w-full "
                 placeholder="Sebutkan pengalaman relevan Anda..."
               ></textarea>
             </div>
@@ -308,7 +298,7 @@ export default function ProfileEditForm({
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="form-control">
+              <div className="flex flex-col gap-2">
                 <label className="label">
                   <span className="label-text font-medium flex items-center gap-2">
                     <IconWorld size={16} />
@@ -319,12 +309,12 @@ export default function ProfileEditForm({
                   type="url"
                   name="website"
                   defaultValue={profileInfo.website || ''}
-                  className="input input-bordered input-primary"
+                  className="input w-full"
                   placeholder="https://your-website.com"
                 />
               </div>
 
-              <div className="form-control">
+              <div className="flex flex-col gap-2">
                 <label className="label">
                   <span className="label-text font-medium flex items-center gap-2">
                     <IconBrandLinkedin size={16} />
@@ -335,12 +325,12 @@ export default function ProfileEditForm({
                   type="url"
                   name="linkedin"
                   defaultValue={profileInfo.linkedin || ''}
-                  className="input input-bordered input-primary"
+                  className="input w-full"
                   placeholder="https://linkedin.com/in/username"
                 />
               </div>
 
-              <div className="form-control">
+              <div className="flex flex-col gap-2">
                 <label className="label">
                   <span className="label-text font-medium flex items-center gap-2">
                     <IconBrandGithub size={16} />
@@ -351,12 +341,12 @@ export default function ProfileEditForm({
                   type="url"
                   name="github"
                   defaultValue={profileInfo.github || ''}
-                  className="input input-bordered input-primary"
+                  className="input w-full"
                   placeholder="https://github.com/username"
                 />
               </div>
 
-              <div className="form-control">
+              <div className="flex flex-col gap-2">
                 <label className="label">
                   <span className="label-text font-medium flex items-center gap-2">
                     <IconBrandInstagram size={16} />
@@ -367,7 +357,7 @@ export default function ProfileEditForm({
                   type="url"
                   name="instagram"
                   defaultValue={profileInfo.instagram || ''}
-                  className="input input-bordered input-primary"
+                  className="input w-full"
                   placeholder="https://instagram.com/username"
                 />
               </div>
@@ -378,7 +368,7 @@ export default function ProfileEditForm({
 
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-end">
-            <Link href="/profile" className="btn btn-outline btn-sm md:btn-md">
+            <Link href="/profile" className="btn btn-outline btn-error btn-sm md:btn-md">
               Batalkan
             </Link>
             <SubmitButton />
