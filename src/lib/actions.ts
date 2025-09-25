@@ -9,7 +9,6 @@ import { getCategories } from './data';
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 
 type FormState = { error: string | null; success: boolean };
-type AuthState = { error: string | null; success: boolean };
 
 const prisma = new PrismaClient();
 
@@ -56,7 +55,168 @@ async function uploadImageToS3(file: File): Promise<string> {
   }
 }
 
-export async function signInWithEmail(_prevState: AuthState, formData: FormData): Promise<AuthState> {
+// Helper function to validate and process image file
+async function processImageFile(imageFile: File | null): Promise<string | undefined> {
+  const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
+
+  if (!imageFile || imageFile.size === 0) {
+    return undefined;
+  }
+
+  if (imageFile.size > MAX_FILE_SIZE) {
+    throw new Error('Ukuran file tidak boleh melebihi 2MB.');
+  }
+
+  return await uploadImageToS3(imageFile);
+}
+
+// Helper function to validate and find role
+async function validateRole(roleName: string) {
+  if (!roleName) {
+    throw new Error('Role harus dipilih.');
+  }
+
+  const roleRecord = await prisma.roles.findUnique({
+    where: { name: roleName },
+  });
+
+  if (!roleRecord) {
+    throw new Error(`Role "${roleName}" tidak ditemukan di database.`);
+  }
+
+  return roleRecord;
+}
+
+// Helper function to validate and find category
+async function validateCategory(categoryName?: string): Promise<number | undefined> {
+  if (!categoryName) return undefined;
+
+  const categories = await getCategories();
+  const selectedCategory = categories.find((c) => c.name === categoryName);
+
+  if (!selectedCategory) {
+    throw new Error(`Category "${categoryName}" tidak ditemukan di database.`);
+  }
+
+  return selectedCategory.id;
+}
+
+// Helper function to extract profile data from FormData
+function extractProfileData(formData: FormData) {
+  return {
+    roleName: formData.get('role') as string,
+    headline: formData.get('headline') as string,
+    description: formData.get('description') as string,
+    experiences: formData.get('experiences') as string,
+    categoryName: formData.get('category') as string,
+    website: formData.get('website') as string,
+    linkedin: formData.get('linkedin') as string,
+    instagram: formData.get('instagram') as string,
+    github: formData.get('github') as string,
+    imageFile: formData.get('image') as File | null,
+    name: formData.get('name') as string,
+  };
+}
+
+// Helper function to authenticate user session
+async function authenticateUser() {
+  const currentHeaders = await headers();
+  const session = await auth.api.getSession({
+    headers: currentHeaders,
+  });
+
+  if (!session?.user?.id) {
+    throw new Error('User not authenticated');
+  }
+
+  return session;
+}
+
+// Main function to handle profile updates (both create and update)
+async function handleProfileUpdate(formData: FormData, isUpdate: boolean = false): Promise<FormState> {
+  try {
+    // Authenticate user
+    const session = await authenticateUser();
+
+    // Extract form data
+    const profileData = extractProfileData(formData);
+
+    // Validate and process data
+    const [roleRecord, categoryId, imageUrl] = await Promise.all([
+      validateRole(profileData.roleName),
+      validateCategory(profileData.categoryName),
+      processImageFile(profileData.imageFile),
+    ]);
+
+    // Prepare user update data
+    const userUpdateData: any = {
+      roles: {
+        connect: {
+          id: roleRecord.id,
+        },
+      },
+    };
+
+    if (imageUrl) {
+      userUpdateData.image_url = imageUrl;
+    }
+
+    // Update user name if provided (for edit mode)
+    if (isUpdate && profileData.name) {
+      userUpdateData.name = profileData.name;
+    }
+
+    // Prepare profile update data
+    const profileUpdateData: any = {
+      headline: profileData.headline,
+      description: profileData.description,
+      experiences: profileData.experiences,
+      website: profileData.website,
+      linkedin: profileData.linkedin,
+      instagram: profileData.instagram,
+      github: profileData.github,
+    };
+
+    if (categoryId) {
+      profileUpdateData.category_id = categoryId;
+    }
+
+    // Execute database operations in transaction for data consistency
+    await prisma.$transaction(async (tx) => {
+      // Update user data
+      await tx.user.update({
+        where: { id: session.user.id },
+        data: userUpdateData,
+      });
+
+      // Update or create profile data
+      if (isUpdate) {
+        await tx.profile.update({
+          where: { user_id: session.user.id },
+          data: profileUpdateData,
+        });
+      } else {
+        // For new profiles, use upsert to handle potential race conditions
+        await tx.profile.upsert({
+          where: { user_id: session.user.id },
+          create: {
+            user_id: session.user.id,
+            ...profileUpdateData,
+          },
+          update: profileUpdateData,
+        });
+      }
+    });
+
+    return { error: null, success: true };
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : 'Terjadi kesalahan yang tidak diketahui.';
+    console.error(`Error ${isUpdate ? 'updating' : 'creating'} profile:`, error);
+    return { error: msg, success: false };
+  }
+}
+
+export async function signInWithEmail(_prevState: FormState, formData: FormData): Promise<FormState> {
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
 
@@ -83,7 +243,7 @@ export async function signInWithEmail(_prevState: AuthState, formData: FormData)
   }
 }
 
-export async function signUpWithEmail(_prevState: AuthState, formData: FormData): Promise<AuthState> {
+export async function signUpWithEmail(_prevState: FormState, formData: FormData): Promise<FormState> {
   const name = formData.get('name') as string;
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
@@ -126,103 +286,10 @@ export async function signOut() {
   redirect('/sign-in');
 }
 
-const MAX_FILE_SIZE = 2 * 1024 * 1024;
-
 export async function postProfileInfo(_prevState: FormState, formData: FormData): Promise<FormState> {
-  const currentHeaders = await headers();
-  const session = await auth.api.getSession({
-    headers: currentHeaders,
-  });
-  if (!session?.user?.id) {
-    return { error: 'User not authenticated', success: false };
-  }
+  return handleProfileUpdate(formData, false);
+}
 
-  const roleName = formData.get('role') as string;
-  const headline = formData.get('headline') as string;
-  const description = formData.get('description') as string;
-  const experiences = formData.get('experiences') as string;
-  const categoryName = formData.get('category') as string;
-  const website = formData.get('website') as string;
-  const linkedin = formData.get('linkedin') as string;
-  const instagram = formData.get('instagram') as string;
-  const github = formData.get('github') as string;
-  const imageFile = formData.get('image') as File | null;
-
-  if (imageFile && imageFile.size > MAX_FILE_SIZE) {
-    return { error: 'Ukuran file tidak boleh melebihi 2MB.', success: false };
-  }
-
-  let imageUrl: string | undefined = undefined;
-  let categoryId: number | undefined = undefined;
-
-  try {
-    if (!roleName) {
-      return { error: 'Role harus dipilih.', success: false };
-    }
-    const roleRecord = await prisma.roles.findUnique({
-      where: { name: roleName },
-    });
-    if (!roleRecord) {
-      return { error: `Role "${roleName}" tidak ditemukan di database.`, success: false };
-    }
-
-    if (categoryName) {
-      const categories = await getCategories();
-      const selectedCategory = categories.find((c) => c.name === categoryName);
-      if (selectedCategory) {
-        categoryId = selectedCategory.id;
-      } else {
-        return { error: `Category "${categoryName}" not found.`, success: false };
-      }
-    }
-
-    if (imageFile && imageFile.size > 0) {
-      imageUrl = await uploadImageToS3(imageFile);
-    }
-
-    const updateUser: any = {
-      roles: {
-        connect: {
-          id: roleRecord.id,
-        },
-      },
-    };
-
-    if (imageUrl) {
-      updateUser.image_url = imageUrl;
-    }
-
-    await prisma.user.update({
-      where: {
-        id: session.user.id,
-      },
-      data: updateUser,
-    });
-
-    const updateData: any = {
-      headline,
-      description,
-      experiences,
-      website,
-      linkedin,
-      instagram,
-      github,
-    };
-    if (categoryId) {
-      updateData.category_id = categoryId;
-    }
-
-    await prisma.profile.update({
-      where: {
-        user_id: session.user.id,
-      },
-      data: updateData,
-    });
-
-    return { error: null, success: true };
-  } catch (error: unknown) {
-    const msg = error instanceof Error ? error.message : 'An unknown error occurred.';
-    console.error('Error updating profile: ' + msg);
-    return { error: msg, success: false };
-  }
+export async function updateProfile(_prevState: FormState, formData: FormData): Promise<FormState> {
+  return handleProfileUpdate(formData, true);
 }
