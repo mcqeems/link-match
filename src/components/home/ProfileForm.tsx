@@ -58,9 +58,7 @@ export default function ProfileForm({
 
   useEffect(() => {
     if (state.success) {
-      // Pindahkan redirect ke dalam useEffect untuk menghindari error
       router.push('/');
-      // refresh agar data baru muncul
       router.refresh();
     }
   }, [state.success, router]);
@@ -128,7 +126,7 @@ export default function ProfileForm({
             <div className="rounded-md bg-red-400 p-3 text-black text-center">{clientError || state.error}</div>
           )}
           {state.success && (
-            <div className="rounded-md bg-green-200 p-3 text-white text-center">
+            <div className="rounded-md bg-green-600 p-3 text-white text-center">
               Terima kasih telah mengisi! Anda akan dialihkan...
             </div>
           )}

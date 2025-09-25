@@ -12,7 +12,10 @@ export default function SignUpForm() {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (state.success) router.push('/');
+    if (state.success) {
+      router.push('/');
+      router.refresh();
+    }
   }, [state.success, router]);
 
   return (

@@ -13,15 +13,11 @@ import {
 } from '@tabler/icons-react';
 import ExpandableText from './ExpandableText';
 
-// Tipe untuk props, tetap sama
 interface PropsTypes {
   mode: 'personal' | 'public';
-  // Anda bisa menambahkan props lain jika diperlukan, misalnya userId untuk profil publik
 }
 
-// Komponen untuk menampilkan link sosial media, agar kode lebih rapi
 function SocialLinks({ profileInfo }: { profileInfo: NonNullable<Awaited<ReturnType<typeof fetchProfileInfo>>> }) {
-  // Array untuk memudahkan me-render link sosial media
   const socialLinks = [
     { href: profileInfo.website, icon: <IconWorld size={24} />, label: 'Website' },
     { href: profileInfo.linkedin, icon: <IconBrandLinkedin size={24} />, label: 'LinkedIn' },
@@ -33,7 +29,6 @@ function SocialLinks({ profileInfo }: { profileInfo: NonNullable<Awaited<ReturnT
     <div className="flex justify-center md:justify-start gap-4 mt-4">
       {socialLinks.map(
         (link) =>
-          // Hanya render ikon jika link-nya ada
           link.href && (
             <Link
               key={link.label}
@@ -51,11 +46,9 @@ function SocialLinks({ profileInfo }: { profileInfo: NonNullable<Awaited<ReturnT
   );
 }
 
-// Komponen untuk kartu profil personal (milik sendiri)
 export async function PersonalCard() {
   const profileInfo = await fetchProfileInfo();
 
-  // Tampilan jika profil tidak ditemukan
   if (!profileInfo) {
     return (
       <div className="card bg-secondary shadow-xl w-full max-w-4xl mx-auto text-center p-10">
@@ -66,11 +59,11 @@ export async function PersonalCard() {
     );
   }
 
-  const { User, headline, description, experiences } = profileInfo;
+  const { User, headline, description, experiences, categories } = profileInfo;
   const { name, email, image_url, roles } = User;
 
   return (
-    <div className="card bg-secondary shadow-xl w-full max-w-4xl mx-auto my-auto">
+    <div className="card bg-secondary shadow-xl w-full max-w-4xl mx-auto">
       <div className="card-body p-6 md:p-10">
         {/* Bagian Header Profil */}
         <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
@@ -93,7 +86,8 @@ export async function PersonalCard() {
                 Edit Profil
               </Link>
             </div>
-            <p className="text-xl text-white/75 mt-1">{headline || 'Headline belum diatur'}</p>
+            <p className="text-xl text-white/75 mt-1">{headline || null}</p>
+            <p className="text-md text-white/75 mb-1">{categories?.name}</p>
             <p className="text-sm text-base-content/70">{email}</p>
             {roles?.name && (
               <div className="mt-3">
@@ -112,7 +106,7 @@ export async function PersonalCard() {
             <IconInfoCircle />
             Tentang Saya
           </h2>
-          <ExpandableText text={description} maxLength={300} placeholder="Pengguna ini belum menambahkan deskripsi." />
+          <ExpandableText text={description} maxLength={300} placeholder="Anda belum menambahkan deskripsi." />
         </div>
 
         <div>
@@ -120,9 +114,8 @@ export async function PersonalCard() {
             <IconBriefcase />
             Pengalaman
           </h2>
-          <ExpandableText text={experiences} maxLength={300} placeholder="Pengguna ini belum menambahkan pengalaman." />
+          <ExpandableText text={experiences} maxLength={300} placeholder="Anda belum menambahkan pengalaman." />
         </div>
-        {/* ▲▲▲ AKHIR PERUBAHAN ▲▲▲ */}
       </div>
     </div>
   );

@@ -23,8 +23,10 @@ export default async function Profile() {
   }
 
   return (
-    <div className="my-24">
-      <ProfilePage />
+    <div className="min-h-screen py-8 px-4 mt-12">
+      <div className="max-w-7xl mx-auto">
+        <ProfilePage />
+      </div>
     </div>
   );
 }

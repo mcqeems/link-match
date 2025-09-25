@@ -31,6 +31,12 @@ export async function fetchProfileInfo() {
           id: true,
         },
       },
+      categories: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
     },
   });
 

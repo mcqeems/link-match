@@ -18,8 +18,14 @@ export default function ExpandableText({ text, maxLength, placeholder }: Expanda
 
   useEffect(() => {
     if (contentRef.current) {
-      // Atur tinggi konten berdasarkan apakah diperluas atau tidak
-      setContentHeight(isExpanded ? `${contentRef.current.scrollHeight}px` : `${maxLength / 3}px`);
+      if (isExpanded) {
+        // When expanding, set to full content height
+        setContentHeight(`${contentRef.current.scrollHeight}px`);
+      } else {
+        // When collapsed, calculate appropriate height based on text length
+        const estimatedHeight = Math.min(maxLength / 8, 120); // Reasonable collapsed height
+        setContentHeight(`${estimatedHeight}px`);
+      }
     }
   }, [isExpanded, text, maxLength]);
 
@@ -34,8 +40,11 @@ export default function ExpandableText({ text, maxLength, placeholder }: Expanda
   return (
     <div>
       <div
-        className="overflow-hidden transition-max-height duration-700 ease-in-out"
-        style={{ maxHeight: contentHeight }}
+        className="overflow-hidden transition-all duration-500 ease-in-out"
+        style={{
+          maxHeight: contentHeight,
+          marginBottom: isExpanded ? '0' : '0',
+        }}
       >
         <p ref={contentRef} className="text-base-content/80 whitespace-pre-wrap">
           {text}
