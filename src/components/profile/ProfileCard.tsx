@@ -46,7 +46,8 @@ function SocialLinks({ profileInfo }: { profileInfo: NonNullable<Awaited<ReturnT
   );
 }
 
-export async function PersonalCard() {
+// Komponen utama yang akan memilih kartu mana yang akan ditampilkan
+export default async function ProfileCard({ mode }: PropsTypes) {
   const profileInfo = await fetchProfileInfo();
 
   if (!profileInfo) {
@@ -81,10 +82,12 @@ export async function PersonalCard() {
           <div className="flex-grow text-center md:text-left">
             <div className="flex flex-col md:flex-row items-center justify-center md:justify-between gap-2">
               <h1 className="card-title text-3xl font-bold">{name}</h1>
-              <Link href="/profile/edit" className="btn btn-outline btn-accent  btn-sm">
-                <IconEdit size={16} />
-                Edit Profil
-              </Link>
+              {mode === 'personal' && (
+                <Link href="/profile/edit" className="btn btn-outline btn-accent  btn-sm">
+                  <IconEdit size={16} />
+                  Edit Profil
+                </Link>
+              )}
             </div>
             <p className="text-xl text-white/75 mt-1">{headline || null}</p>
             <p className="text-md text-white/75 mb-1">{categories?.name}</p>
@@ -119,18 +122,4 @@ export async function PersonalCard() {
       </div>
     </div>
   );
-}
-
-// Komponen utama yang akan memilih kartu mana yang akan ditampilkan
-export default function ProfileCard({ mode }: PropsTypes) {
-  if (mode === 'personal') {
-    return <PersonalCard />;
-  }
-
-  // Di sini Anda bisa menambahkan logika untuk 'public' card nanti
-  // if (mode === 'public') {
-  //   return <PublicCard />;
-  // }
-
-  return null;
 }

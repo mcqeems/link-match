@@ -293,3 +293,175 @@ export async function postProfileInfo(_prevState: FormState, formData: FormData)
 export async function updateProfile(_prevState: FormState, formData: FormData): Promise<FormState> {
   return handleProfileUpdate(formData, true);
 }
+
+// Message-related actions
+
+/**
+ * Create a new conversation or find existing one between two users
+ */
+export async function createOrFindConversation(
+  otherUserId: string
+): Promise<{ conversationId: number; error: string | null }> {
+  try {
+    const session = await authenticateUser();
+
+    if (session.user.id === otherUserId) {
+      return { conversationId: 0, error: 'Cannot create conversation with yourself' };
+    }
+
+    // Check if conversation already exists
+    const existingConversation = await prisma.conversations.findFirst({
+      where: {
+        conversation_participants: {
+          every: {
+            OR: [{ user_id: session.user.id }, { user_id: otherUserId }],
+          },
+        },
+      },
+      include: {
+        conversation_participants: true,
+      },
+    });
+
+    // Verify it's exactly a 2-person conversation
+    if (existingConversation && existingConversation.conversation_participants.length === 2) {
+      const participantIds = existingConversation.conversation_participants.map((p) => p.user_id);
+      if (participantIds.includes(session.user.id) && participantIds.includes(otherUserId)) {
+        return { conversationId: existingConversation.id, error: null };
+      }
+    }
+
+    // Verify other user exists
+    const otherUser = await prisma.user.findUnique({
+      where: { id: otherUserId },
+      select: { id: true },
+    });
+
+    if (!otherUser) {
+      return { conversationId: 0, error: 'User not found' };
+    }
+
+    // Create new conversation
+    const conversation = await prisma.$transaction(async (tx) => {
+      const newConversation = await tx.conversations.create({
+        data: {
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+      });
+
+      // Add participants
+      await tx.conversation_participants.createMany({
+        data: [
+          {
+            conversation_id: newConversation.id,
+            user_id: session.user.id,
+          },
+          {
+            conversation_id: newConversation.id,
+            user_id: otherUserId,
+          },
+        ],
+      });
+
+      return newConversation;
+    });
+
+    return { conversationId: conversation.id, error: null };
+  } catch (error) {
+    console.error('Error creating conversation:', error);
+    const msg = error instanceof Error ? error.message : 'Terjadi kesalahan saat membuat percakapan.';
+    return { conversationId: 0, error: msg };
+  }
+}
+
+/**
+ * Send a message in a conversation
+ */
+export async function sendMessage(_prevState: FormState, formData: FormData): Promise<FormState> {
+  try {
+    const session = await authenticateUser();
+
+    const conversationId = parseInt(formData.get('conversationId') as string);
+    const content = (formData.get('content') as string)?.trim();
+
+    if (!conversationId) {
+      return { error: 'ID percakapan tidak valid', success: false };
+    }
+
+    if (!content || content.length === 0) {
+      return { error: 'Pesan tidak boleh kosong', success: false };
+    }
+
+    if (content.length > 1000) {
+      return { error: 'Pesan terlalu panjang (maksimal 1000 karakter)', success: false };
+    }
+
+    // Verify user is participant in this conversation
+    const isParticipant = await prisma.conversation_participants.findFirst({
+      where: {
+        conversation_id: conversationId,
+        user_id: session.user.id,
+      },
+    });
+
+    if (!isParticipant) {
+      return { error: 'Anda tidak memiliki akses ke percakapan ini', success: false };
+    }
+
+    // Create message and update conversation timestamp in transaction
+    await prisma.$transaction(async (tx) => {
+      await tx.messages.create({
+        data: {
+          conversation_id: conversationId,
+          sender_id: session.user.id,
+          content,
+          created_at: new Date(),
+        },
+      });
+
+      await tx.conversations.update({
+        where: { id: conversationId },
+        data: { updated_at: new Date() },
+      });
+    });
+
+    return { error: null, success: true };
+  } catch (error) {
+    console.error('Error sending message:', error);
+    const msg = error instanceof Error ? error.message : 'Terjadi kesalahan saat mengirim pesan.';
+    return { error: msg, success: false };
+  }
+}
+
+/**
+ * Delete a conversation (only if user is participant)
+ */
+export async function deleteConversation(conversationId: number): Promise<{ success: boolean; error: string | null }> {
+  try {
+    const session = await authenticateUser();
+
+    // Verify user is participant
+    const isParticipant = await prisma.conversation_participants.findFirst({
+      where: {
+        conversation_id: conversationId,
+        user_id: session.user.id,
+      },
+    });
+
+    if (!isParticipant) {
+      return { success: false, error: 'Anda tidak memiliki akses ke percakapan ini' };
+    }
+
+    // Delete conversation (cascading will handle participants and messages)
+    await prisma.conversations.delete({
+      where: { id: conversationId },
+    });
+
+    return { success: true, error: null };
+  } catch (error) {
+    console.error('Error deleting conversation:', error);
+    const msg = error instanceof Error ? error.message : 'Terjadi kesalahan saat menghapus percakapan.';
+    return { success: false, error: msg };
+  }
+}
