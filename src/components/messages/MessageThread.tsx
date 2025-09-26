@@ -15,6 +15,7 @@ interface MessageThreadProps {
   onBack?: () => void;
   onDeleteConversation?: () => void;
   onMessageSent?: () => void;
+  isPolling?: boolean;
   className?: string;
 }
 
@@ -119,7 +120,7 @@ function MessageInput({ conversationId, onMessageSent }: MessageInputProps) {
   };
 
   return (
-    <div className="border-t border-base-300 p-4 bg-base-100">
+    <div className=" p-4 bg-base-100">
       {state.error && (
         <div className="alert alert-error mb-4">
           <span>{state.error}</span>
@@ -130,7 +131,7 @@ function MessageInput({ conversationId, onMessageSent }: MessageInputProps) {
         <textarea
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          onKeyPress={handleKeyPress}
+          onKeyUp={handleKeyPress}
           placeholder="Ketik pesan..."
           className="textarea textarea-bordered flex-1 resize-none min-h-[40px] max-h-32"
           rows={1}
@@ -163,6 +164,7 @@ export default function MessageThread({
   onBack,
   onDeleteConversation,
   onMessageSent,
+  isPolling = false,
   className = '',
 }: MessageThreadProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -200,7 +202,7 @@ export default function MessageThread({
   return (
     <div className={`flex flex-col h-full bg-base-100 ${className}`}>
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-base-300">
+      <div className="flex items-center justify-between p-4 pb-0">
         <div className="flex items-center gap-3">
           {onBack && (
             <button onClick={onBack} className="btn btn-ghost btn-sm btn-circle lg:hidden">
@@ -223,12 +225,13 @@ export default function MessageThread({
           <div>
             <h3 className="font-semibold">{otherUser.name}</h3>
             <p className="text-sm text-base-content/70">
-              {otherUser.profile?.headline || otherUser.roles?.name || 'User'}
+              {otherUser.roles?.name || otherUser.profile?.headline}
+              {isPolling && <span className="ml-2 text-xs text-primary-light"> ⟳ </span>}
             </p>
           </div>
         </div>
 
-        {onDeleteConversation && (
+        {/* {onDeleteConversation && (
           <div className="relative">
             <button onClick={() => setShowMenu(!showMenu)} className="btn btn-ghost btn-sm btn-circle">
               <IconDotsVertical size={20} />
@@ -236,7 +239,7 @@ export default function MessageThread({
 
             {showMenu && (
               <div className="absolute right-0 top-full mt-2 z-10">
-                <div className="menu bg-base-100 rounded-box shadow-lg border border-base-300">
+                <div className="menu bg-base-100 rounded-box shadow-lg">
                   <li>
                     <button onClick={handleDeleteConversation} className="text-error hover:bg-error/10">
                       <IconTrash size={16} />
@@ -247,8 +250,10 @@ export default function MessageThread({
               </div>
             )}
           </div>
-        )}
+        )} */}
       </div>
+
+      <div className="divider"></div>
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4">
@@ -296,6 +301,7 @@ export default function MessageThread({
 
       {/* Click outside to close menu */}
       {showMenu && <div className="fixed inset-0 z-0" onClick={() => setShowMenu(false)} />}
+      <p className=" label text-xs text-center block">Pesan direfresh setiap 30 detik sekali.</p>
     </div>
   );
 }

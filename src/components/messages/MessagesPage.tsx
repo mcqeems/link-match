@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import ConversationList from './ConversationList';
 import MessageThread from './MessageThread';
@@ -22,6 +22,8 @@ export default function MessagesPage({ initialConversations, currentUserId }: Me
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
   const [showMobileConversations, setShowMobileConversations] = useState(true);
   const [showUserSearch, setShowUserSearch] = useState(false);
+  const [isPollingMessages, setIsPollingMessages] = useState(false);
+  const currentMessagesRef = useRef<Message[]>([]);
 
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -58,6 +60,7 @@ export default function MessagesPage({ initialConversations, currentUserId }: Me
 
         setSelectedConversation(conversationDetails as Conversation);
         setMessages(conversationMessages as Message[]);
+        currentMessagesRef.current = conversationMessages as Message[];
         setOtherUser(otherParticipant?.User || null);
       } catch (error) {
         console.error('Error loading conversation:', error);
@@ -76,7 +79,7 @@ export default function MessagesPage({ initialConversations, currentUserId }: Me
     const refreshConversations = async () => {
       try {
         const updatedConversations = await fetchUserConversations();
-        setConversations(updatedConversations as Conversation[]);
+        setConversations(updatedConversations as unknown as Conversation[]);
       } catch (error) {
         console.error('Error refreshing conversations:', error);
       }
@@ -86,6 +89,43 @@ export default function MessagesPage({ initialConversations, currentUserId }: Me
     const interval = setInterval(refreshConversations, 30000);
     return () => clearInterval(interval);
   }, []);
+
+  // Refresh active conversation messages periodically
+  useEffect(() => {
+    if (!conversationId) return;
+
+    const refreshActiveMessages = async () => {
+      const id = parseInt(conversationId);
+      if (isNaN(id)) return;
+
+      try {
+        setIsPollingMessages(true);
+        console.log('Polling: Refreshing messages for conversation', id);
+        const updatedMessages = await fetchConversationMessages(id);
+
+        // Only update if there are new messages (compare with ref)
+        const currentMessages = currentMessagesRef.current;
+        if (
+          updatedMessages.length !== currentMessages.length ||
+          (updatedMessages.length > 0 &&
+            currentMessages.length > 0 &&
+            updatedMessages[updatedMessages.length - 1]?.id !== currentMessages[currentMessages.length - 1]?.id)
+        ) {
+          console.log('New messages detected, updating UI');
+          setMessages(updatedMessages as Message[]);
+          currentMessagesRef.current = updatedMessages as Message[];
+        }
+      } catch (error) {
+        console.error('Error refreshing active conversation messages:', error);
+      } finally {
+        setIsPollingMessages(false);
+      }
+    };
+
+    // Refresh messages every 5 seconds for active conversation (more frequent for better UX)
+    const interval = setInterval(refreshActiveMessages, 5000);
+    return () => clearInterval(interval);
+  }, [conversationId]); // Remove messages dependency to avoid excessive polling
 
   const handleDeleteConversation = async (conversationIdToDelete: number) => {
     if (!window.confirm('Apakah Anda yakin ingin menghapus percakapan ini?')) {
@@ -127,10 +167,11 @@ export default function MessagesPage({ initialConversations, currentUserId }: Me
     try {
       const updatedMessages = await fetchConversationMessages(id);
       setMessages(updatedMessages as Message[]);
+      currentMessagesRef.current = updatedMessages as Message[];
 
       // Also refresh conversations to update last message
       const updatedConversations = await fetchUserConversations();
-      setConversations(updatedConversations as Conversation[]);
+      setConversations(updatedConversations as unknown as Conversation[]);
 
       console.log('Messages refreshed successfully');
     } catch (error) {
@@ -180,6 +221,7 @@ export default function MessagesPage({ initialConversations, currentUserId }: Me
                 onBack={handleBackToConversations}
                 onDeleteConversation={() => handleDeleteConversation(parseInt(conversationId))}
                 onMessageSent={refreshMessages}
+                isPolling={isPollingMessages}
               />
             )
           ) : (

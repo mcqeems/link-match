@@ -83,11 +83,17 @@ export async function fetchUserConversations() {
         conversation_participants: {
           include: {
             User: {
-              select: {
-                id: true,
-                name: true,
-                image_url: true,
-                email: true,
+              include: {
+                profile: {
+                  select: {
+                    headline: true,
+                  },
+                },
+                roles: {
+                  select: {
+                    name: true,
+                  },
+                },
               },
             },
           },
@@ -203,14 +209,15 @@ export async function fetchConversationDetails(conversationId: number) {
         conversation_participants: {
           include: {
             User: {
-              select: {
-                id: true,
-                name: true,
-                image_url: true,
-                email: true,
+              include: {
                 profile: {
                   select: {
                     headline: true,
+                  },
+                },
+                roles: {
+                  select: {
+                    name: true,
                   },
                 },
               },
