@@ -278,14 +278,16 @@ export async function searchUsers(query?: string) {
         {
           name: {
             contains: searchTerm,
-            lte: 'insensitive',
+            // buat PostGre
+            // mode: 'insensitive',
           },
         },
         // Search by email
         {
           email: {
             contains: searchTerm,
-            lte: 'insensitive',
+            // buat PostGre
+            // mode: 'insensitive',
           },
         },
         // Search by profile headline (only for users who have profiles)
@@ -300,7 +302,8 @@ export async function searchUsers(query?: string) {
               profile: {
                 headline: {
                   contains: searchTerm,
-                  lte: 'insensitive',
+                  // buat PostGre
+                  // mode: 'insensitive',
                 },
               },
             },

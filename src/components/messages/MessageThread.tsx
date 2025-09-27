@@ -42,17 +42,25 @@ function MessageBubble({ message, isOwnMessage, showAvatar = true }: MessageBubb
   return (
     <div className={`flex ${isOwnMessage ? 'justify-end' : 'justify-start'} mb-4`}>
       <div className={`flex max-w-xs lg:max-w-md ${isOwnMessage ? 'flex-row-reverse' : 'flex-row'}`}>
-        {showAvatar && !isOwnMessage && (
-          <div className="avatar mr-2 flex-shrink-0">
-            <div className="w-8 h-8 rounded-full">
-              <Image
-                src={message.User.image_url || '/profile_image_default.png'}
-                alt={message.User.name}
-                width={32}
-                height={32}
-                className="object-cover"
-              />
-            </div>
+        {/* Avatar slot: always reserve space for other user's messages to keep bubbles aligned */}
+        {!isOwnMessage && (
+          <div className="mr-2 flex-shrink-0">
+            {showAvatar ? (
+              <div className="avatar">
+                <div className="w-8 h-8 rounded-full">
+                  <Image
+                    src={message.User.image_url || '/profile_image_default.png'}
+                    alt={message.User.name}
+                    width={32}
+                    height={32}
+                    className="object-cover"
+                  />
+                </div>
+              </div>
+            ) : (
+              // Placeholder keeps the same width/height so subsequent bubbles align with the first
+              <div className="w-8 h-8" />
+            )}
           </div>
         )}
 
@@ -64,8 +72,8 @@ function MessageBubble({ message, isOwnMessage, showAvatar = true }: MessageBubb
             `}
           >
             <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+            <span className="text-xs text-base-content/60">{formatTime(message.created_at)}</span>
           </div>
-          <span className="text-xs text-base-content/60 mt-1 px-2">{formatTime(message.created_at)}</span>
         </div>
       </div>
     </div>
@@ -169,6 +177,7 @@ export default function MessageThread({
 }: MessageThreadProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [showMenu, setShowMenu] = useState(false);
+  const [showDeleteDrawer, setShowDeleteDrawer] = useState(false);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -178,12 +187,26 @@ export default function MessageThread({
     scrollToBottom();
   }, [messages]);
 
+  // Open a bottom drawer instead of using browser confirm
   const handleDeleteConversation = () => {
-    if (window.confirm('Apakah Anda yakin ingin menghapus percakapan ini?')) {
-      onDeleteConversation?.();
-      setShowMenu(false);
-    }
+    setShowDeleteDrawer(true);
   };
+
+  const confirmDeleteConversation = () => {
+    onDeleteConversation?.();
+    setShowDeleteDrawer(false);
+    setShowMenu(false);
+  };
+
+  // Close drawer on Escape key
+  useEffect(() => {
+    if (!showDeleteDrawer) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setShowDeleteDrawer(false);
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [showDeleteDrawer]);
 
   if (!otherUser) {
     return (
@@ -231,15 +254,15 @@ export default function MessageThread({
           </div>
         </div>
 
-        {/* {onDeleteConversation && (
+        {onDeleteConversation && (
           <div className="relative">
             <button onClick={() => setShowMenu(!showMenu)} className="btn btn-ghost btn-sm btn-circle">
               <IconDotsVertical size={20} />
             </button>
 
             {showMenu && (
-              <div className="absolute right-0 top-full mt-2 z-10">
-                <div className="menu bg-base-100 rounded-box shadow-lg">
+              <div className="absolute right-0 top-full mt-2 z-10 min-w-[200px]">
+                <div className="menu bg-accent rounded-box shadow-lg">
                   <li>
                     <button onClick={handleDeleteConversation} className="text-error hover:bg-error/10">
                       <IconTrash size={16} />
@@ -250,7 +273,7 @@ export default function MessageThread({
               </div>
             )}
           </div>
-        )} */}
+        )}
       </div>
 
       <div className="divider"></div>
@@ -301,6 +324,47 @@ export default function MessageThread({
 
       {/* Click outside to close menu */}
       {showMenu && <div className="fixed inset-0 z-0" onClick={() => setShowMenu(false)} />}
+
+      {/* Delete confirmation modal (center) with dark backdrop */}
+      <div
+        className={`fixed inset-0 z-50 ${showDeleteDrawer ? '' : 'pointer-events-none'}`}
+        aria-hidden={!showDeleteDrawer}
+      >
+        {/* Backdrop: 75% black */}
+        <div
+          className={`absolute inset-0 bg-black/75 transition-opacity ${showDeleteDrawer ? 'opacity-100' : 'opacity-0'}`}
+          onClick={() => setShowDeleteDrawer(false)}
+        />
+        {/* Centered modal */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div
+            className={`w-full max-w-md transform rounded-2xl bg-base-200 p-5 shadow-2xl transition-all duration-200 ease-out ${showDeleteDrawer ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
+            role="dialog"
+            aria-modal="true"
+          >
+            <div className="flex items-start gap-3">
+              <div className="text-error mt-0.5">
+                <IconTrash size={24} />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-semibold text-base">Hapus Percakapan?</h3>
+                <p className="text-sm text-base-content/70 mt-1">
+                  Tindakan ini akan menghapus seluruh pesan dalam percakapan ini untuk anda dan yang tersangkut.
+                  Tindakan tidak dapat dibatalkan.
+                </p>
+                <div className="mt-4 flex justify-end gap-2">
+                  <button className="btn btn-ghost" onClick={() => setShowDeleteDrawer(false)}>
+                    Batal
+                  </button>
+                  <button className="btn btn-error" onClick={confirmDeleteConversation}>
+                    Hapus
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <p className=" label text-xs text-center block">Pesan direfresh setiap 30 detik sekali.</p>
     </div>
   );

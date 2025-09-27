@@ -128,10 +128,6 @@ export default function MessagesPage({ initialConversations, currentUserId }: Me
   }, [conversationId]); // Remove messages dependency to avoid excessive polling
 
   const handleDeleteConversation = async (conversationIdToDelete: number) => {
-    if (!window.confirm('Apakah Anda yakin ingin menghapus percakapan ini?')) {
-      return;
-    }
-
     try {
       const result = await deleteConversation(conversationIdToDelete);
       if (result.success) {
@@ -228,15 +224,15 @@ export default function MessagesPage({ initialConversations, currentUserId }: Me
             <div className="flex-1 flex items-center justify-center bg-base-100">
               <div className="text-center max-w-md mx-auto p-8">
                 <div className="text-6xl mb-4">💬</div>
-                <h3 className="text-2xl font-semibold mb-3">Selamat datang di Pesan</h3>
+                <h3 className="text-2xl font-semibold mb-3">Selamat datang!</h3>
                 <p className="text-base-content/70 mb-6">
-                  Pilih percakapan dari sidebar atau mulai percakapan baru untuk memulai chatting.
+                  Pilih percakapan dari sidebar atau mulai percakapan baru untuk memulai percakapan.
                 </p>
                 <div className="text-sm text-base-content/60">
                   <p>
-                    💡 <strong>Tips:</strong>
+                    💡 <strong>Manual Guide:</strong>
                   </p>
-                  <ul className="mt-2 space-y-1 text-left">
+                  <ul className="mt-2 space-y-1 text-center">
                     <li>• Klik "Baru" untuk memulai percakapan</li>
                     <li>• Tekan Enter untuk mengirim pesan</li>
                     <li>• Gunakan Shift+Enter untuk baris baru</li>

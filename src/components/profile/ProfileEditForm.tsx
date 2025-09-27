@@ -192,8 +192,8 @@ export default function ProfileEditForm({
                   </label>
                   <select name="role" defaultValue={profileInfo.User.roles?.name || ''} className="select w-full">
                     <option value="">Pilih Role</option>
-                    <option value="talenta">Talent</option>
-                    <option value="recruiter">Recruiter</option>
+                    <option value="Talenta">Talent</option>
+                    <option value="Recruiter">Recruiter</option>
                   </select>
                 </div>
               </div>

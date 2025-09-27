@@ -72,11 +72,11 @@ export default function ProfileForm({
   const defaultCategory = categoryOptions.find((option) => option.value === currentCategoryName);
 
   const incrementPage = () => {
-    if (role === 'recruiter') {
+    if (role === 'Recruiter') {
       setPage((prevCount) => prevCount + 2);
     }
 
-    if (role === 'talenta') {
+    if (role === 'Talenta') {
       setPage((prevCount) => prevCount + 1);
     }
 
@@ -140,10 +140,10 @@ export default function ProfileForm({
                   <input
                     type="radio"
                     name="role-selector"
-                    value="recruiter"
-                    defaultChecked={role === 'recruiter'}
+                    value="Recruiter"
+                    defaultChecked={role === 'Recruiter'}
                     onClick={() => {
-                      setRole('recruiter');
+                      setRole('Recruiter');
                     }}
                     className="radio bg-primary border-primary/20 checked:bg-primary-75 checked:text-primary checked:border-primary"
                   />
@@ -153,10 +153,10 @@ export default function ProfileForm({
                   <input
                     type="radio"
                     name="role-selector"
-                    value="talenta"
-                    defaultChecked={role === 'talenta'}
+                    value="Talenta"
+                    defaultChecked={role === 'Talenta'}
                     onClick={() => {
-                      setRole('talenta');
+                      setRole('Talenta');
                     }}
                     className="radio bg-primary border-primary/20 checked:bg-primary-75 checked:text-primary checked:border-primary"
                   />

@@ -85,7 +85,7 @@ export default function ConversationList({
               <IconMessages size={24} />
               Pesan
             </h2>
-            <button onClick={() => onNewConversation?.()} className="btn btn-primary btn-sm">
+            <button onClick={() => onNewConversation?.()} className="btn btn-accent btn-sm">
               <IconPlus size={16} />
               Baru
             </button>
@@ -99,7 +99,7 @@ export default function ConversationList({
               <IconMessages size={64} className="mx-auto mb-4 opacity-50" />
               <h3 className="text-lg font-semibold mb-2">Belum ada percakapan</h3>
               <p className="text-base-content/70 mb-4">Mulai percakapan dengan mengklik tombol "Baru" di atas</p>
-              <button onClick={() => onNewConversation?.()} className="btn btn-primary btn-sm">
+              <button onClick={() => onNewConversation?.()} className="btn btn-accent btn-sm">
                 <IconPlus size={16} />
                 Mulai Percakapan
               </button>
