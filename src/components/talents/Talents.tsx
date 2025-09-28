@@ -1,22 +1,70 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { fetchProfileTalentAll } from '@/lib/data';
+import { fetchProfileTalentAll, getCategories } from '@/lib/data';
+import { IconZoomQuestion } from '@tabler/icons-react';
 
 type Props = {
   page?: number;
+  category?: number;
+  q?: string;
 };
 
-export default async function Talents({ page = 1 }: Props) {
-  const data = await fetchProfileTalentAll(page);
+export default async function Talents({ page = 1, category, q }: Props) {
+  const [data, categories] = await Promise.all([fetchProfileTalentAll(page, category, q), getCategories()]);
 
-  const hrefFor = (p: number) => `/talents?page=${p}`;
+  const hrefFor = (p: number) =>
+    `/talents?page=${p}${typeof category === 'number' ? `&category=${category}` : ''}${
+      q ? `&q=${encodeURIComponent(q)}` : ''
+    }`;
 
   return (
     <div className="max-w-6xl mx-auto p-4 mt-12 md:p-8 min-h-screen">
       <h1 className="text-2xl md:text-4xl font-bold md:mb-6 mb-2 font-mono">Talents</h1>
 
+      {/* Filters: Category + Search by name */}
+      <form
+        method="get"
+        action="/talents"
+        className="mb-4 flex md:flex-row flex-col items-center justify-center md:gap-3 gap-1"
+      >
+        <input type="hidden" name="page" value={1} />
+        <label className="label p-0">
+          <span className="label-text mr-2">Category</span>
+        </label>
+        <select
+          name="category"
+          defaultValue={typeof category === 'number' ? String(category) : ''}
+          className="select select-bordered select-sm w-full md:max-w-xs"
+          aria-label="Filter by category"
+        >
+          <option value="">All</option>
+          {categories.map((c) => (
+            <option key={c.id} value={c.id}>
+              {c.name}
+            </option>
+          ))}
+        </select>
+        <label className="label p-0">
+          <span className="label-text mr-2">Search</span>
+        </label>
+        <input
+          type="text"
+          name="q"
+          defaultValue={q ?? ''}
+          placeholder="Search by name..."
+          className="input input-bordered input-sm w-full"
+          aria-label="Search by name"
+        />
+        <button type="submit" className="btn btn-sm mt-2">
+          Apply
+        </button>
+      </form>
+
       {data.items.length === 0 ? (
-        <div className="text-center text-base-content/60 py-12">No talents found.</div>
+        <div className="py-12 flex flex-col items-center justify-center gap-4">
+          <IconZoomQuestion className=" opacity-75" size={100} />
+          <p className="text-center text-base-content/60">No talents found.</p>
+        </div>
       ) : (
         <div className="grid md:gap-6 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {data.items.map((p) => {

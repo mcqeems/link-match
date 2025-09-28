@@ -5,7 +5,11 @@ import { auth } from '@/lib/auth';
 import { Suspense } from 'react';
 import Talents from '@/components/talents/Talents';
 
-export default async function TalentsPage({ searchParams }: { searchParams?: { page?: string } }) {
+export default async function TalentsPage({
+  searchParams,
+}: {
+  searchParams?: { page?: string; category?: string; q?: string };
+}) {
   const param = await searchParams;
   const currentHeaders = await headers();
   const session = await auth.api.getSession({
@@ -25,10 +29,12 @@ export default async function TalentsPage({ searchParams }: { searchParams?: { p
   }
 
   const page = Number(param?.page ?? 1) || 1;
+  const category = param?.category ? Number(param.category) : undefined;
+  const q = param?.q ?? undefined;
 
   return (
     <Suspense>
-      <Talents page={page} />
+      <Talents page={page} category={category} q={q} />
     </Suspense>
   );
 }

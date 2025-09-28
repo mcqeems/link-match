@@ -45,7 +45,7 @@ export async function fetchProfileInfo() {
   return response;
 }
 
-export async function fetchProfileTalentAll(page: number = 1) {
+export async function fetchProfileTalentAll(page: number = 1, categoryId?: number, q?: string) {
   // Basic pagination settings
   const currentPage = Math.max(1, Number.isFinite(page) ? page : 1);
   const pageSize = 6;
@@ -71,6 +71,17 @@ export async function fetchProfileTalentAll(page: number = 1) {
   const whereClause: any = {
     ...(session?.user?.id ? { user_id: { not: session.user.id } } : {}),
     ...roleFilter,
+    ...(typeof categoryId === 'number' && !Number.isNaN(categoryId) ? { category_id: categoryId } : {}),
+    ...(q && q.trim()
+      ? {
+          User: {
+            ...roleFilter.User,
+            name: {
+              contains: q.trim(),
+            },
+          },
+        }
+      : {}),
   };
 
   // Fetch total count for pagination metadata
