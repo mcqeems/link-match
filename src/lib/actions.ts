@@ -375,13 +375,8 @@ export async function createOrFindConversation(
       // Fetch recipient email and name; also sender name
       const [toUser, fromUser] = await Promise.all([
         prisma.user.findUnique({ where: { id: otherUserId }, select: { email: true, name: true } }),
-        prisma.user.findUnique({ where: { id: session.user.id }, select: { name: true } }),
+        prisma.user.findUnique({ where: { id: session.user.id }, select: { name: true, id: true } }),
       ]);
-
-      // Build a simple profile URL if available; otherwise link to conversation/messages page
-      const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-      const fromProfileUrl = `${baseUrl}/profile`;
-      const fromMessagesUrl = `${baseUrl}/messages`;
 
       if (toUser?.email && fromUser?.name) {
         // Don't block the response on email; log any errors
@@ -389,8 +384,10 @@ export async function createOrFindConversation(
           toEmail: toUser.email,
           toName: toUser.name,
           fromName: fromUser.name,
-          fromProfileUrl,
-          fromMessagesUrl,
+          // Use the new public profile route: /profile/[uuid]
+          fromProfileUrl: `${process.env.BASE_URL}/profile/${fromUser.id}`,
+          // Keep messages URL as requested
+          fromMessagesUrl: `${process.env.BASE_URL}/messages`,
         }).catch((e) => console.error('Failed to send connection email:', e));
       }
     }
@@ -417,23 +414,19 @@ export async function requestConnection(otherUserId: string): Promise<{ success:
 
     const [toUser, fromUser] = await Promise.all([
       prisma.user.findUnique({ where: { id: otherUserId }, select: { email: true, name: true } }),
-      prisma.user.findUnique({ where: { id: session.user.id }, select: { name: true } }),
+      prisma.user.findUnique({ where: { id: session.user.id }, select: { name: true, id: true } }),
     ]);
 
     if (!toUser?.email) {
       return { success: false, error: 'Destination user has no email' };
     }
 
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-    const fromProfileUrl = `${baseUrl}/profile`;
-    const fromMessagesUrl = `${baseUrl}/messages`;
-
     await sendConnectionRequestEmail({
       toEmail: toUser.email,
       toName: toUser.name,
       fromName: fromUser?.name || 'A LinkMatch user',
-      fromProfileUrl,
-      fromMessagesUrl,
+      fromProfileUrl: fromUser ? `/profile/${fromUser.id}` : undefined,
+      fromMessagesUrl: '/messages',
     });
 
     return { success: true, error: null };

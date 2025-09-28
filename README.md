@@ -7,7 +7,7 @@ Environment variables required:
 - GMAIL_USER: Your Gmail address (notifications sender)
 - GMAIL_PASS: An App Password created in Google Account (2FA required)
 - EMAIL_FROM (optional): Custom From header; defaults to GMAIL_USER
-- NEXT_PUBLIC_APP_URL: Base URL for generating links in emails (e.g. http://localhost:3000)
+- BASE_URL: Base URL for generating links in emails (e.g. http://localhost:3000)
 
 Steps to set up Gmail App Password:
 

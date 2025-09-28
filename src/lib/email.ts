@@ -55,15 +55,19 @@ export async function sendConnectionRequestEmail(params: {
   fromProfileUrl?: string;
   fromMessagesUrl?: string;
 }) {
-  const { toEmail, toName, fromName, fromProfileUrl, fromMessagesUrl } = params;
+  const { toEmail, toName, fromName, fromProfileUrl } = params;
+
+  // Keep messages URL as requested: '/messages' unless explicitly overridden
+  const messageHref =
+    params.fromMessagesUrl && params.fromMessagesUrl.length > 0 ? params.fromMessagesUrl : '/messages';
 
   const subject = `${fromName} wants to connect with you on LinkMatch`;
   const greeting = toName ? `Hi ${toName},` : 'Hi,';
   const profileLink = fromProfileUrl
-    ? `<p>View profile: <a href="${fromProfileUrl}" target="_blank" rel="noreferrer">${fromProfileUrl}</a></p>`
+    ? `<p style="margin:0 0 8px">View profile: <a href="${fromProfileUrl}" target="_blank" rel="noreferrer">${fromProfileUrl}</a></p>`
     : '';
-  const messageLink = fromMessagesUrl
-    ? `<p>View message: <a href="${fromMessagesUrl}" target="_blank" rel="noreferrer">${fromMessagesUrl}</a></p>`
+  const messageLink = messageHref
+    ? `<p style="margin:0 0 8px">View messages: <a href="${messageHref}" target="_blank" rel="noreferrer">${messageHref}</a></p>`
     : '';
 
   const html = `
@@ -71,16 +75,19 @@ export async function sendConnectionRequestEmail(params: {
       <h2 style="margin:0 0 12px">New connection request</h2>
       <p style="margin:0 0 12px">${greeting}</p>
       <p style="margin:0 0 12px"><strong>${fromName}</strong> would like to connect with you on <strong>LinkMatch</strong>.</p>
-      ${messageLink}
+  ${profileLink}
+  ${messageLink}
       <p style="margin:16px 0 0">You can reply directly in LinkMatch messages.</p>
       <hr style="margin:20px 0; border:none; border-top:1px solid #eee"/>
       <p style="font-size:12px; color:#666; margin:0">This email was sent by LinkMatch notifications.</p>
     </div>
   `;
 
-  const text = `${toName ? `Hi ${toName},` : 'Hi,'}\n\n${fromName} would like to connect with you on LinkMatch.
-    \nView message: ${fromMessagesUrl}
-  }\n\nYou can reply directly in LinkMatch messages.`;
+  const textLines = [toName ? `Hi ${toName},` : 'Hi,', '', `${fromName} would like to connect with you on LinkMatch.`];
+  if (fromProfileUrl) textLines.push(`View profile: ${fromProfileUrl}`);
+  if (messageHref) textLines.push(`View messages: ${messageHref}`);
+  textLines.push('', 'You can reply directly in LinkMatch messages.');
+  const text = textLines.join('\n');
 
   await sendEmail({ to: toEmail, subject, html, text });
 }

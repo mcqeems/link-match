@@ -10,7 +10,11 @@ import {
   IconBriefcase,
   IconEdit,
   IconUserCircle,
+  IconMailUp,
+  IconMessage,
 } from '@tabler/icons-react';
+import { headers } from 'next/headers';
+import { auth } from '@/lib/auth';
 import ExpandableText from './ExpandableText';
 
 interface PropsTypes {
@@ -49,6 +53,11 @@ function SocialLinks({ profileInfo }: { profileInfo: NonNullable<Awaited<ReturnT
 
 // Komponen utama yang akan memilih kartu mana yang akan ditampilkan
 export default async function ProfileCard({ mode, uuid }: PropsTypes) {
+  const currentHeaders = await headers();
+  const session = await auth.api.getSession({
+    headers: currentHeaders,
+  });
+
   let profileInfo = null;
 
   if (mode === 'personal') {
@@ -94,6 +103,19 @@ export default async function ProfileCard({ mode, uuid }: PropsTypes) {
                   <IconEdit size={16} />
                   Edit Profil
                 </Link>
+              )}
+
+              {mode === 'public' && session && (
+                <div className="flex flex-col md:flex-row gap-2 md:gap-4">
+                  <Link href="/profile/edit" className="btn btn-accent btn-sm">
+                    <IconMailUp size={16} />
+                    Connect
+                  </Link>
+                  <Link href="/messages" className="btn btn-accent btn-sm">
+                    <IconMessage size={16} />
+                    Kirim Pesan
+                  </Link>
+                </div>
               )}
             </div>
             <p className="text-xl text-white/75 mt-1">{headline || null}</p>
