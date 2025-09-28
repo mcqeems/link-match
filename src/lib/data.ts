@@ -45,14 +45,70 @@ export async function fetchProfileInfo() {
   return response;
 }
 
-export async function fetchProfileAll() {
-  const response = await prisma.profile.findMany({
-    include: {
-      categories: true,
-      User: true,
-    },
+export async function fetchProfileTalentAll(page: number = 1) {
+  // Basic pagination settings
+  const currentPage = Math.max(1, Number.isFinite(page) ? page : 1);
+  const pageSize = 5;
+
+  // Exclude current user (if authenticated) from results
+  const currentHeaders = await headers();
+  const session = await auth.api.getSession({
+    headers: currentHeaders,
   });
-  return response;
+
+  // Only show Talenta role (exclude Recruiter)
+  const roleFilter = {
+    User: {
+      roles: {
+        // 'roles' is a 1:1 relation; use 'is' to filter by role name
+        is: {
+          name: 'Talenta',
+        },
+      },
+    },
+  };
+
+  const whereClause: any = {
+    ...(session?.user?.id ? { user_id: { not: session.user.id } } : {}),
+    ...roleFilter,
+  };
+
+  // Fetch total count for pagination metadata
+  const total = await prisma.profile.count({ where: whereClause });
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+
+  // Clamp current page to available range
+  const safePage = Math.min(currentPage, totalPages);
+
+  const items = await prisma.profile.findMany({
+    where: whereClause,
+    include: {
+      categories: {
+        select: { id: true, name: true },
+      },
+      User: {
+        select: {
+          id: true,
+          name: true,
+          image_url: true,
+          roles: { select: { name: true } },
+        },
+      },
+    },
+    orderBy: { created_at: 'desc' },
+    skip: (safePage - 1) * pageSize,
+    take: pageSize,
+  });
+
+  return {
+    items,
+    page: safePage,
+    pageSize,
+    total,
+    totalPages,
+    hasPrev: safePage > 1,
+    hasNext: safePage < totalPages,
+  };
 }
 
 export async function fetchProfileByUUID(uuid: string | undefined) {

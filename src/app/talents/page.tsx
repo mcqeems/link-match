@@ -5,7 +5,8 @@ import { auth } from '@/lib/auth';
 import { Suspense } from 'react';
 import Talents from '@/components/talents/Talents';
 
-export default async function TalentsPage() {
+export default async function TalentsPage({ searchParams }: { searchParams?: { page?: string } }) {
+  const param = await searchParams;
   const currentHeaders = await headers();
   const session = await auth.api.getSession({
     headers: currentHeaders,
@@ -23,9 +24,11 @@ export default async function TalentsPage() {
     redirect('/');
   }
 
+  const page = Number(param?.page ?? 1) || 1;
+
   return (
     <Suspense>
-      <Talents />
+      <Talents page={page} />
     </Suspense>
   );
 }
