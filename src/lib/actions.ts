@@ -142,6 +142,8 @@ async function handleProfileUpdate(formData: FormData, isUpdate: boolean = false
     // Extract form data
     const profileData = extractProfileData(formData);
 
+    // (moved requestConnectionAction to top-level scope)
+
     // Validate and process data
     const [roleRecord, categoryId, imageUrl] = await Promise.all([
       validateRole(profileData.roleName),
@@ -384,10 +386,8 @@ export async function createOrFindConversation(
           toEmail: toUser.email,
           toName: toUser.name,
           fromName: fromUser.name,
-          // Use the new public profile route: /profile/[uuid]
-          fromProfileUrl: `${process.env.BASE_URL}/profile/${fromUser.id}`,
-          // Keep messages URL as requested
-          fromMessagesUrl: `${process.env.BASE_URL}/messages`,
+          fromProfileUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/profile/${fromUser.id}`,
+          fromMessagesUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/messages`,
         }).catch((e) => console.error('Failed to send connection email:', e));
       }
     }
@@ -404,7 +404,9 @@ export async function createOrFindConversation(
  * Server action to explicitly request a connection (send notification email) without creating a conversation.
  * This can be used by a future "Connect" button.
  */
-export async function requestConnection(otherUserId: string): Promise<{ success: boolean; error: string | null }> {
+export async function requestConnection(
+  otherUserId: string | undefined
+): Promise<{ success: boolean; error: string | null }> {
   try {
     const session = await authenticateUser();
 
@@ -425,8 +427,8 @@ export async function requestConnection(otherUserId: string): Promise<{ success:
       toEmail: toUser.email,
       toName: toUser.name,
       fromName: fromUser?.name || 'A LinkMatch user',
-      fromProfileUrl: fromUser ? `/profile/${fromUser.id}` : undefined,
-      fromMessagesUrl: '/messages',
+      fromProfileUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/profile/${fromUser?.id}`,
+      fromMessagesUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/messages`,
     });
 
     return { success: true, error: null };
@@ -524,6 +526,24 @@ export async function deleteConversation(conversationId: number): Promise<{ succ
   } catch (error) {
     console.error('Error deleting conversation:', error);
     const msg = error instanceof Error ? error.message : 'Terjadi kesalahan saat menghapus percakapan.';
+    return { success: false, error: msg };
+  }
+}
+
+// A useActionState-friendly wrapper for requestConnection to work with client forms
+export async function requestConnectionAction(
+  _prev: { error: string | null; success: boolean },
+  formData: FormData
+): Promise<{ error: string | null; success: boolean }> {
+  try {
+    const otherUserId = (formData.get('otherUserId') as string) || '';
+    if (!otherUserId) {
+      return { success: false, error: 'User tidak valid' };
+    }
+    const res = await requestConnection(otherUserId);
+    return { success: res.success, error: res.error };
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : 'Gagal mengirim permintaan koneksi';
     return { success: false, error: msg };
   }
 }

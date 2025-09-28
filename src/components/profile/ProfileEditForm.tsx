@@ -4,6 +4,7 @@ import { useFormStatus } from 'react-dom';
 import { useActionState, useEffect, useState } from 'react';
 import { updateProfile } from '@/lib/actions';
 import { useRouter } from 'next/navigation';
+import { useToast } from '@/components/notifications/ToastProvider';
 import Image from 'next/image';
 import Link from 'next/link';
 import Select from 'react-select';
@@ -71,13 +72,21 @@ export default function ProfileEditForm({
   const [imagePreview, setImagePreview] = useState<string | null>(profileInfo.User.image_url || null);
   const [clientError, setClientError] = useState<string | null>(null);
   const router = useRouter();
+  const toast = useToast();
 
   useEffect(() => {
     if (state.success) {
+      toast.success('Profil berhasil diperbarui');
       router.push('/profile');
       router.refresh();
     }
-  }, [state.success, router]);
+  }, [state.success, router, toast]);
+
+  useEffect(() => {
+    if (state.error || clientError) {
+      toast.error(clientError || state.error || 'Terjadi kesalahan');
+    }
+  }, [state.error, clientError, toast]);
 
   const categoryOptions = categories.map((cat) => ({
     value: cat.name,

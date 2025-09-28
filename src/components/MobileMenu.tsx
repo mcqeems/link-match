@@ -55,7 +55,7 @@ export default function MobileMenu({ session, onSignOut }: { session: any; onSig
 
           {session ? (
             <>
-              <li className="pt-4 border-t border-gray-700">
+              <li>
                 <Link href="/profile" onClick={() => setOpen(false)}>
                   Profile
                 </Link>

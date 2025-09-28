@@ -4,7 +4,9 @@ import { useState, useEffect, useRef, useTransition } from 'react';
 import Image from 'next/image';
 import { useActionState } from 'react';
 import { sendMessage } from '@/lib/actions';
+import { useToast } from '@/components/notifications/ToastProvider';
 import { IconSend, IconArrowLeft, IconDotsVertical, IconTrash, IconUserCircle } from '@tabler/icons-react';
+import Link from 'next/link';
 import type { Message, User } from './types';
 
 interface MessageThreadProps {
@@ -87,6 +89,7 @@ interface MessageInputProps {
 }
 
 function MessageInput({ conversationId, onMessageSent }: MessageInputProps) {
+  const toast = useToast();
   const [message, setMessage] = useState('');
   const [state, formAction, isPendingAction] = useActionState(sendMessage, { error: null, success: false });
   const [isPending, startTransition] = useTransition();
@@ -103,6 +106,12 @@ function MessageInput({ conversationId, onMessageSent }: MessageInputProps) {
       processedCount.current = submissionCount;
     }
   }, [state.success, submissionCount, onMessageSent]);
+
+  useEffect(() => {
+    if (state.error) {
+      toast.error(state.error);
+    }
+  }, [state.error, toast]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -129,11 +138,7 @@ function MessageInput({ conversationId, onMessageSent }: MessageInputProps) {
 
   return (
     <div className=" p-4 bg-base-100">
-      {state.error && (
-        <div className="alert alert-error mb-4">
-          <span>{state.error}</span>
-        </div>
-      )}
+      {/* error toasts handled via effect */}
 
       <form ref={formRef} onSubmit={handleSubmit} className="flex gap-2">
         <textarea
@@ -175,6 +180,7 @@ export default function MessageThread({
   isPolling = false,
   className = '',
 }: MessageThreadProps) {
+  const toast = useToast();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [showMenu, setShowMenu] = useState(false);
   const [showDeleteDrawer, setShowDeleteDrawer] = useState(false);
@@ -193,7 +199,9 @@ export default function MessageThread({
   };
 
   const confirmDeleteConversation = () => {
+    toast.info('Deleting conversation...');
     onDeleteConversation?.();
+    toast.success('Conversation deleted');
     setShowDeleteDrawer(false);
     setShowMenu(false);
   };
@@ -226,33 +234,34 @@ export default function MessageThread({
     <div className={`flex flex-col h-full bg-base-100 ${className}`}>
       {/* Header */}
       <div className="flex items-center justify-between p-4 pb-0">
-        <div className="flex items-center gap-3">
-          {onBack && (
-            <button onClick={onBack} className="btn btn-ghost btn-sm btn-circle lg:hidden">
-              <IconArrowLeft size={20} />
-            </button>
-          )}
+        <Link href={`${process.env.NEXT_PUBLIC_BASE_URL}/profile/${otherUser.id}`}>
+          <div className="flex items-center gap-3">
+            {onBack && (
+              <button onClick={onBack} className="btn btn-ghost btn-sm btn-circle lg:hidden">
+                <IconArrowLeft size={20} />
+              </button>
+            )}
+            <div className="avatar">
+              <div className="w-10 h-10 rounded-full">
+                <Image
+                  src={otherUser.image_url || '/profile_image_default.png'}
+                  alt={otherUser.name}
+                  width={40}
+                  height={40}
+                  className="object-cover"
+                />
+              </div>
+            </div>
 
-          <div className="avatar">
-            <div className="w-10 h-10 rounded-full">
-              <Image
-                src={otherUser.image_url || '/profile_image_default.png'}
-                alt={otherUser.name}
-                width={40}
-                height={40}
-                className="object-cover"
-              />
+            <div>
+              <h3 className="font-semibold">{otherUser.name}</h3>
+              <p className="text-sm text-base-content/70">
+                {otherUser.profile?.headline || otherUser.roles?.name}
+                {isPolling && <span className="ml-2 text-xs text-primary-light"> ⟳ </span>}
+              </p>
             </div>
           </div>
-
-          <div>
-            <h3 className="font-semibold">{otherUser.name}</h3>
-            <p className="text-sm text-base-content/70">
-              {otherUser.profile?.headline || otherUser.roles?.name}
-              {isPolling && <span className="ml-2 text-xs text-primary-light"> ⟳ </span>}
-            </p>
-          </div>
-        </div>
+        </Link>
 
         {onDeleteConversation && (
           <div className="relative">

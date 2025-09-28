@@ -5,6 +5,7 @@ import { useActionState, useEffect, useState } from 'react';
 import { postProfileInfo } from '@/lib/actions';
 import type { categories } from '@/generated/prisma';
 import { redirect, useRouter } from 'next/navigation';
+import { useToast } from '@/components/notifications/ToastProvider';
 import Select from 'react-select';
 
 type FormState = {
@@ -55,13 +56,21 @@ export default function ProfileForm({
   const [imagePreview, setImagePreview] = useState<string | null>(profileInfo?.image_url || null);
   const [clientError, setClientError] = useState<string | null>(null);
   const router = useRouter();
+  const toast = useToast();
 
   useEffect(() => {
     if (state.success) {
+      toast.success('Profil berhasil disimpan');
       router.push('/');
       router.refresh();
     }
-  }, [state.success, router]);
+  }, [state.success, router, toast]);
+
+  useEffect(() => {
+    if (state.error || clientError) {
+      toast.error(clientError || state.error || 'Terjadi kesalahan');
+    }
+  }, [state.error, clientError, toast]);
 
   const categoryOptions = categories.map((cat) => ({
     value: cat.name,

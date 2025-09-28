@@ -2,6 +2,7 @@
 
 import { signInWithEmail } from '@/lib/actions';
 import { useRouter } from 'next/navigation';
+import { useToast } from './notifications/ToastProvider';
 import { useActionState, useEffect, useState } from 'react';
 
 const initialState = { error: null as string | null, success: false };
@@ -10,13 +11,21 @@ export default function LoginForm() {
   const router = useRouter();
   const [state, formAction] = useActionState(signInWithEmail, initialState);
   const [isLoading, setIsLoading] = useState(false);
+  const toast = useToast();
 
   useEffect(() => {
     if (state.success) {
+      toast.success('Signed in successfully');
       router.push('/');
       router.refresh();
     }
-  }, [state.success, router]);
+  }, [state.success, router, toast]);
+
+  useEffect(() => {
+    if (state.error) {
+      toast.error(state.error);
+    }
+  }, [state.error, toast]);
 
   return (
     <div className="flex flex-col h-screen justify-center items-center">

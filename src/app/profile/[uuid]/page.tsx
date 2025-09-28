@@ -1,7 +1,8 @@
 import ProfileCard from '@/components/profile/ProfileCard';
 
 export async function PageParam(params: { uuid: string }) {
-  return params.uuid;
+  const param = await params;
+  return param.uuid;
 }
 
 export default async function PublicProfile({ params }: { params: { uuid: string } }) {

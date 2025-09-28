@@ -1,4 +1,5 @@
 import { fetchProfileInfo, fetchProfileByUUID } from '@/lib/data';
+import { requestConnection } from '@/lib/actions';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
@@ -16,6 +17,7 @@ import {
 import { headers } from 'next/headers';
 import { auth } from '@/lib/auth';
 import ExpandableText from './ExpandableText';
+import ConnectButton from './ConnectButton';
 
 interface PropsTypes {
   mode: 'personal' | 'public';
@@ -79,6 +81,8 @@ export default async function ProfileCard({ mode, uuid }: PropsTypes) {
   const { User, headline, description, experiences, categories } = profileInfo;
   const { name, email, image_url, roles } = User;
 
+  // Connect handled by client island for notifications
+
   return (
     <div className="card bg-secondary shadow-xl w-full max-w-4xl mx-auto">
       <div className="card-body p-6 md:p-10">
@@ -107,10 +111,8 @@ export default async function ProfileCard({ mode, uuid }: PropsTypes) {
 
               {mode === 'public' && session && (
                 <div className="flex flex-col md:flex-row gap-2 md:gap-4">
-                  <Link href="/profile/edit" className="btn btn-accent btn-sm">
-                    <IconMailUp size={16} />
-                    Connect
-                  </Link>
+                  <ConnectButton otherUserId={User.id} />
+
                   <Link href="/messages" className="btn btn-accent btn-sm">
                     <IconMessage size={16} />
                     Kirim Pesan
