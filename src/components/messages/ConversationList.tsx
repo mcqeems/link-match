@@ -56,7 +56,7 @@ export default function ConversationList({
       <div className="flex flex-col h-full">
         <div className="p-4 border-b border-base-300">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold">Pesan</h2>
+            <h2 className="text-xl font-bold">Messages</h2>
             <div className="skeleton w-10 h-10 rounded-full"></div>
           </div>
         </div>
@@ -83,7 +83,7 @@ export default function ConversationList({
           <div className="flex justify-between items-center">
             <h2 className="text-xl font-bold flex items-center gap-2">
               <IconMessages size={24} />
-              Pesan
+              Messages
             </h2>
             <button onClick={() => onNewConversation?.()} className="btn btn-accent btn-sm">
               <IconPlus size={16} />

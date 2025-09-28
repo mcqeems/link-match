@@ -234,13 +234,13 @@ export default function MessageThread({
     <div className={`flex flex-col h-full bg-base-100 ${className}`}>
       {/* Header */}
       <div className="flex items-center justify-between p-4 pb-0">
-        <Link href={`${process.env.NEXT_PUBLIC_BASE_URL}/profile/${otherUser.id}`}>
-          <div className="flex items-center gap-3">
-            {onBack && (
-              <button onClick={onBack} className="btn btn-ghost btn-sm btn-circle lg:hidden">
-                <IconArrowLeft size={20} />
-              </button>
-            )}
+        <div className="flex items-center gap-3">
+          {onBack && (
+            <button onClick={onBack} className="btn btn-ghost btn-sm btn-circle lg:hidden">
+              <IconArrowLeft size={20} />
+            </button>
+          )}
+          <Link className="flex items-center gap-3" href={`/profile/${otherUser.id}`}>
             <div className="avatar">
               <div className="w-10 h-10 rounded-full">
                 <Image
@@ -260,8 +260,8 @@ export default function MessageThread({
                 {isPolling && <span className="ml-2 text-xs text-primary-light"> ⟳ </span>}
               </p>
             </div>
-          </div>
-        </Link>
+          </Link>
+        </div>
 
         {onDeleteConversation && (
           <div className="relative">

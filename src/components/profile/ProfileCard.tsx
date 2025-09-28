@@ -110,9 +110,8 @@ export default async function ProfileCard({ mode, uuid }: PropsTypes) {
               )}
 
               {mode === 'public' && session && (
-                <div className="flex flex-col md:flex-row gap-2 md:gap-4">
+                <div className="hidden md:flex md:flex-row md:gap-4">
                   <ConnectButton otherUserId={User.id} />
-
                   <Link href="/messages" className="btn btn-accent btn-sm">
                     <IconMessage size={16} />
                     Kirim Pesan
@@ -129,6 +128,15 @@ export default async function ProfileCard({ mode, uuid }: PropsTypes) {
               </div>
             )}
             <SocialLinks profileInfo={profileInfo} />
+            {mode === 'public' && session && (
+              <div className="flex flex-row mt-2 md:hidden gap-2">
+                <ConnectButton otherUserId={User.id} />
+                <Link href="/messages" className="btn btn-accent btn-sm">
+                  <IconMessage size={16} />
+                  Kirim Pesan
+                </Link>
+              </div>
+            )}
           </div>
         </div>
 

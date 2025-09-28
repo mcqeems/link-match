@@ -48,7 +48,7 @@ export async function fetchProfileInfo() {
 export async function fetchProfileTalentAll(page: number = 1) {
   // Basic pagination settings
   const currentPage = Math.max(1, Number.isFinite(page) ? page : 1);
-  const pageSize = 5;
+  const pageSize = 6;
 
   // Exclude current user (if authenticated) from results
   const currentHeaders = await headers();

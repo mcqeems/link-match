@@ -8,6 +8,7 @@ import UserSearch from './UserSearch';
 import { fetchUserConversations, fetchConversationMessages, fetchConversationDetails } from '@/lib/data';
 import { deleteConversation } from '@/lib/actions';
 import type { Conversation, Message, User } from './types';
+import { IconMessage } from '@tabler/icons-react';
 
 interface MessagesPageProps {
   initialConversations: Conversation[];
@@ -223,7 +224,9 @@ export default function MessagesPage({ initialConversations, currentUserId }: Me
           ) : (
             <div className="flex-1 flex items-center justify-center bg-base-100">
               <div className="text-center max-w-md mx-auto p-8">
-                <div className="text-6xl mb-4">💬</div>
+                <div className="mb-4 flex justify-center items-center">
+                  <IconMessage size={84} />
+                </div>
                 <h3 className="text-2xl font-semibold mb-3">Selamat datang!</h3>
                 <p className="text-base-content/70 mb-6">
                   Pilih percakapan dari sidebar atau mulai percakapan baru untuk memulai percakapan.

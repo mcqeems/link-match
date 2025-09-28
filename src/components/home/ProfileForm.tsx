@@ -123,7 +123,7 @@ export default function ProfileForm({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 overflow-auto">
-      <div className="bg-primary rounded-xl p-6 w-full max-w-4xl shadow-lg">
+      <div className="bg-secondary rounded-xl p-6 w-full max-w-4xl shadow-lg">
         <h2 className="text-xl font-bold mb-4">Selamat datang di LinkMatch!</h2>
         <p className="mb-6">
           Untuk melanjutkan penggunaan terhadap aplikasi kami, silahkan mengisi informasi berikut ini terlebih dahulu
@@ -246,7 +246,7 @@ export default function ProfileForm({
                   name="experiences"
                   rows={4}
                   defaultValue={profileInfo?.experiences || ''}
-                  placeholder="Sebutkan pengalaman relevan Anda..."
+                  placeholder="Sebutkan pengalaman Anda..."
                   className="w-full rounded-md input"
                 ></textarea>
               </div>
