@@ -45,6 +45,33 @@ export async function fetchProfileInfo() {
   return response;
 }
 
+export async function fetchProfileByUUID(uuid: string | undefined) {
+  const response = await prisma.profile.findUnique({
+    where: { user_id: uuid },
+    include: {
+      User: {
+        select: {
+          roles: {
+            select: { name: true },
+          },
+          image_url: true,
+          name: true,
+          email: true,
+          id: true,
+        },
+      },
+      categories: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    },
+  });
+
+  return response;
+}
+
 export async function getCategories() {
   try {
     const categories = await prisma.categories.findMany();

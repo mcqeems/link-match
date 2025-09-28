@@ -1,4 +1,4 @@
-import { fetchProfileInfo } from '@/lib/data';
+import { fetchProfileInfo, fetchProfileByUUID } from '@/lib/data';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
@@ -15,6 +15,7 @@ import ExpandableText from './ExpandableText';
 
 interface PropsTypes {
   mode: 'personal' | 'public';
+  uuid?: string;
 }
 
 function SocialLinks({ profileInfo }: { profileInfo: NonNullable<Awaited<ReturnType<typeof fetchProfileInfo>>> }) {
@@ -47,8 +48,14 @@ function SocialLinks({ profileInfo }: { profileInfo: NonNullable<Awaited<ReturnT
 }
 
 // Komponen utama yang akan memilih kartu mana yang akan ditampilkan
-export default async function ProfileCard({ mode }: PropsTypes) {
-  const profileInfo = await fetchProfileInfo();
+export default async function ProfileCard({ mode, uuid }: PropsTypes) {
+  let profileInfo = null;
+
+  if (mode === 'personal') {
+    profileInfo = await fetchProfileInfo();
+  } else if (mode === 'public') {
+    profileInfo = await fetchProfileByUUID(uuid);
+  }
 
   if (!profileInfo) {
     return (
@@ -109,7 +116,13 @@ export default async function ProfileCard({ mode }: PropsTypes) {
             <IconInfoCircle />
             Tentang Saya
           </h2>
-          <ExpandableText text={description} maxLength={300} placeholder="Anda belum menambahkan deskripsi." />
+          <ExpandableText
+            text={description}
+            maxLength={300}
+            placeholder={
+              mode === 'personal' ? 'Anda belum menambahkan pengalaman.' : 'User ini belum menambahkan pengalaman.'
+            }
+          />
         </div>
 
         <div>
@@ -117,7 +130,13 @@ export default async function ProfileCard({ mode }: PropsTypes) {
             <IconBriefcase />
             Pengalaman
           </h2>
-          <ExpandableText text={experiences} maxLength={300} placeholder="Anda belum menambahkan pengalaman." />
+          <ExpandableText
+            text={experiences}
+            maxLength={300}
+            placeholder={
+              mode === 'personal' ? 'Anda belum menambahkan pengalaman.' : 'User ini belum menambahkan pengalaman.'
+            }
+          />
         </div>
       </div>
     </div>
