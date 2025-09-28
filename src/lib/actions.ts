@@ -7,6 +7,7 @@ import { BetterAuthError } from 'better-auth';
 import { PrismaClient } from '@/generated/prisma';
 import { getCategories } from './data';
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import { sendConnectionRequestEmail } from './email';
 
 type FormState = { error: string | null; success: boolean };
 
@@ -342,6 +343,7 @@ export async function createOrFindConversation(
     }
 
     // Create new conversation
+    let created = false;
     const conversation = await prisma.$transaction(async (tx) => {
       const newConversation = await tx.conversations.create({
         data: {
@@ -364,14 +366,81 @@ export async function createOrFindConversation(
         ],
       });
 
+      created = true;
       return newConversation;
     });
+
+    // Fire-and-forget email when a new conversation is created
+    if (created) {
+      // Fetch recipient email and name; also sender name
+      const [toUser, fromUser] = await Promise.all([
+        prisma.user.findUnique({ where: { id: otherUserId }, select: { email: true, name: true } }),
+        prisma.user.findUnique({ where: { id: session.user.id }, select: { name: true } }),
+      ]);
+
+      // Build a simple profile URL if available; otherwise link to conversation/messages page
+      const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+      const fromProfileUrl = `${baseUrl}/profile`;
+      const fromMessagesUrl = `${baseUrl}/messages`;
+
+      if (toUser?.email && fromUser?.name) {
+        // Don't block the response on email; log any errors
+        sendConnectionRequestEmail({
+          toEmail: toUser.email,
+          toName: toUser.name,
+          fromName: fromUser.name,
+          fromProfileUrl,
+          fromMessagesUrl,
+        }).catch((e) => console.error('Failed to send connection email:', e));
+      }
+    }
 
     return { conversationId: conversation.id, error: null };
   } catch (error) {
     console.error('Error creating conversation:', error);
     const msg = error instanceof Error ? error.message : 'Terjadi kesalahan saat membuat percakapan.';
     return { conversationId: 0, error: msg };
+  }
+}
+
+/**
+ * Server action to explicitly request a connection (send notification email) without creating a conversation.
+ * This can be used by a future "Connect" button.
+ */
+export async function requestConnection(otherUserId: string): Promise<{ success: boolean; error: string | null }> {
+  try {
+    const session = await authenticateUser();
+
+    if (session.user.id === otherUserId) {
+      return { success: false, error: 'Cannot request connection with yourself' };
+    }
+
+    const [toUser, fromUser] = await Promise.all([
+      prisma.user.findUnique({ where: { id: otherUserId }, select: { email: true, name: true } }),
+      prisma.user.findUnique({ where: { id: session.user.id }, select: { name: true } }),
+    ]);
+
+    if (!toUser?.email) {
+      return { success: false, error: 'Destination user has no email' };
+    }
+
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    const fromProfileUrl = `${baseUrl}/profile`;
+    const fromMessagesUrl = `${baseUrl}/messages`;
+
+    await sendConnectionRequestEmail({
+      toEmail: toUser.email,
+      toName: toUser.name,
+      fromName: fromUser?.name || 'A LinkMatch user',
+      fromProfileUrl,
+      fromMessagesUrl,
+    });
+
+    return { success: true, error: null };
+  } catch (error) {
+    console.error('Error requesting connection:', error);
+    const msg = error instanceof Error ? error.message : 'Terjadi kesalahan saat mengirim email koneksi.';
+    return { success: false, error: msg };
   }
 }
 
