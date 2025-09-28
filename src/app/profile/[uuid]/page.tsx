@@ -1,4 +1,8 @@
 import ProfileCard from '@/components/profile/ProfileCard';
+import { headers } from 'next/headers';
+import { auth } from '@/lib/auth';
+import { redirect } from 'next/navigation';
+import { fetchProfileInfo } from '@/lib/data';
 
 export async function PageParam(params: { uuid: string }) {
   const param = await params;
@@ -6,6 +10,23 @@ export async function PageParam(params: { uuid: string }) {
 }
 
 export default async function PublicProfile({ params }: { params: { uuid: string } }) {
+  const currentHeaders = await headers();
+  const session = await auth.api.getSession({
+    headers: currentHeaders,
+  });
+
+  if (!session) {
+    redirect('/');
+  }
+
+  if (session) {
+    const profileInfo = await fetchProfileInfo();
+    const role = profileInfo?.User.roles?.name;
+    if (!role || role === undefined) {
+      redirect('/');
+    }
+  }
+
   const uuid = await PageParam(params);
 
   return (
