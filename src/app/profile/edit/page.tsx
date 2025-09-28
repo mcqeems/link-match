@@ -3,6 +3,7 @@ import { fetchProfileInfo, getCategories } from '@/lib/data';
 import { headers } from 'next/headers';
 import { auth } from '@/lib/auth';
 import ProfileEditForm from '@/components/profile/ProfileEditForm';
+import { Suspense } from 'react';
 
 export default async function ProfileEdit() {
   const currentHeaders = await headers();
@@ -22,7 +23,9 @@ export default async function ProfileEdit() {
 
   return (
     <div className="my-24">
-      <ProfileEditForm profileInfo={profileInfo} categories={categories} />
+      <Suspense>
+        <ProfileEditForm profileInfo={profileInfo} categories={categories} />
+      </Suspense>
     </div>
   );
 }

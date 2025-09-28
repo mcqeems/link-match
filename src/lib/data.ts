@@ -45,6 +45,16 @@ export async function fetchProfileInfo() {
   return response;
 }
 
+export async function fetchProfileAll() {
+  const response = await prisma.profile.findMany({
+    include: {
+      categories: true,
+      User: true,
+    },
+  });
+  return response;
+}
+
 export async function fetchProfileByUUID(uuid: string | undefined) {
   const response = await prisma.profile.findUnique({
     where: { user_id: uuid },

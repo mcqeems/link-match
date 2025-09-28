@@ -27,8 +27,7 @@ export default function SubmitButton({
     >
       {pending ? (
         <span className="inline-flex items-center gap-2">
-          <IconLoader2 size={16} className="animate-spin" />
-          {pendingText}
+          <span className="loading loading-spinner loading-sm"></span> {pendingText}
         </span>
       ) : (
         children

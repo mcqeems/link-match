@@ -2,8 +2,10 @@ import { redirect } from 'next/navigation';
 import { fetchProfileInfo } from '@/lib/data';
 import { headers } from 'next/headers';
 import { auth } from '@/lib/auth';
+import { Suspense } from 'react';
+import Talents from '@/components/talents/Talents';
 
-export default async function Talents() {
+export default async function TalentsPage() {
   const currentHeaders = await headers();
   const session = await auth.api.getSession({
     headers: currentHeaders,
@@ -17,9 +19,13 @@ export default async function Talents() {
     }
   }
 
+  if (!session) {
+    redirect('/');
+  }
+
   return (
-    <div className="h-dvh flex justify-center items-center ">
-      <p className="text-4xl">Talent</p>
-    </div>
+    <Suspense>
+      <Talents />
+    </Suspense>
   );
 }

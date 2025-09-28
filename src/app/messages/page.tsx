@@ -3,6 +3,7 @@ import { fetchProfileInfo, fetchUserConversations } from '@/lib/data';
 import { headers } from 'next/headers';
 import { auth } from '@/lib/auth';
 import MessagesPage from '@/components/messages/MessagesPage';
+import { Suspense } from 'react';
 
 export default async function Messages() {
   const currentHeaders = await headers();
@@ -31,9 +32,9 @@ export default async function Messages() {
 
   return (
     <div className="h-screen pt-16">
-      {' '}
-      {/* Account for navbar height */}
-      <MessagesPage initialConversations={initialConversations} currentUserId={session.user.id} />
+      <Suspense>
+        <MessagesPage initialConversations={initialConversations} currentUserId={session.user.id} />
+      </Suspense>
     </div>
   );
 }
