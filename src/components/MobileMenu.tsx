@@ -34,11 +34,14 @@ export default function MobileMenu({ session, onSignOut }: { session: any; onSig
           </button>
         </div>
         <ul className="text-center p-4 space-y-2">
-          <li>
-            <Link href="/talents" onClick={() => setOpen(false)}>
-              Cari Talenta
-            </Link>
-          </li>
+          {session && (
+            <li>
+              <Link href="/talents" onClick={() => setOpen(false)}>
+                Cari Talenta
+              </Link>
+            </li>
+          )}
+
           <li>
             <Link href="/about" onClick={() => setOpen(false)}>
               Tentang

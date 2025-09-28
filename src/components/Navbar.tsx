@@ -13,9 +13,13 @@ export default async function Navbar() {
   });
 
   let profileImage = '/profile_image_default.png';
+  let profileName = '';
+  let profileRole = '';
 
   if (session) {
     const profileInfo = await fetchProfileInfo();
+    profileName = profileInfo?.User.name || '';
+    profileRole = profileInfo?.User.roles?.name || '';
     profileImage = profileInfo?.User.image_url || '/profile_image_default.png';
   }
 
@@ -28,19 +32,22 @@ export default async function Navbar() {
         </Link>
       </div>
 
-      {/* Desktop Menu */}
-      <div className="hidden md:flex gap-2">
-        <ul className="menu menu-horizontal px-1">
-          <li>
-            <Link href="/talents">Cari Talenta</Link>
-          </li>
-          <li>
-            <Link href="/about">Tentang</Link>
-          </li>
-          <li>
-            <Link href="/contact">Hubungi Kami</Link>
-          </li>
-        </ul>
+      <div className="hidden md:flex gap-4">
+        {session ? (
+          <div className="flex flex-col justify-center items-center gap-0">
+            <p>{profileName}</p>
+            <p className="text-end self-end text-base-content/75 text-sm">{profileRole}</p>
+          </div>
+        ) : (
+          <ul className="menu menu-horizontal px-1">
+            <li>
+              <Link href="/about">Tentang</Link>
+            </li>
+            <li>
+              <Link href="/contact">Hubungi Kami</Link>
+            </li>
+          </ul>
+        )}
 
         {session ? (
           <div className="dropdown dropdown-end">
@@ -51,10 +58,19 @@ export default async function Navbar() {
             </div>
             <ul tabIndex={0} className="menu menu-sm dropdown-content bg-accent rounded-box z-1 mt-3 w-40 p-2">
               <li>
-                <Link href="/profile">Profile</Link>
+                <Link href="/talents">Cari Talenta</Link>
               </li>
               <li>
                 <Link href="/messages">Messages</Link>
+              </li>
+              <li>
+                <Link href="/profile">Profile</Link>
+              </li>
+              <li>
+                <Link href="/about">Tentang</Link>
+              </li>
+              <li>
+                <Link href="/contact">Hubungi Kami</Link>
               </li>
               <li>
                 <button onClick={signOut}>Logout</button>
