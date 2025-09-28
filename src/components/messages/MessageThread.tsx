@@ -248,7 +248,7 @@ export default function MessageThread({
           <div>
             <h3 className="font-semibold">{otherUser.name}</h3>
             <p className="text-sm text-base-content/70">
-              {otherUser.roles?.name || otherUser.profile?.headline}
+              {otherUser.profile?.headline || otherUser.roles?.name}
               {isPolling && <span className="ml-2 text-xs text-primary-light"> ⟳ </span>}
             </p>
           </div>
@@ -295,6 +295,9 @@ export default function MessageThread({
             </div>
             <h4 className="font-semibold mb-2">Mulai percakapan dengan {otherUser.name}</h4>
             <p className="text-base-content/70">Kirim pesan untuk memulai percakapan</p>
+            <p className="text-red-500 text-sm mt-4">
+              * Apabila anda tidak jadi untuk memulai percakapan harap dihapus.
+            </p>
           </div>
         ) : (
           <>

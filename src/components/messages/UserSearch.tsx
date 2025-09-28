@@ -99,14 +99,11 @@ export default function UserSearch({ isOpen, onClose }: UserSearchProps) {
             <input
               type="text"
               placeholder="Cari pengguna berdasarkan nama, email, atau headline..."
-              className="input input-bordered flex-1"
+              className="input w-full"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               autoFocus
             />
-            <span className="btn btn-square">
-              <IconSearch size={20} />
-            </span>
           </div>
         </div>
 
