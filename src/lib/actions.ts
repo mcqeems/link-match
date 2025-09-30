@@ -4,7 +4,7 @@ import { auth } from './auth';
 import { redirect } from 'next/navigation';
 import { headers } from 'next/headers';
 import { BetterAuthError } from 'better-auth';
-import { PrismaClient } from '@/generated/prisma';
+import { PrismaClient } from '../generated/prisma';
 import { getCategories } from './data';
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import { sendConnectionRequestEmail } from './email';

@@ -3,7 +3,7 @@
 import { useFormStatus } from 'react-dom';
 import { useActionState, useEffect, useState } from 'react';
 import { postProfileInfo } from '@/lib/actions';
-import type { categories } from '@/generated/prisma';
+import type { categories } from '../../generated/prisma';
 import { redirect, useRouter } from 'next/navigation';
 import { useToast } from '@/components/notifications/ToastProvider';
 import Select from 'react-select';

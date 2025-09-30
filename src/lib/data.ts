@@ -1,6 +1,6 @@
 'use server';
 
-import { PrismaClient } from '@/generated/prisma';
+import { PrismaClient } from '../generated/prisma';
 import { auth } from './auth';
 import { headers } from 'next/headers';
 
