@@ -2,7 +2,6 @@ import { redirect } from 'next/navigation';
 import { fetchProfileInfo } from '@/lib/data';
 import { headers } from 'next/headers';
 import { auth } from '@/lib/auth';
-import { Suspense } from 'react';
 import Talents from '@/components/talents/Talents';
 import type { Metadata } from 'next';
 
@@ -38,9 +37,5 @@ export default async function TalentsPage({
   const category = param?.category ? Number(param.category) : undefined;
   const q = param?.q ?? undefined;
 
-  return (
-    <Suspense>
-      <Talents page={page} category={category} q={q} />
-    </Suspense>
-  );
+  return <Talents page={page} category={category} q={q} />;
 }
