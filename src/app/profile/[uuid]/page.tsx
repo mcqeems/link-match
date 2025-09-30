@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation';
 import { fetchProfileInfo } from '@/lib/data';
 import { Suspense } from 'react';
 
-export default async function PublicProfile({ params }: { params: { uuid: string } }) {
+export default async function PublicProfile({ params }: { params: Promise<{ uuid: string }> }) {
   const currentHeaders = await headers();
   const session = await auth.api.getSession({
     headers: currentHeaders,
@@ -23,7 +23,7 @@ export default async function PublicProfile({ params }: { params: { uuid: string
     }
   }
 
-  const { uuid } = params;
+  const { uuid } = await params;
 
   return (
     <div className="min-h-screen py-8 px-4 mt-12">
