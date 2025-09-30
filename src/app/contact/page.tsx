@@ -48,14 +48,14 @@ export default function Contact() {
   };
 
   return (
-    <div className="min-h-dvh py-16 px-6">
+    <div className="min-h-dvh py-16 px-6 md:mt-8 mt-4">
       <div className="max-w-3xl mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-3xl md:text-4xl font-bold">Hubungi Kami</h1>
-          <p className="opacity-75 mt-2">Kirimkan pesan singkat—kami akan merespons secepatnya.</p>
+          <p className="opacity-75 mt-2">Kirimkan pesan singkat, kami akan merespons secepatnya.</p>
         </div>
 
-        <div className="card bg-base-200 border border-base-300">
+        <div className="card bg-accent/20 border border-base-300">
           <form className="card-body" onSubmit={onSubmit} noValidate>
             <div className="grid md:grid-cols-2 gap-4">
               <label className="form-control">
@@ -64,7 +64,7 @@ export default function Contact() {
                 </div>
                 <input
                   type="text"
-                  className={`input input-bordered ${errors.name ? 'input-error' : ''}`}
+                  className={`input input-bordered w-full ${errors.name ? 'input-error' : ''}`}
                   placeholder="Nama lengkap"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
@@ -77,7 +77,7 @@ export default function Contact() {
                 </div>
                 <input
                   type="email"
-                  className={`input input-bordered ${errors.email ? 'input-error' : ''}`}
+                  className={`input input-bordered w-full ${errors.email ? 'input-error' : ''}`}
                   placeholder="nama@domain.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -94,7 +94,7 @@ export default function Contact() {
               </div>
               <input
                 type="text"
-                className={`input input-bordered ${errors.subject ? 'input-error' : ''}`}
+                className={`input input-bordered w-full ${errors.subject ? 'input-error' : ''}`}
                 placeholder="Topik pesan"
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
@@ -110,7 +110,7 @@ export default function Contact() {
                 </span>
               </div>
               <textarea
-                className={`textarea textarea-bordered min-h-40 ${errors.message ? 'textarea-error' : ''}`}
+                className={`textarea textarea-bordered w-full min-h-40 ${errors.message ? 'textarea-error' : ''}`}
                 placeholder="Tulis pesan Anda di sini..."
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
@@ -120,10 +120,10 @@ export default function Contact() {
             </label>
 
             <div className="card-actions mt-4 justify-between items-center">
-              <Link href="/" className="btn btn-ghost">
+              <Link href="/" className="btn btn-outline btn-error">
                 Kembali
               </Link>
-              <button type="submit" className="btn btn-secondary">
+              <button type="submit" className="btn btn-success">
                 Kirim via Email
               </button>
             </div>

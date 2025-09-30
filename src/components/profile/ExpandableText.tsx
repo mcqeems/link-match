@@ -52,7 +52,7 @@ export default function ExpandableText({ text, maxLength, placeholder }: Expanda
       </div>
       <button
         onClick={toggleExpansion}
-        className="btn btn-link btn-sm text-primary-light p-0 mt-1 no-underline hover:underline"
+        className="btn btn-link btn-sm text-accent p-0 mt-1 no-underline hover:underline"
       >
         {isExpanded ? 'Tampilkan lebih sedikit' : 'Baca selengkapnya'}
         <IconChevronDown

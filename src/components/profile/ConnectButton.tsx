@@ -19,7 +19,7 @@ export default function ConnectButton({ otherUserId }: { otherUserId: string }) 
   useEffect(() => {
     if (!submitted) return;
     if (state.success) {
-      toast.success('Connection request sent.');
+      toast.success('Connection request sent to email.');
       setSubmitted(false);
     } else if (state.error) {
       toast.error(state.error);
