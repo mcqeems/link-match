@@ -4,6 +4,7 @@ import './globals.css';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { ToastProvider } from '@/components/notifications/ToastProvider';
+import Providers from './providers';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -32,13 +33,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark" style={{ colorScheme: 'dark' }} suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} antialiased`}>
-        <ToastProvider>
-          <Navbar />
-          <main>{children}</main>
-          <Footer />
-        </ToastProvider>
+        <Providers>
+          <ToastProvider>
+            <Navbar />
+            <main>{children}</main>
+            <Footer />
+          </ToastProvider>
+        </Providers>
       </body>
     </html>
   );

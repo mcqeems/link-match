@@ -2,12 +2,14 @@
 @plugin "daisyui";
 
 :root {
-  --background: #f3f6f7;
-  --foreground: #070808;
-  --primary: #4d8899;
-  --secondary: #245865;
-  --accent: #237e95;
-  --primary-light: #345a74;
+  --color-base-100: #11171a;
+  --color-accent: #c3c1ff;
+  --background: #11171a;
+  --foreground: #f7f8f8;
+  --primary: #2b5069;
+  --secondary: #1c2229;
+  --accent: #232931;
+  --primary-light: #406e8d;
 }
 
 @theme inline {
@@ -21,7 +23,7 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root {
     --color-base-100: #11171a;
     --color-accent: #c3c1ff;
@@ -32,7 +34,7 @@
     --accent: #232931;
     --primary-light: #406e8d;
   }
-}
+} */
 
 body {
   background-color: var(--background);
