@@ -38,7 +38,7 @@ export default async function About() {
       {/* Visi & Misi (split layout) */}
       <section id="visi-misi" className="py-16 px-6">
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-6">
-          <div className="card bg-base-200 border border-base-300">
+          <div className="card bg-accent/20 border border-base-300">
             <div className="card-body">
               <h2 className="card-title">Visi</h2>
               <p className="opacity-75">
@@ -52,11 +52,11 @@ export default async function About() {
               </ul>
             </div>
           </div>
-          <div className="card bg-base-200 border border-base-300">
+          <div className="card bg-accent/20 border border-base-300">
             <div className="card-body">
               <h2 className="card-title">Misi</h2>
               <p className="opacity-75">Menyajikan rekomendasi kandidat dan peluang kerja yang akurat sejak awal.</p>
-              <div className="stats bg-base-100 border border-base-300">
+              <div className="stats bg-base-200 border border-base-300">
                 <div className="stat">
                   <div className="stat-title">Waktu shortlist</div>
                   <div className="stat-value">-3x</div>
@@ -146,23 +146,23 @@ export default async function About() {
       {/* Nilai-nilai (berbeda dari kartu misi) */}
       <section className="py-12 px-6 bg-base-200/50">
         <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-6">
-          <div className="card bg-base-100 border border-base-300">
+          <div className="card bg-accent/20 border border-base-300">
             <div className="card-body">
-              <div className="badge badge-accent">Relevansi</div>
+              <div className="badge badge-primary">Relevansi</div>
               <h3 className="card-title">Fokus pada Kesesuaian</h3>
               <p className="opacity-75">Memahami konteks dan kebutuhan, bukan hanya kata kunci.</p>
             </div>
           </div>
-          <div className="card bg-base-100 border border-base-300">
+          <div className="card bg-accent/20 border border-base-300">
             <div className="card-body">
-              <div className="badge badge-accent">Transparansi</div>
+              <div className="badge badge-primary">Transparansi</div>
               <h3 className="card-title">Alasan yang Jelas</h3>
               <p className="opacity-75">Mengapa kandidat direkomendasikan, dijelaskan secara ringkas.</p>
             </div>
           </div>
-          <div className="card bg-base-100 border border-base-300">
+          <div className="card bg-accent/20 border border-base-300">
             <div className="card-body">
-              <div className="badge badge-accent">Efisiensi</div>
+              <div className="badge badge-primary">Efisiensi</div>
               <h3 className="card-title">Cepat ke Inti</h3>
               <p className="opacity-75">Hadirkan shortlist relevan lebih awal untuk menghemat waktu.</p>
             </div>
@@ -175,21 +175,21 @@ export default async function About() {
         <div className="max-w-5xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-8 font-mono">FAQ</h2>
           <div className="space-y-3">
-            <div className="collapse collapse-arrow bg-base-200 border border-base-300">
+            <div className="collapse collapse-arrow bg-accent/20 border border-base-300">
               <input type="checkbox" />
               <div className="collapse-title text-lg font-medium">Apakah LinkMatch gratis?</div>
               <div className="collapse-content opacity-80">
                 <p>Ya, fitur inti dapat digunakan secara gratis tanpa biaya tersembunyi.</p>
               </div>
             </div>
-            <div className="collapse collapse-arrow bg-base-200 border border-base-300">
+            <div className="collapse collapse-arrow bg-accent/20 border border-base-300">
               <input type="checkbox" />
               <div className="collapse-title text-lg font-medium">Apakah AI menggantikan proses interview?</div>
               <div className="collapse-content opacity-80">
                 <p>Tidak. AI membantu menyaring dan memberi rekomendasi — keputusan tetap pada manusia.</p>
               </div>
             </div>
-            <div className="collapse collapse-arrow bg-base-200 border border-base-300">
+            <div className="collapse collapse-arrow bg-accent/20 border border-base-300">
               <input type="checkbox" />
               <div className="collapse-title text-lg font-medium">Bagaimana privasi data dijaga?</div>
               <div className="collapse-content opacity-80">
@@ -204,7 +204,7 @@ export default async function About() {
       <section className="py-16 px-6">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-2xl md:text-3xl font-bold text-center mb-6 font-mono">Pengembang</h2>
-          <div className="card bg-base-200 border border-base-300">
+          <div className="card bg-accent/20 border border-base-300">
             <div className="card-body">
               <div className="flex items-center gap-4">
                 <div className="avatar">

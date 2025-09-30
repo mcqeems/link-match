@@ -5,6 +5,7 @@ import { auth } from '@/lib/auth';
 import Link from 'next/link';
 import Image from 'next/image';
 import MobileMenu from './MobileMenu';
+import { IconDotsVertical } from '@tabler/icons-react';
 
 export default async function Navbar() {
   const currentHeaders = await headers();
@@ -32,12 +33,21 @@ export default async function Navbar() {
         </Link>
       </div>
 
-      <div className="hidden md:flex gap-4">
+      <div className="hidden md:flex gap-0">
         {session ? (
-          <div className="flex flex-col justify-center items-center gap-0">
-            <p>{profileName}</p>
-            <p className="text-end self-end text-base-content/75 text-sm">{profileRole}</p>
-          </div>
+          <>
+            <div className="flex flex-col justify-center items-center gap-0 mr-4">
+              <p>{profileName}</p>
+              <p className="text-end self-end text-base-content/75 text-sm">{profileRole}</p>
+            </div>
+            <Link href="/profile">
+              <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
+                <div className="w-10 rounded-full border border-primary-light">
+                  <Image alt="Profile Image" src={profileImage} width={40} height={40} />
+                </div>
+              </div>
+            </Link>
+          </>
         ) : (
           <ul className="menu menu-horizontal px-1">
             <li>
@@ -52,9 +62,7 @@ export default async function Navbar() {
         {session ? (
           <div className="dropdown dropdown-end">
             <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
-              <div className="w-10 rounded-full border border-primary-light">
-                <Image alt="Profile Image" src={profileImage} width={40} height={40} />
-              </div>
+              <IconDotsVertical size={24} />
             </div>
             <ul tabIndex={0} className="menu menu-sm dropdown-content bg-accent rounded-box z-1 mt-3 w-40 p-2">
               <li>
