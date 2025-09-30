@@ -7,7 +7,7 @@ export default async function HomePage() {
   return (
     <div className="min-h-dvh md:mt-8">
       {/* Hero Section */}
-      <section className="hero bg-accent/20 text-base-content relative">
+      <section className="hero bg-accent/20/20 text-base-content relative">
         <Squares
           speed={0.3}
           squareSize={40}
@@ -52,7 +52,7 @@ export default async function HomePage() {
           </div>
 
           <div className="flex justify-center items-center">
-            <div className="card bg-accent border border-gray-700 w-full md:max-w-[350px]">
+            <div className="card bg-accent/20 border border-gray-700 w-full md:max-w-[350px]">
               <div className="card-body">
                 <h3 className="card-title">Gratis Selamanya</h3>
                 <p className="opacity-90">Mulai dalam hitungan detik dan nikmati semua kemampuan utama.</p>
@@ -89,7 +89,7 @@ export default async function HomePage() {
 
           <div className="grid lg:grid-cols-2 gap-8 items-center">
             <div className="space-y-4">
-              <div className="collapse collapse-arrow bg-accent border border-base-300">
+              <div className="collapse collapse-arrow bg-accent/20 border border-base-300">
                 <input type="checkbox" />
                 <div className="collapse-title text-lg font-medium">Semantic Candidate Discovery</div>
                 <div className="collapse-content opacity-80">
@@ -99,7 +99,7 @@ export default async function HomePage() {
                   </p>
                 </div>
               </div>
-              <div className="collapse collapse-arrow bg-accent border border-base-300">
+              <div className="collapse collapse-arrow bg-accent/20 border border-base-300">
                 <input type="checkbox" />
                 <div className="collapse-title text-lg font-medium">Context-aware Ranking</div>
                 <div className="collapse-content opacity-80">
@@ -109,7 +109,7 @@ export default async function HomePage() {
                   </p>
                 </div>
               </div>
-              <div className="collapse collapse-arrow bg-accent border border-base-300">
+              <div className="collapse collapse-arrow bg-accent/20 border border-base-300">
                 <input type="checkbox" />
                 <div className="collapse-title text-lg font-medium">Keandalan AWS Bedrock</div>
                 <div className="collapse-content opacity-80">
@@ -128,7 +128,7 @@ export default async function HomePage() {
               </div>
             </div>
 
-            <div className="mockup-code bg-accent border border-gray-700 p-2">
+            <div className="mockup-code bg-accent/20 border border-gray-700 p-2">
               <pre data-prefix="1">
                 <code>{`<match>`}</code>
               </pre>
@@ -179,7 +179,7 @@ export default async function HomePage() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
-            <div className="card bg-accent border border-gray-700">
+            <div className="card bg-accent/20 border border-gray-700">
               <div className="card-body">
                 <div className="flex justify-center items-center">
                   <IconSparkles size={50} />
@@ -191,7 +191,7 @@ export default async function HomePage() {
               </div>
             </div>
 
-            <div className="card bg-accent border border-gray-700">
+            <div className="card bg-accent/20 border border-gray-700">
               <div className="card-body">
                 <div className="flex justify-center items-center">
                   <IconUserCog size={50} />
@@ -204,7 +204,7 @@ export default async function HomePage() {
               </div>
             </div>
 
-            <div className="card bg-accent border border-gray-700">
+            <div className="card bg-accent/20 border border-gray-700">
               <div className="card-body">
                 <div className="flex justify-center items-center">
                   <IconMessage size={50} />
@@ -220,7 +220,7 @@ export default async function HomePage() {
       </section>
 
       {/* How It Works */}
-      <section id="how-it-works" className="bg-accent/20 py-16 px-6">
+      <section id="how-it-works" className="bg-accent/20/20 py-16 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-10">
             <h2 className="text-3xl md:text-4xl font-bold font-mono">Bagaimana Cara Kerjanya?</h2>
@@ -272,7 +272,7 @@ export default async function HomePage() {
 
           <div className="grid md:grid-cols-3 gap-6">
             {/* Card 1 */}
-            <div className="card bg-accent border border-base-300">
+            <div className="card bg-accent/20 border border-base-300">
               <div className="card-body">
                 <div className="flex items-center gap-3">
                   <div className="avatar">
@@ -297,7 +297,7 @@ export default async function HomePage() {
             </div>
 
             {/* Card 2 */}
-            <div className="card bg-accent border border-base-300">
+            <div className="card bg-accent/20 border border-base-300">
               <div className="card-body">
                 <div className="flex items-center gap-3">
                   <div className="avatar">
@@ -322,7 +322,7 @@ export default async function HomePage() {
             </div>
 
             {/* Card 3 */}
-            <div className="card bg-accent border border-base-300">
+            <div className="card bg-accent/20 border border-base-300">
               <div className="card-body">
                 <div className="flex items-center gap-3">
                   <div className="avatar">
@@ -352,7 +352,7 @@ export default async function HomePage() {
       {/* Call to Action */}
       <section className="py-16 px-6">
         <div className="max-w-7xl w-full mx-auto">
-          <div className="md:alert md:bg-accent/50 flex flex-col rounded-lg bg-accent/50 shadow-lg p-4 gap-2">
+          <div className="md:alert md:bg-accent/20/50 flex flex-col rounded-lg bg-accent/20/50 shadow-lg p-4 gap-2">
             <div className="flex-1">
               <h3 className="font-bold text-2xl">Siap memulai?</h3>
               <div className="text-sm opacity-90">Bergabung sekarang dan temukan kecocokan terbaik Anda.</div>
