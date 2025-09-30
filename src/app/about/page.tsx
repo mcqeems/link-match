@@ -5,6 +5,13 @@ import { auth } from '@/lib/auth';
 import Image from 'next/image';
 import Link from 'next/link';
 import { IconBrandGithub, IconBrandInstagram, IconBrandLinkedin, IconCheck, IconWorld } from '@tabler/icons-react';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'About',
+  description:
+    'Pelajari misi, visi, dan teknologi di balik LinkMatch—platform pencocokan talenta dan recruiter berbasis AI.',
+};
 
 export default async function About() {
   const currentHeaders = await headers();

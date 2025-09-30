@@ -4,6 +4,12 @@ import { headers } from 'next/headers';
 import { auth } from '@/lib/auth';
 import { Suspense } from 'react';
 import Talents from '@/components/talents/Talents';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Talents',
+  description: 'Jelajahi daftar Talenta di LinkMatch dan temukan kandidat yang paling relevan untuk kebutuhan Anda.',
+};
 
 export default async function TalentsPage({
   searchParams,

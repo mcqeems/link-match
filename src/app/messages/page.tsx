@@ -4,6 +4,12 @@ import { headers } from 'next/headers';
 import { auth } from '@/lib/auth';
 import MessagesPage from '@/components/messages/MessagesPage';
 import { Suspense } from 'react';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Messages',
+  description: 'Kelola percakapan Anda dengan kandidat atau recruiter melalui pesan di LinkMatch.',
+};
 
 export default async function Messages() {
   const currentHeaders = await headers();

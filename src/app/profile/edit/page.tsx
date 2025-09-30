@@ -4,6 +4,12 @@ import { headers } from 'next/headers';
 import { auth } from '@/lib/auth';
 import ProfileEditForm from '@/components/profile/ProfileEditForm';
 import { Suspense } from 'react';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Edit Profile',
+  description: 'Perbarui profil LinkMatch Anda: headline, kategori, dan informasi penting lainnya.',
+};
 
 export default async function ProfileEdit() {
   const currentHeaders = await headers();

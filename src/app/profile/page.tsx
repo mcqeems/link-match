@@ -4,6 +4,12 @@ import { headers } from 'next/headers';
 import { auth } from '@/lib/auth';
 import ProfileCard from '@/components/profile/ProfileCard';
 import { Suspense } from 'react';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Profile',
+  description: 'Lihat profil Anda di LinkMatch termasuk informasi, pengalaman, dan preferensi karier.',
+};
 
 export default async function Profile() {
   const currentHeaders = await headers();
