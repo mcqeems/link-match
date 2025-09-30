@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 export default async function TalentsPage({
   searchParams,
 }: {
-  searchParams?: { page?: string; category?: string; q?: string };
+  searchParams?: Promise<{ page?: string; category?: string; q?: string }>;
 }) {
   const param = await searchParams;
   const currentHeaders = await headers();
