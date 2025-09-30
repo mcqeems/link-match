@@ -1,0 +1,161 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model categories {
+  id         Int       @id @default(autoincrement())
+  name       String    @unique(map: "categories_name_unique") @db.VarChar(100)
+  created_at DateTime? @default(now()) @db.Timestamp(0)
+  profile    profile[]
+}
+
+model conversation_participants {
+  conversation_id Int
+  user_id         String
+  conversations   conversations @relation(fields: [conversation_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "conversation_participants_ibfk_1")
+  User            User          @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "conversation_participants_ibfk_2")
+
+  @@id([conversation_id, user_id])
+  @@index([user_id], map: "idx_conversation_participants_user_id")
+}
+
+model conversations {
+  id                        Int                         @id @default(autoincrement())
+  created_at                DateTime?                   @default(now()) @db.Timestamp(0)
+  updated_at                DateTime?                   @default(now()) @db.Timestamp(0)
+  conversation_participants conversation_participants[]
+  messages                  messages[]
+}
+
+model messages {
+  id              Int           @id @default(autoincrement())
+  conversation_id Int
+  sender_id       String
+  content         String        @db.Text
+  created_at      DateTime?     @default(now()) @db.Timestamp(0)
+  conversations   conversations @relation(fields: [conversation_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "messages_ibfk_1")
+  User            User          @relation(fields: [sender_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "messages_ibfk_2")
+
+  @@index([conversation_id], map: "idx_messages_conversation_id")
+  @@index([sender_id], map: "idx_messages_sender_id")
+}
+
+model profile {
+  id             Int              @id @default(autoincrement())
+  user_id        String           @unique(map: "user_id")
+  headline       String?          @db.VarChar(255)
+  description    String?          @db.Text
+  experiences    String?          @db.Text
+  category_id    Int?
+  website        String?          @db.VarChar(255)
+  linkedin       String?          @db.VarChar(255)
+  instagram      String?          @db.VarChar(255)
+  github         String?          @db.VarChar(255)
+  created_at     DateTime?        @default(now()) @db.Timestamp(0)
+  updated_at     DateTime?        @default(now()) @db.Timestamp(0)
+  User           User             @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "profile_ibfk_1")
+  categories     categories?      @relation(fields: [category_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "profile_ibfk_2")
+  profile_skills profile_skills[]
+
+  @@index([category_id], map: "idx_profile_category_id")
+  @@index([user_id], map: "idx_profile_user_id")
+}
+
+model profile_skills {
+  profile_id Int
+  skill_id   Int
+  profile    profile @relation(fields: [profile_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "profile_skills_ibfk_1")
+  skills     skills  @relation(fields: [skill_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "profile_skills_ibfk_2")
+
+  @@id([profile_id, skill_id])
+  @@index([skill_id], map: "idx_profile_skills_skill_id")
+}
+
+model roles {
+  id         Int       @id @default(autoincrement())
+  name       String    @unique(map: "roles_name_unique") @db.VarChar(50)
+  created_at DateTime? @default(now()) @db.Timestamp(0)
+  User       User[]
+}
+
+model skills {
+  id             Int              @id @default(autoincrement())
+  name           String           @unique(map: "name") @db.VarChar(100)
+  created_at     DateTime?        @default(now()) @db.Timestamp(0)
+  profile_skills profile_skills[]
+}
+
+model User {
+  id                        String                      @id
+  name                      String                      @db.VarChar(255)
+  email                     String                      @unique(map: "email") @db.VarChar(255)
+  image_url                 String?                     @db.VarChar(255)
+  role_id                   Int?
+  conversation_participants conversation_participants[]
+  messages                  messages[]
+  profile                   profile?
+  roles                     roles?                      @relation(fields: [role_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "User_ibfk_1")
+
+  emailVerified Boolean   @default(false)
+  image         String?   @db.Text
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @default(now()) @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+
+  @@index([email], map: "idx_User_email")
+  @@index([role_id], map: "idx_User_role_id")
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?  @db.Text
+  userAgent String?  @db.Text
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String    @db.Text
+  providerId            String    @db.Text
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?   @db.Text
+  refreshToken          String?   @db.Text
+  idToken               String?   @db.Text
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?   @db.Text
+  password              String?   @db.Text
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String   @db.Text
+  value      String   @db.Text
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now()) @updatedAt
+
+  @@map("verification")
+}
