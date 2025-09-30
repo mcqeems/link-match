@@ -3,7 +3,6 @@ import { fetchProfileInfo, fetchUserConversations } from '@/lib/data';
 import { headers } from 'next/headers';
 import { auth } from '@/lib/auth';
 import MessagesPage from '@/components/messages/MessagesPage';
-import { Suspense } from 'react';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -38,9 +37,7 @@ export default async function Messages() {
 
   return (
     <div className="h-screen pt-16">
-      <Suspense>
-        <MessagesPage initialConversations={initialConversations} currentUserId={session.user.id} />
-      </Suspense>
+      <MessagesPage initialConversations={initialConversations} currentUserId={session.user.id} />
     </div>
   );
 }

@@ -3,7 +3,6 @@ import { headers } from 'next/headers';
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { fetchProfileInfo } from '@/lib/data';
-import { Suspense } from 'react';
 
 export default async function PublicProfile({ params }: { params: Promise<{ uuid: string }> }) {
   const currentHeaders = await headers();
@@ -28,9 +27,7 @@ export default async function PublicProfile({ params }: { params: Promise<{ uuid
   return (
     <div className="min-h-screen py-8 px-4 mt-12">
       <div className="max-w-7xl mx-auto">
-        <Suspense>
-          <ProfileCard mode="public" uuid={uuid} />
-        </Suspense>
+        <ProfileCard mode="public" uuid={uuid} />
       </div>
     </div>
   );

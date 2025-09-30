@@ -3,7 +3,6 @@ import { fetchProfileInfo, getCategories } from '@/lib/data';
 import { headers } from 'next/headers';
 import { auth } from '@/lib/auth';
 import ProfileEditForm from '@/components/profile/ProfileEditForm';
-import { Suspense } from 'react';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -29,9 +28,7 @@ export default async function ProfileEdit() {
 
   return (
     <div className="my-24">
-      <Suspense>
-        <ProfileEditForm profileInfo={profileInfo} categories={categories} />
-      </Suspense>
+      <ProfileEditForm profileInfo={profileInfo} categories={categories} />
     </div>
   );
 }
