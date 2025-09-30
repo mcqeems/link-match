@@ -28,7 +28,7 @@ export default async function Navbar() {
       <div className=" contents">
         <Link href="/" className="flex flex-row items-center gap-2 px-2">
           <Image alt="Logo" src="/LinkMatch_Logo.webp" width={40} height={40} />
-          <p className="btn btn-ghost text-xl font-mono p-0">LinkMatch</p>
+          <p className="text-xl font-mono p-0 font-bold">LinkMatch</p>
         </Link>
       </div>
 

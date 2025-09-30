@@ -1,43 +1,109 @@
 @import 'tailwindcss';
 @plugin "daisyui";
 
+/* Global dark palette — DaisyUI token names included */
 :root {
-  --color-base-100: #11171a;
-  --color-accent: #c3c1ff;
-  --background: #11171a;
-  --foreground: #f7f8f8;
-  --primary: #2b5069;
-  --secondary: #1c2229;
-  --accent: #232931;
-  --primary-light: #406e8d;
-}
+  /* DaisyUI tokens */
+  --b1: #11171a; /* page bg */
+  --b2: #0d1316; /* card bg */
+  --b3: #0a0f12; /* subtle bg / borders */
+  --bc: #f7f8f8; /* base content */
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-primary: var(--primary);
-  --color-secondary: var(--secondary);
-  --color-accent: var(--accent);
-  --color-primary-light: var(--primary-light);
+  --p: #2b5069;
+  --pc: #e5f0f6; /* primary */
+  --s: #1c2229;
+  --sc: #e8edf4; /* secondary */
+  --a: #38636e;
+  --ac: #0a0f12; /* accent */
+  --n: #2a2f36;
+  --nc: #e5e7eb; /* neutral */
+
+  --in: #38bdf8;
+  --inc: #0b1220; /* info */
+  --su: #22c55e;
+  --suc: #07130b; /* success */
+  --wa: #f59e0b;
+  --wac: #120d05; /* warning */
+  --er: #ef4444;
+  --erc: #140909; /* error */
+
+  /* Aliases (legacy vars used across app) */
+  --color-base-100: var(--b1);
+  --color-base-200: var(--b2);
+  --color-base-300: var(--b3);
+  --color-base-content: var(--bc);
+  --color-primary: var(--p);
+  --color-primary-content: var(--pc);
+  --color-secondary: var(--s);
+  --color-secondary-content: var(--sc);
+  --color-accent: var(--a);
+  --color-accent-content: var(--ac);
+  --color-neutral: var(--n);
+  --color-neutral-content: var(--nc);
+  --color-info: var(--in);
+  --color-info-content: var(--inc);
+  --color-success: var(--su);
+  --color-success-content: var(--suc);
+  --color-warning: var(--wa);
+  --color-warning-content: var(--wac);
+  --color-error: var(--er);
+  --color-error-content: var(--erc);
+
+  /* App tokens */
+  --background: var(--b1);
+  --foreground: var(--bc);
+  --primary-light: #406e8d;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-/* @media (prefers-color-scheme: dark) {
-  :root {
-    --color-base-100: #11171a;
-    --color-accent: #c3c1ff;
-    --background: #11171a;
-    --foreground: #f7f8f8;
-    --primary: #2b5069;
-    --secondary: #1c2229;
-    --accent: #232931;
-    --primary-light: #406e8d;
-  }
-} */
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
 
 body {
-  background-color: var(--background);
-  color: var(--foreground);
+  background-color: var(--b1);
+  color: var(--bc);
   font-family: var(--font-inter);
 }
+
+/* Note: html has data-theme="dark" set in layout; tokens above are global anyway. */
+
+/* Make unstyled text elements adopt dark content color by default */
+:where(
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  span,
+  small,
+  li,
+  dt,
+  dd,
+  a,
+  blockquote,
+  code,
+  pre,
+  em,
+  strong,
+  figcaption,
+  label,
+  th,
+  td
+):not([class*='text-']) {
+  color: var(--bc);
+}
+
+/* Subtle borders/placeholders tuned for dark */
+hr {
+  border-color: color-mix(in oklab, var(--bc) 12%, transparent);
+}
+::placeholder {
+  color: color-mix(in oklab, var(--bc) 45%, transparent);
+}
+
+/* (Removed duplicated rules) */

@@ -273,7 +273,10 @@ export default function MessageThread({
               <div className="absolute right-0 top-full mt-2 z-10 min-w-[200px]">
                 <div className="menu bg-accent rounded-box shadow-lg">
                   <li>
-                    <button onClick={handleDeleteConversation} className="text-error hover:bg-error/10">
+                    <button
+                      onClick={handleDeleteConversation}
+                      className="text-red-200 hover:bg-error/75 transition-colors"
+                    >
                       <IconTrash size={16} />
                       Hapus Percakapan
                     </button>
@@ -377,7 +380,7 @@ export default function MessageThread({
           </div>
         </div>
       </div>
-      <p className=" label text-xs text-center block">Pesan direfresh setiap 30 detik sekali.</p>
+      <p className=" label text-xs text-center block mb-2">Pesan direfresh setiap 30 detik sekali.</p>
     </div>
   );
 }

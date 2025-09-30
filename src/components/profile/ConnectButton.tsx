@@ -35,7 +35,7 @@ export default function ConnectButton({ otherUserId }: { otherUserId: string }) 
   return (
     <form action={onSubmit}>
       <input type="hidden" name="otherUserId" value={otherUserId} />
-      <SubmitButton pendingText="Mengirim...">
+      <SubmitButton className="text-base-content" pendingText="Mengirim...">
         <IconMailUp size={16} />
         Connect
       </SubmitButton>

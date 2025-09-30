@@ -20,7 +20,7 @@ export default async function HomePage() {
         />
         <div className="hero-content max-w-4xl mx-auto flex-col lg:flex-row gap-10 py-64 px-6">
           <div className="flex-1 space-y-6 flex flex-col justify-center items-center text-center">
-            <div className="badge badge-accent badge-outline">Smart Talent Matching</div>
+            <div className="badge badge-outline">Smart Talent Matching</div>
             <h1 className="text-4xl md:text-6xl font-bold leading-tight font-mono text-foreground">LinkMatch</h1>
             <p className="opacity-80 text-lg text-foreground">
               Platform yang mempertemukan Recruiter dan Talenta dengan pencocokan berbasis AI. LinkMatch memanfaatkan
@@ -64,7 +64,7 @@ export default async function HomePage() {
                   </div>
                 </div>
                 <div className="card-actions mt-4">
-                  <Link href="/sign-up" className="btn">
+                  <Link href="/sign-up" className="btn btn-secondary">
                     Mulai Sekarang
                   </Link>
                 </div>
@@ -78,7 +78,7 @@ export default async function HomePage() {
       <section className="py-16 px-6 bg-accent/20">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-10">
-            <div className="badge badge-accent badge-outline">AI Technology</div>
+            <div className="badge badge-outline">AI Technology</div>
             <h2 className="text-3xl md:text-4xl font-bold mt-3 font-mono">Powered by AWS Bedrock</h2>
             <p className="opacity-75 mt-2 max-w-4xl mx-auto">
               LinkMatch memanfaatkan AWS Bedrock untuk embedding dan pencarian semantik. Mesin kami memahami konteks
@@ -272,7 +272,7 @@ export default async function HomePage() {
 
           <div className="grid md:grid-cols-3 gap-6">
             {/* Card 1 */}
-            <div className="card bg-base-200 border border-base-300">
+            <div className="card bg-accent border border-base-300">
               <div className="card-body">
                 <div className="flex items-center gap-3">
                   <div className="avatar">
@@ -297,7 +297,7 @@ export default async function HomePage() {
             </div>
 
             {/* Card 2 */}
-            <div className="card bg-base-200 border border-base-300">
+            <div className="card bg-accent border border-base-300">
               <div className="card-body">
                 <div className="flex items-center gap-3">
                   <div className="avatar">
@@ -322,7 +322,7 @@ export default async function HomePage() {
             </div>
 
             {/* Card 3 */}
-            <div className="card bg-base-200 border border-base-300">
+            <div className="card bg-accent border border-base-300">
               <div className="card-body">
                 <div className="flex items-center gap-3">
                   <div className="avatar">
@@ -352,7 +352,7 @@ export default async function HomePage() {
       {/* Call to Action */}
       <section className="py-16 px-6">
         <div className="max-w-7xl w-full mx-auto">
-          <div className="md:alert flex flex-col bg-accent shadow-lg p-4 gap-2">
+          <div className="md:alert md:bg-accent/50 flex flex-col rounded-lg bg-accent/50 shadow-lg p-4 gap-2">
             <div className="flex-1">
               <h3 className="font-bold text-2xl">Siap memulai?</h3>
               <div className="text-sm opacity-90">Bergabung sekarang dan temukan kecocokan terbaik Anda.</div>
