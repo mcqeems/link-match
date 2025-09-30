@@ -23,7 +23,7 @@ export default async function PublicProfile({ params }: { params: { uuid: string
     }
   }
 
-  const { uuid } = await params;
+  const { uuid } = params;
 
   return (
     <div className="min-h-screen py-8 px-4 mt-12">
