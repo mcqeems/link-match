@@ -89,7 +89,7 @@ export default async function HomePage() {
 
           <div className="grid lg:grid-cols-2 gap-8 items-center">
             <div className="space-y-4">
-              <div className="collapse collapse-arrow bg-accent/20 border border-base-300">
+              <div className="collapse collapse-arrow bg-accent/20 border border-gray-700">
                 <input type="checkbox" />
                 <div className="collapse-title text-lg font-medium">Semantic Candidate Discovery</div>
                 <div className="collapse-content opacity-80">
@@ -99,7 +99,7 @@ export default async function HomePage() {
                   </p>
                 </div>
               </div>
-              <div className="collapse collapse-arrow bg-accent/20 border border-base-300">
+              <div className="collapse collapse-arrow bg-accent/20 border border-gray-700">
                 <input type="checkbox" />
                 <div className="collapse-title text-lg font-medium">Context-aware Ranking</div>
                 <div className="collapse-content opacity-80">
@@ -109,7 +109,7 @@ export default async function HomePage() {
                   </p>
                 </div>
               </div>
-              <div className="collapse collapse-arrow bg-accent/20 border border-base-300">
+              <div className="collapse collapse-arrow bg-accent/20 border border-gray-700">
                 <input type="checkbox" />
                 <div className="collapse-title text-lg font-medium">Keandalan AWS Bedrock</div>
                 <div className="collapse-content opacity-80">

@@ -129,13 +129,13 @@ export default function ProfileForm({
           Untuk melanjutkan penggunaan terhadap aplikasi kami, silahkan mengisi informasi berikut ini terlebih dahulu
           ya!
         </p>
-        <form action={formAction} className="space-y-6 rounded-lg p-8 shadow-md bg-accent">
+        <form action={formAction} className="space-y-6 rounded-lg p-8 shadow-md bg-accent/20">
           <input type="hidden" name="role" value={role} />
           {(state.error || clientError) && (
             <div className="rounded-md bg-red-400 p-3 text-black text-center">{clientError || state.error}</div>
           )}
           {state.success && (
-            <div className="rounded-md bg-green-600 p-3 text-white text-center">
+            <div className="rounded-md bg-accent/10 p-3 text-white text-center border border-green-900">
               Terima kasih telah mengisi! Anda akan dialihkan...
             </div>
           )}
@@ -211,7 +211,7 @@ export default function ProfileForm({
                       }`,
                     placeholder: () => 'text-white/50',
                     singleValue: () => 'text-foreground',
-                    menu: () => 'bg-background border border-primary rounded-md mt-1 shadow-lg',
+                    menu: () => 'bg-base-100 border border-primary rounded-md mt-1 shadow-lg',
                     option: (state) =>
                       `p-2 cursor-pointer transition-colors duration-200 ${state.isFocused ? 'bg-primary/50' : ''} ${
                         state.isSelected ? 'bg-primary text-white' : 'text-foreground'

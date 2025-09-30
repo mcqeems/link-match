@@ -32,20 +32,21 @@ export default async function About() {
   return (
     <div className="min-h-dvh md:mt-12 mt-4">
       {/* Banner ringkas (berbeda dari hero ber-latar animasi) */}
-      <section className="bg-accent/20 border-b border-base-300">
-        <div className="max-w-7xl mx-auto px-6 py-14">
+      <section>
+        <div className="max-w-7xl mx-auto px-6 pt-14 pb-6">
           <h1 className="text-3xl md:text-5xl font-bold font-mono">Tentang LinkMatch</h1>
           <p className="opacity-80 mt-3 max-w-3xl">
             LinkMatch mempertemukan Recruiter dan Talenta melalui pencarian semantik dan orkestrasi AI. Fokus kami
             adalah relevansi, transparansi, dan efisiensi—agar keputusan bisa diambil lebih cepat dan tepat.
           </p>
+          <span className="divider"></span>
         </div>
       </section>
 
       {/* Visi & Misi (split layout) */}
       <section id="visi-misi" className="py-16 px-6">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="card h-full bg-accent/20 border border-base-300">
+          <div className="card h-full bg-accent/20 border border-gray-700">
             <div className="card-body">
               <h2 className="card-title">Visi</h2>
               <p className="opacity-75">
@@ -59,11 +60,11 @@ export default async function About() {
               </ul>
             </div>
           </div>
-          <div className="card h-full bg-accent/20 border border-base-300">
+          <div className="card h-full bg-accent/20 border border-gray-700">
             <div className="card-body">
               <h2 className="card-title">Misi</h2>
               <p className="opacity-75">Menyajikan rekomendasi kandidat dan peluang kerja yang akurat sejak awal.</p>
-              <div className="stats stats-vertical md:stats-horizontal w-full bg-base-200 border border-base-300">
+              <div className="stats stats-vertical md:stats-horizontal w-full bg-base-200 border border-gray-700">
                 <div className="stat">
                   <div className="stat-title">Waktu shortlist</div>
                   <div className="stat-value">-3x</div>
@@ -81,9 +82,9 @@ export default async function About() {
       </section>
 
       {/* Teknologi Inti (dua kolom berbeda gaya) */}
-      <section className="py-16 px-6 bg-accent/20">
+      <section className="py-16 px-6">
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-8 items-start">
-          <div className="mockup-code bg-base-200 border border-base-300 p-2">
+          <div className="mockup-code bg-base-200 border border-gray-700 p-2">
             <pre data-prefix="1">
               <code>{`<match>`}</code>
             </pre>
@@ -151,23 +152,23 @@ export default async function About() {
       </section>
 
       {/* Nilai-nilai (berbeda dari kartu misi) */}
-      <section className="py-12 px-6 bg-base-200/50">
+      <section className="py-12 px-6">
         <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-6">
-          <div className="card bg-accent/20 border border-base-300">
+          <div className="card bg-accent/20 border border-gray-700">
             <div className="card-body">
               <div className="badge badge-primary">Relevansi</div>
               <h3 className="card-title">Fokus pada Kesesuaian</h3>
               <p className="opacity-75">Memahami konteks dan kebutuhan, bukan hanya kata kunci.</p>
             </div>
           </div>
-          <div className="card bg-accent/20 border border-base-300">
+          <div className="card bg-accent/20 border border-gray-700">
             <div className="card-body">
               <div className="badge badge-primary">Transparansi</div>
               <h3 className="card-title">Alasan yang Jelas</h3>
               <p className="opacity-75">Mengapa kandidat direkomendasikan, dijelaskan secara ringkas.</p>
             </div>
           </div>
-          <div className="card bg-accent/20 border border-base-300">
+          <div className="card bg-accent/20 border border-gray-700">
             <div className="card-body">
               <div className="badge badge-primary">Efisiensi</div>
               <h3 className="card-title">Cepat ke Inti</h3>
@@ -182,21 +183,21 @@ export default async function About() {
         <div className="max-w-5xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-8 font-mono">FAQ</h2>
           <div className="space-y-3">
-            <div className="collapse collapse-arrow bg-accent/20 border border-base-300">
+            <div className="collapse collapse-arrow bg-accent/20 border border-gray-700">
               <input type="checkbox" />
               <div className="collapse-title text-lg font-medium">Apakah LinkMatch gratis?</div>
               <div className="collapse-content opacity-80">
                 <p>Ya, fitur inti dapat digunakan secara gratis tanpa biaya tersembunyi.</p>
               </div>
             </div>
-            <div className="collapse collapse-arrow bg-accent/20 border border-base-300">
+            <div className="collapse collapse-arrow bg-accent/20 border border-gray-700">
               <input type="checkbox" />
               <div className="collapse-title text-lg font-medium">Apakah AI menggantikan proses interview?</div>
               <div className="collapse-content opacity-80">
                 <p>Tidak. AI membantu menyaring dan memberi rekomendasi — keputusan tetap pada manusia.</p>
               </div>
             </div>
-            <div className="collapse collapse-arrow bg-accent/20 border border-base-300">
+            <div className="collapse collapse-arrow bg-accent/20 border border-gray-700">
               <input type="checkbox" />
               <div className="collapse-title text-lg font-medium">Bagaimana privasi data dijaga?</div>
               <div className="collapse-content opacity-80">
@@ -211,7 +212,7 @@ export default async function About() {
       <section className="py-16 px-6">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-2xl md:text-3xl font-bold text-center mb-6 font-mono">Pengembang</h2>
-          <div className="card bg-accent/20 border border-base-300">
+          <div className="card bg-accent/20 border border-gray-700">
             <div className="card-body">
               <div className="flex items-center gap-4">
                 <div className="avatar">
