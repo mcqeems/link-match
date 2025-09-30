@@ -37,8 +37,8 @@ export default async function About() {
 
       {/* Visi & Misi (split layout) */}
       <section id="visi-misi" className="py-16 px-6">
-        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-6">
-          <div className="card bg-accent/20 border border-base-300">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="card h-full bg-accent/20 border border-base-300">
             <div className="card-body">
               <h2 className="card-title">Visi</h2>
               <p className="opacity-75">
@@ -52,11 +52,11 @@ export default async function About() {
               </ul>
             </div>
           </div>
-          <div className="card bg-accent/20 border border-base-300">
+          <div className="card h-full bg-accent/20 border border-base-300">
             <div className="card-body">
               <h2 className="card-title">Misi</h2>
               <p className="opacity-75">Menyajikan rekomendasi kandidat dan peluang kerja yang akurat sejak awal.</p>
-              <div className="stats bg-base-200 border border-base-300">
+              <div className="stats stats-vertical md:stats-horizontal w-full bg-base-200 border border-base-300">
                 <div className="stat">
                   <div className="stat-title">Waktu shortlist</div>
                   <div className="stat-value">-3x</div>
