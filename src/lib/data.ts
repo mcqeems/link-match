@@ -19,6 +19,11 @@ export async function fetchProfileInfo() {
     headers: currentHeaders,
   });
 
+  // If no authenticated session or missing user id, return null gracefully
+  if (!session?.user?.id) {
+    return null;
+  }
+
   const response = await prisma.profile.findUnique({
     where: { user_id: session.user.id },
     include: {
