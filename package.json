@@ -1,6 +1,9 @@
 {
   "name": "linkmatch",
   "version": "0.1.0",
+  "prisma": {
+    "seed": "ts-node ./prisma/seed.ts"
+  },
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -30,6 +33,7 @@
     "@types/react-dom": "^19",
     "prisma": "^6.16.2",
     "tailwindcss": "^4",
+    "ts-node": "^10.9.2",
     "tsx": "^4.20.5",
     "typescript": "^5"
   }
