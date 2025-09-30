@@ -388,7 +388,7 @@ export async function searchUsers(query?: string) {
           name: {
             contains: searchTerm,
             // buat PostGre
-            // mode: 'insensitive',
+            mode: 'insensitive',
           },
         },
         // Search by email
@@ -396,7 +396,7 @@ export async function searchUsers(query?: string) {
           email: {
             contains: searchTerm,
             // buat PostGre
-            // mode: 'insensitive',
+            mode: 'insensitive',
           },
         },
         // Search by profile headline (only for users who have profiles)
@@ -412,7 +412,7 @@ export async function searchUsers(query?: string) {
                 headline: {
                   contains: searchTerm,
                   // buat PostGre
-                  // mode: 'insensitive',
+                  mode: 'insensitive',
                 },
               },
             },
