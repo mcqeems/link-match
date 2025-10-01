@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { MagicMatcherPage } from '@/components/magic-matcher/MagicMatcherPage';
 
 export const metadata: Metadata = {
-  title: 'Magic Matcher - LinkMatch',
+  title: 'Magic Matcher',
   description: 'Find the perfect talent match using AI-powered search',
 };
 
