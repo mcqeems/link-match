@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
         headline: profile.headline,
         description: profile.description,
         experiences: profile.experiences,
-        skills: profile.profile_skills?.map((ps: any) => ps.skills.name) || [],
+        skills: [], // Skills not implemented yet
         category: profile.categories?.name,
       });
 
@@ -77,7 +77,7 @@ export async function POST(request: NextRequest) {
           description: profile.description,
           experiences: profile.experiences,
           category: profile.categories?.name,
-          skills: profile.profile_skills?.map((ps: any) => ps.skills.name) || [],
+          skills: [], // Skills not implemented yet
           website: profile.website,
           linkedin: profile.linkedin,
           github: profile.github,

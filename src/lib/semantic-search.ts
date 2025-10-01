@@ -43,11 +43,6 @@ export async function generateProfileEmbedding(profileId: number): Promise<void>
           },
         },
         categories: true,
-        profile_skills: {
-          include: {
-            skills: true,
-          },
-        },
       },
     });
 
@@ -61,18 +56,24 @@ export async function generateProfileEmbedding(profileId: number): Promise<void>
       return;
     }
 
-    // Create text representation of profile
-    const skills = profile.profile_skills.map((ps) => ps.skills.name).join(', ');
-    const textContent = [
+    // Create comprehensive text representation of profile
+    // Build comprehensive profile text including all relevant information
+    const profileParts = [
       profile.User.name,
       profile.headline,
       profile.description,
       profile.experiences,
-      skills,
       profile.categories?.name,
-    ]
-      .filter(Boolean)
+      // Add social/portfolio links for additional context
+      profile.website,
+      profile.linkedin,
+      profile.github,
+    ];
+    const textContent = profileParts
+      .filter(Boolean) // Remove null/undefined values
       .join(' ');
+
+    console.log(`Generating embedding for profile ${profileId} with content length: ${textContent.length} characters`);
 
     // Generate embedding
     const embedding = await generateEmbedding(textContent);
@@ -143,11 +144,6 @@ export async function searchSimilarProfiles(
               },
             },
             categories: true,
-            profile_skills: {
-              include: {
-                skills: true,
-              },
-            },
           },
         },
       },
