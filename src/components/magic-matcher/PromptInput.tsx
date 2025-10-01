@@ -42,7 +42,13 @@ export function PromptInput({ onSearchComplete, isLoading, setIsLoading }: Promp
 
       const data = await response.json();
 
-      setSuccessMessage(`Found ${data.matches.length} amazing matches! 🎉`);
+      // Handle case when no matches are found
+      if (data.matches.length === 0) {
+        setError(data.message || 'Tidak ada talenta yang sesuai dengan kriteria pencarian Anda.');
+        return;
+      }
+
+      setSuccessMessage(`Menemukan ${data.matches.length} kandidat yang cocok! 🎉`);
 
       // Small delay to show success message
       setTimeout(() => {

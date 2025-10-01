@@ -35,11 +35,32 @@ export async function POST(request: NextRequest) {
     // Analyze prompt using AI
     const promptAnalysis = await analyzePromptForTalentSearch(prompt);
 
-    // Perform semantic search
+    // Create enhanced search text for better matching
+    const enhancedSearchText = `${prompt} ${promptAnalysis.enhanced_search_text} ${promptAnalysis.keywords.join(' ')} ${promptAnalysis.skills.join(' ')}`;
+
+    // Perform semantic search with stricter filtering
     const similarProfiles = await searchSimilarProfiles(
-      promptAnalysis.enhanced_search_text,
+      enhancedSearchText,
       20 // Get top 20 matches
     );
+
+    // Check if we have any good matches
+    if (similarProfiles.length === 0) {
+      // Update match request status even with no matches
+      await prisma.match_requests.update({
+        where: { id: matchRequest.id },
+        data: { status: 'completed' },
+      });
+
+      return NextResponse.json({
+        match_request_id: matchRequest.id,
+        matches: [],
+        total_matches: 0,
+        message:
+          'Tidak ada talenta yang sesuai dengan kebutuhan Anda. Coba ubah kriteria pencarian atau gunakan kata kunci yang lebih umum.',
+        prompt_analysis: promptAnalysis,
+      });
+    }
 
     // Generate talent matches with AI explanations
     const talentMatches = [];
@@ -97,11 +118,17 @@ export async function POST(request: NextRequest) {
       data: { status: 'completed' },
     });
 
+    console.log(`Generated ${talentMatches.length} talent matches with enhanced similarity algorithm`);
+
     return NextResponse.json({
       match_request_id: matchRequest.id,
       matches: talentMatches,
       total_matches: talentMatches.length,
       prompt_analysis: promptAnalysis,
+      similarity_info: {
+        min_threshold: '15%',
+        algorithm: 'enhanced_cosine_with_exponential_scaling',
+      },
     });
   } catch (error) {
     console.error('Error in magic match:', error);

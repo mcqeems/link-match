@@ -80,19 +80,19 @@ export async function generateMatchAnalysis(
     category?: string;
   }
 ): Promise<string> {
-  const systemPrompt = `You are an expert talent matcher. Analyze how well a talent profile matches a recruiter's requirements and provide a clear, concise explanation.
+  const systemPrompt = `Anda adalah ahli pencocokan talenta profesional. Analisis seberapa baik profil talenta cocok dengan kebutuhan perekrut dan berikan penjelasan yang jelas dan ringkas dalam bahasa Indonesia.
 
-Talent Profile:
-- Name: ${talentProfile.name}
-- Headline: ${talentProfile.headline || 'Not specified'}
-- Description: ${talentProfile.description || 'Not specified'}
-- Experience: ${talentProfile.experiences || 'Not specified'}
-- Skills: ${talentProfile.skills?.join(', ') || 'Not specified'}
-- Category: ${talentProfile.category || 'Not specified'}
+Profil Talenta:
+- Nama: ${talentProfile.name}
+- Headline: ${talentProfile.headline || 'Tidak disebutkan'}
+- Deskripsi: ${talentProfile.description || 'Tidak disebutkan'}
+- Pengalaman: ${talentProfile.experiences || 'Tidak disebutkan'}
+- Skills: ${talentProfile.skills?.join(', ') || 'Tidak disebutkan'}
+- Kategori: ${talentProfile.category || 'Tidak disebutkan'}
 
-Recruiter Requirements: ${prompt}
+Kebutuhan Perekrut: ${prompt}
 
-Provide a brief explanation (2-3 sentences) of why this talent is a good match, focusing on specific skills, experience, or qualities that align with the requirements.`;
+Berikan penjelasan singkat (2-3 kalimat) dalam bahasa Indonesia mengapa talenta ini cocok, fokus pada skills spesifik, pengalaman, atau kualitas yang sesuai dengan kebutuhan. Gunakan bahasa yang natural dan mudah dipahami.`;
 
   const payload = {
     anthropic_version: 'bedrock-2023-05-31',

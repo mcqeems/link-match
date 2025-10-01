@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import {
   IconArrowLeft,
   IconHeart,
@@ -22,17 +22,43 @@ export function TalentCards({ matches, matchRequest, onBackToSearch, onUpdateMat
   const [currentIndex, setCurrentIndex] = useState(0);
   const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(null);
   const [isSwaping, setIsSwaping] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [containerWidth, setContainerWidth] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Track container size and mobile state
+  useEffect(() => {
+    const updateSize = () => {
+      if (containerRef.current) {
+        setContainerWidth(containerRef.current.offsetWidth);
+      }
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    updateSize();
+    window.addEventListener('resize', updateSize);
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
 
   const currentMatch = matches[currentIndex];
   const remainingMatches = matches.length - currentIndex;
 
+  // Calculate swipe limits based on container size
+  const getSwipeLimits = () => {
+    const maxSwipe = Math.min(containerWidth * 0.8, isMobile ? 250 : 350);
+    const threshold = Math.min(containerWidth * 0.3, isMobile ? 80 : 120);
+    return { maxSwipe, threshold };
+  };
+
   const handleSwipe = async (direction: 'left' | 'right') => {
-    if (isSwaping || !currentMatch) return;
+    if (isSwaping || isAnimating || !currentMatch) return;
 
     setIsSwaping(true);
+    setIsAnimating(true);
     setSwipeDirection(direction);
 
     try {
@@ -64,62 +90,124 @@ export function TalentCards({ matches, matchRequest, onBackToSearch, onUpdateMat
       };
       onUpdateMatch(updatedMatches);
 
-      // Show animation and move to next card
+      // Wait for animation to complete before moving to next card
       setTimeout(() => {
         setCurrentIndex((prev) => prev + 1);
         setSwipeDirection(null);
         setIsSwaping(false);
+        setIsAnimating(false);
         setDragOffset({ x: 0, y: 0 });
-      }, 300);
+      }, 400); // Match animation duration
     } catch (error) {
       console.error('Failed to swipe:', error);
       setIsSwaping(false);
+      setIsAnimating(false);
       setSwipeDirection(null);
     }
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
-    if (isSwaping) return;
+    if (isSwaping || isAnimating) return;
     setDragStart({ x: e.clientX, y: e.clientY });
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (isSwaping || dragStart.x === 0) return;
+    if (isSwaping || isAnimating || dragStart.x === 0) return;
 
     const deltaX = e.clientX - dragStart.x;
     const deltaY = e.clientY - dragStart.y;
+    const { maxSwipe } = getSwipeLimits();
+
+    // Limit horizontal movement to prevent overlapping
+    const limitedDeltaX = Math.max(-maxSwipe, Math.min(maxSwipe, deltaX));
 
     // Limit vertical movement and emphasize horizontal
     setDragOffset({
-      x: deltaX,
-      y: deltaY * 0.1,
+      x: limitedDeltaX,
+      y: deltaY * 0.1, // Reduced vertical movement
     });
   };
 
   const handleMouseUp = () => {
-    if (isSwaping) return;
+    if (isSwaping || isAnimating) return;
 
-    const threshold = 100;
+    const { threshold } = getSwipeLimits();
     if (Math.abs(dragOffset.x) > threshold) {
       handleSwipe(dragOffset.x > 0 ? 'right' : 'left');
     } else {
-      // Snap back
+      // Smooth snap back animation
+      setDragOffset({ x: 0, y: 0 });
+    }
+    setDragStart({ x: 0, y: 0 });
+  };
+
+  // Touch handlers for mobile
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (isSwaping || isAnimating) return;
+    const touch = e.touches[0];
+    setDragStart({ x: touch.clientX, y: touch.clientY });
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (isSwaping || isAnimating || dragStart.x === 0) return;
+
+    const touch = e.touches[0];
+    const deltaX = touch.clientX - dragStart.x;
+    const deltaY = touch.clientY - dragStart.y;
+    const { maxSwipe } = getSwipeLimits();
+
+    // Limit horizontal movement to prevent overlapping
+    const limitedDeltaX = Math.max(-maxSwipe, Math.min(maxSwipe, deltaX));
+
+    setDragOffset({
+      x: limitedDeltaX,
+      y: deltaY * 0.1,
+    });
+  };
+
+  const handleTouchEnd = () => {
+    if (isSwaping || isAnimating) return;
+
+    const { threshold } = getSwipeLimits();
+    if (Math.abs(dragOffset.x) > threshold) {
+      handleSwipe(dragOffset.x > 0 ? 'right' : 'left');
+    } else {
       setDragOffset({ x: 0, y: 0 });
     }
     setDragStart({ x: 0, y: 0 });
   };
 
   const getCardStyle = () => {
-    const rotation = dragOffset.x * 0.1;
+    const rotation = Math.max(-15, Math.min(15, dragOffset.x * 0.08)); // Limit rotation
     const scale = isSwaping ? 0.95 : 1;
+    const { maxSwipe } = getSwipeLimits();
 
     let translateX = dragOffset.x;
-    if (swipeDirection === 'left') translateX = -window.innerWidth;
-    if (swipeDirection === 'right') translateX = window.innerWidth;
+    let opacity = 1;
+
+    // During swipe animation, move card completely off screen
+    if (swipeDirection === 'left') {
+      translateX = -(containerWidth || window.innerWidth);
+      opacity = 0;
+    }
+    if (swipeDirection === 'right') {
+      translateX = containerWidth || window.innerWidth;
+      opacity = 0;
+    }
+
+    // Add fade effect based on drag distance
+    if (!isSwaping && Math.abs(dragOffset.x) > 0) {
+      const fadeAmount = Math.abs(dragOffset.x) / maxSwipe;
+      opacity = Math.max(0.7, 1 - fadeAmount * 0.3);
+    }
 
     return {
       transform: `translate(${translateX}px, ${dragOffset.y}px) rotate(${rotation}deg) scale(${scale})`,
-      transition: isSwaping || (dragStart.x === 0 && dragOffset.x === 0) ? 'transform 0.3s ease-out' : 'none',
+      opacity,
+      transition:
+        isSwaping || isAnimating || (dragStart.x === 0 && dragOffset.x === 0)
+          ? 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+          : 'none',
     };
   };
 
@@ -135,9 +223,9 @@ export function TalentCards({ matches, matchRequest, onBackToSearch, onUpdateMat
               <IconHeart className="w-10 h-10 text-white" />
             </div>
 
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">🎉 All Done!</h2>
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">🎉 Selesai!</h2>
             <p className="text-gray-600 dark:text-gray-300 mb-6">
-              You've reviewed all {matches.length} matches for your search.
+              Anda telah meninjau semua {matches.length} kandidat untuk pencarian Anda.
             </p>
           </div>
 
@@ -148,7 +236,7 @@ export function TalentCards({ matches, matchRequest, onBackToSearch, onUpdateMat
                 <IconHeart className="w-6 h-6 text-green-600 mr-2" />
                 <span className="text-2xl font-bold text-green-600">{rightSwipes}</span>
               </div>
-              <p className="text-sm text-gray-600 dark:text-gray-300">Matches Liked</p>
+              <p className="text-sm text-gray-600 dark:text-gray-300">Kandidat Disukai</p>
             </div>
 
             <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
@@ -156,15 +244,15 @@ export function TalentCards({ matches, matchRequest, onBackToSearch, onUpdateMat
                 <IconX className="w-6 h-6 text-red-600 mr-2" />
                 <span className="text-2xl font-bold text-red-600">{leftSwipes}</span>
               </div>
-              <p className="text-sm text-gray-600 dark:text-gray-300">Profiles Passed</p>
+              <p className="text-sm text-gray-600 dark:text-gray-300">Profil Dilewati</p>
             </div>
           </div>
 
           {rightSwipes > 0 && (
             <div className="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-4 mb-6">
               <p className="text-purple-700 dark:text-purple-300 text-sm">
-                💬 Great choices! You can now message your {rightSwipes} liked candidate{rightSwipes !== 1 ? 's' : ''}
-                to start conversations.
+                💬 Pilihan yang bagus! Anda sekarang dapat mengirim pesan kepada {rightSwipes} kandidat yang disukai
+                untuk memulai percakapan.
               </p>
             </div>
           )}
@@ -174,7 +262,7 @@ export function TalentCards({ matches, matchRequest, onBackToSearch, onUpdateMat
               onClick={onBackToSearch}
               className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 transform hover:scale-105"
             >
-              🔍 Start New Search
+              🔍 Mulai Pencarian Baru
             </button>
 
             {rightSwipes > 0 && (
@@ -182,7 +270,7 @@ export function TalentCards({ matches, matchRequest, onBackToSearch, onUpdateMat
                 onClick={() => (window.location.href = '/messages')}
                 className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200"
               >
-                💬 Go to Messages
+                💬 Buka Pesan
               </button>
             )}
           </div>
@@ -194,15 +282,16 @@ export function TalentCards({ matches, matchRequest, onBackToSearch, onUpdateMat
   if (!currentMatch) return null;
 
   return (
-    <div className="max-w-md mx-auto">
+    <div className="max-w-md mx-auto px-4 sm:px-0">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-4 sm:mb-6">
         <button
           onClick={onBackToSearch}
           className="flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
         >
           <IconArrowLeft className="w-5 h-5" />
-          <span>Back to Search</span>
+          <span className="hidden sm:inline">Back to Search</span>
+          <span className="sm:hidden">Back</span>
         </button>
 
         <div className="text-sm text-gray-500 dark:text-gray-400">
@@ -211,19 +300,19 @@ export function TalentCards({ matches, matchRequest, onBackToSearch, onUpdateMat
       </div>
 
       {/* Progress Bar */}
-      <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mb-6">
+      <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mb-4 sm:mb-6">
         <div
           className="bg-gradient-to-r from-purple-600 to-blue-600 h-2 rounded-full transition-all duration-300"
           style={{ width: `${((currentIndex + 1) / matches.length) * 100}%` }}
         />
       </div>
 
-      {/* Card Stack */}
-      <div className="relative h-[600px]">
+      {/* Card Stack Container */}
+      <div ref={containerRef} className="relative h-[500px] sm:h-[600px] overflow-hidden rounded-2xl">
         {/* Next card (behind) */}
         {currentIndex + 1 < matches.length && (
           <div
-            className="absolute inset-0 bg-white dark:bg-gray-800 rounded-2xl shadow-lg transform scale-95 opacity-50"
+            className="absolute inset-0 bg-white dark:bg-gray-800 rounded-2xl shadow-lg transform scale-95 opacity-50 border border-gray-200 dark:border-gray-700"
             style={{ zIndex: 1 }}
           />
         )}
@@ -231,41 +320,44 @@ export function TalentCards({ matches, matchRequest, onBackToSearch, onUpdateMat
         {/* Current card */}
         <div
           ref={cardRef}
-          className="absolute inset-0 bg-white dark:bg-gray-800 rounded-2xl shadow-xl cursor-grab active:cursor-grabbing select-none"
+          className="absolute inset-0 bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 cursor-grab active:cursor-grabbing select-none touch-none"
           style={{ ...getCardStyle(), zIndex: 2 }}
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
           onMouseLeave={handleMouseUp}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
         >
           {/* Swipe Indicators */}
           <div
-            className={`absolute inset-0 flex items-center justify-center transition-opacity ${
-              dragOffset.x > 50 ? 'opacity-100' : 'opacity-0'
+            className={`absolute inset-0 flex items-center justify-center transition-all duration-200 ${
+              dragOffset.x > (isMobile ? 30 : 50) ? 'opacity-100 scale-110' : 'opacity-0 scale-100'
             }`}
             style={{ zIndex: 3 }}
           >
-            <div className="bg-green-500 text-white rounded-full p-4 transform rotate-12">
-              <IconHeart className="w-8 h-8" />
+            <div className="bg-green-500 shadow-lg text-white rounded-full p-3 sm:p-4 transform rotate-12">
+              <IconHeart className="w-6 h-6 sm:w-8 sm:h-8" />
             </div>
           </div>
 
           <div
-            className={`absolute inset-0 flex items-center justify-center transition-opacity ${
-              dragOffset.x < -50 ? 'opacity-100' : 'opacity-0'
+            className={`absolute inset-0 flex items-center justify-center transition-all duration-200 ${
+              dragOffset.x < -(isMobile ? 30 : 50) ? 'opacity-100 scale-110' : 'opacity-0 scale-100'
             }`}
             style={{ zIndex: 3 }}
           >
-            <div className="bg-red-500 text-white rounded-full p-4 transform -rotate-12">
-              <IconX className="w-8 h-8" />
+            <div className="bg-red-500 shadow-lg text-white rounded-full p-3 sm:p-4 transform -rotate-12">
+              <IconX className="w-6 h-6 sm:w-8 sm:h-8" />
             </div>
           </div>
 
           {/* Card Content */}
-          <div className="p-6 h-full flex flex-col">
+          <div className="p-4 sm:p-6 h-full flex flex-col">
             {/* Profile Image */}
-            <div className="flex-shrink-0 mb-4">
-              <div className="w-24 h-24 rounded-full overflow-hidden mx-auto bg-gradient-to-br from-purple-400 to-blue-400 flex items-center justify-center">
+            <div className="flex-shrink-0 mb-3 sm:mb-4">
+              <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden mx-auto bg-gradient-to-br from-purple-400 to-blue-400 flex items-center justify-center">
                 {currentMatch.talent.image_url || currentMatch.talent.image ? (
                   <img
                     src={currentMatch.talent.image_url || currentMatch.talent.image}
@@ -273,16 +365,20 @@ export function TalentCards({ matches, matchRequest, onBackToSearch, onUpdateMat
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <span className="text-white font-bold text-xl">{currentMatch.talent.name.charAt(0)}</span>
+                  <span className="text-white font-bold text-lg sm:text-xl">{currentMatch.talent.name.charAt(0)}</span>
                 )}
               </div>
             </div>
 
             {/* Basic Info */}
-            <div className="text-center mb-4">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">{currentMatch.talent.name}</h2>
+            <div className="text-center mb-3 sm:mb-4">
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-1">
+                {currentMatch.talent.name}
+              </h2>
               {currentMatch.talent.headline && (
-                <p className="text-gray-600 dark:text-gray-300 text-sm">{currentMatch.talent.headline}</p>
+                <p className="text-gray-600 dark:text-gray-300 text-xs sm:text-sm line-clamp-2">
+                  {currentMatch.talent.headline}
+                </p>
               )}
               {currentMatch.talent.category && (
                 <span className="inline-block bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 text-xs px-2 py-1 rounded-full mt-2">
@@ -292,18 +388,22 @@ export function TalentCards({ matches, matchRequest, onBackToSearch, onUpdateMat
             </div>
 
             {/* Similarity Score */}
-            <div className="text-center mb-4">
+            <div className="text-center mb-3 sm:mb-4">
               <div className="inline-flex items-center bg-gradient-to-r from-green-100 to-blue-100 dark:from-green-900 dark:to-blue-900 rounded-full px-3 py-1">
-                <span className="text-sm font-semibold text-green-700 dark:text-green-300">
-                  {Math.round(currentMatch.similarity_score * 100)}% Match
+                <span className="text-xs sm:text-sm font-semibold text-green-700 dark:text-green-300">
+                  {Math.round(currentMatch.similarity_score * 100)}% Cocok
                 </span>
               </div>
             </div>
 
             {/* AI Explanation */}
-            <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 mb-4 flex-grow">
-              <h3 className="font-semibold text-gray-900 dark:text-white text-sm mb-2">Why this is a good match:</h3>
-              <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">{currentMatch.ai_explanation}</p>
+            <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 mb-3 sm:mb-4 flex-grow overflow-y-auto">
+              <h3 className="font-semibold text-gray-900 dark:text-white text-xs sm:text-sm mb-2">
+                Mengapa kandidat ini cocok:
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300 text-xs sm:text-sm leading-relaxed">
+                {currentMatch.ai_explanation}
+              </p>
             </div>
 
             {/* Skills */}
@@ -384,7 +484,7 @@ export function TalentCards({ matches, matchRequest, onBackToSearch, onUpdateMat
 
       {/* Instructions */}
       <div className="text-center mt-6">
-        <p className="text-sm text-gray-500 dark:text-gray-400">Swipe or drag left to pass, right to match</p>
+        <p className="text-sm text-gray-500 dark:text-gray-400">Geser kiri untuk lewati, kanan untuk menyukai</p>
       </div>
     </div>
   );
