@@ -14,7 +14,7 @@ type FormState = { error: string | null; success: boolean };
 const prisma = new PrismaClient();
 
 const s3Client = new S3Client({
-  region: process.env.AWS_S3_REGION,
+  region: process.env.AWS_REGION,
   credentials: {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
@@ -42,16 +42,24 @@ async function uploadImageToS3(file: File): Promise<string> {
     Key: fileName,
     Body: buffer,
     ContentType: file.type,
-    ACL: 'public-read',
+    // Removed ACL as it's often restricted by default
   });
 
   try {
     await s3Client.send(command);
-    // Construct the URL manually
-    const url = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/${fileName}`;
+
+    // For now, we'll construct a public URL
+    // Note: This will only work if your bucket allows public access to objects
+    const url = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${fileName}`;
     return url;
   } catch (error) {
     console.error('Error uploading to S3:', error);
+
+    // Log more details about the error
+    if (error instanceof Error) {
+      console.error('Error details:', error.message);
+    }
+
     throw new Error('Failed to upload image.');
   }
 }

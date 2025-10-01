@@ -64,6 +64,9 @@ model profile {
   categories     categories?      @relation(fields: [category_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "profile_ibfk_2")
   profile_skills profile_skills[]
 
+  // Magic Matcher relation
+  profile_embeddings profile_embeddings?
+
   @@index([category_id], map: "idx_profile_category_id")
   @@index([user_id], map: "idx_profile_user_id")
 }
@@ -109,6 +112,10 @@ model User {
   updatedAt     DateTime  @default(now()) @updatedAt
   sessions      Session[]
   accounts      Account[]
+
+  // Magic Matcher relations
+  match_requests match_requests[]
+  talent_matches talent_matches[]
 
   @@index([email], map: "idx_User_email")
   @@index([role_id], map: "idx_User_role_id")
@@ -158,4 +165,63 @@ model Verification {
   updatedAt  DateTime @default(now()) @updatedAt
 
   @@map("verification")
+}
+
+// Magic Matcher Models
+model match_requests {
+  id           Int      @id @default(autoincrement())
+  requester_id String
+  prompt       String   @db.Text
+  status       String   @default("pending") @db.VarChar(20) // pending, processing, completed, failed
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+
+  requester      User             @relation(fields: [requester_id], references: [id], onDelete: Cascade)
+  talent_matches talent_matches[]
+
+  @@index([requester_id])
+  @@index([status])
+}
+
+model talent_matches {
+  id               Int      @id @default(autoincrement())
+  match_request_id Int
+  talent_id        String
+  similarity_score Float // 0.0 to 1.0
+  ai_explanation   String?  @db.Text
+  created_at       DateTime @default(now())
+
+  match_request match_requests @relation(fields: [match_request_id], references: [id], onDelete: Cascade)
+  talent        User           @relation(fields: [talent_id], references: [id], onDelete: Cascade)
+  swipes        match_swipes[]
+
+  @@unique([match_request_id, talent_id])
+  @@index([match_request_id])
+  @@index([talent_id])
+  @@index([similarity_score])
+}
+
+model match_swipes {
+  id              Int      @id @default(autoincrement())
+  talent_match_id Int
+  swipe_direction String   @db.VarChar(10) // 'left' or 'right'
+  created_at      DateTime @default(now())
+
+  talent_match talent_matches @relation(fields: [talent_match_id], references: [id], onDelete: Cascade)
+
+  @@unique([talent_match_id]) // One swipe per match
+  @@index([swipe_direction])
+}
+
+model profile_embeddings {
+  id           Int      @id @default(autoincrement())
+  profile_id   Int      @unique
+  embedding    Float[] // Vector embedding for semantic search
+  text_content String   @db.Text // The text that was embedded
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+
+  profile profile @relation(fields: [profile_id], references: [id], onDelete: Cascade)
+
+  @@index([profile_id])
 }

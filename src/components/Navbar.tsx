@@ -69,6 +69,9 @@ export default async function Navbar() {
                 <Link href="/talents">Cari Talenta</Link>
               </li>
               <li>
+                <Link href="/magic-matcher">Magic Matcher</Link>
+              </li>
+              <li>
                 <Link href="/messages">Messages</Link>
               </li>
               <li>
