@@ -84,40 +84,10 @@ export default async function About() {
       {/* Teknologi Inti (dua kolom berbeda gaya) */}
       <section className="py-16 px-6">
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-8 items-start">
-          <div className="mockup-code bg-base-200 border border-gray-700 p-2">
-            <pre data-prefix="1">
-              <code>{`<match>`}</code>
-            </pre>
-            <pre data-prefix="2">
-              <code>{`  <job role="Frontend Engineer" stack="React, Next.js, Tailwind" />`}</code>
-            </pre>
-            <pre data-prefix="3">
-              <code>{`  <semantic-search engine="Bedrock">`}</code>
-            </pre>
-            <pre data-prefix="4">
-              <code className="ml-6">{`    <query>React • performa • UX</query>`}</code>
-            </pre>
-            <pre data-prefix="5">
-              <code className="ml-6">{`    <topK>5</topK>`}</code>
-            </pre>
-            <pre data-prefix="6">
-              <code>{`  </semantic-search>`}</code>
-            </pre>
-            <pre data-prefix="7">
-              <code>{`  <candidates>`}</code>
-            </pre>
-            <pre data-prefix="8">
-              <code className="ml-6">{`    <candidate name="Jane" score="0.92" />`}</code>
-            </pre>
-            <pre data-prefix="9">
-              <code className="ml-6">{`    <!-- kandidat lainnya -->`}</code>
-            </pre>
-            <pre data-prefix="10">
-              <code>{`  </candidates>`}</code>
-            </pre>
-            <pre data-prefix="11">
-              <code>{`</match>`}</code>
-            </pre>
+          <div className="bg-accent/20 border border-gray-700 p-6 rounded-lg flex flex-wrap gap-6 items-center justify-center">
+            <Image className="object-contain" src="/aws.webp" alt="Amazon Web Service" width={168} height={168} />
+            <Image className="object-contain" src="/bedrock.webp" alt="Amazon Bedrock" width={168} height={168} />
+            <Image className="object-contain" src="/claude.webp" alt="Claude AI" width={168} height={168} />
           </div>
           <div className="space-y-4">
             <h2 className="text-2xl md:text-3xl font-bold font-mono">Didukung AWS Bedrock & Semantic Search</h2>
