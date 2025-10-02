@@ -58,32 +58,48 @@ function enhancedCosineSimilarity(vecA: number[], vecB: number[], profile: any):
   // Calculate information richness boost
   const richnessScore = calculateInformationRichness(profile);
 
-  // Apply more generous scaling for better user experience
-  // This produces higher similarity scores while maintaining quality distinction
+  // Apply more conservative similarity scaling to let richness boost be the primary factor
+  // This produces more realistic base scores before richness boost
   let scaledSimilarity;
 
   if (rawSimilarity > 0.7) {
-    // Exceptional matches: boost significantly (70%+ becomes 80%+)
-    scaledSimilarity = Math.min(0.95, Math.pow(rawSimilarity, 0.5) * 1.3);
+    // Exceptional matches: modest boost (70%+ becomes 75%+)
+    scaledSimilarity = Math.min(0.95, rawSimilarity * 1.1);
   } else if (rawSimilarity > 0.5) {
-    // Good matches: substantial boost (50-70% becomes 60-80%)
-    scaledSimilarity = Math.pow(rawSimilarity, 0.6) * 1.25;
+    // Good matches: slight boost (50-70% becomes 55-75%)
+    scaledSimilarity = rawSimilarity * 1.1;
   } else if (rawSimilarity > 0.3) {
-    // Moderate matches: generous boost (30-50% becomes 45-65%)
-    scaledSimilarity = Math.pow(rawSimilarity, 0.7) * 1.4;
+    // Moderate matches: minimal boost (30-50% becomes 33-55%)
+    scaledSimilarity = rawSimilarity * 1.1;
   } else if (rawSimilarity > 0.2) {
-    // Weak matches: moderate boost (20-30% becomes 30-45%)
-    scaledSimilarity = Math.pow(rawSimilarity, 0.8) * 1.2;
+    // Weak matches: very slight boost (20-30% becomes 22-33%)
+    scaledSimilarity = rawSimilarity * 1.1;
   } else {
-    // Poor matches: still show but lower (below 20% becomes 15-25%)
-    scaledSimilarity = Math.pow(rawSimilarity, 0.9) * 1.1;
+    // Poor matches: no boost (keep as is)
+    scaledSimilarity = rawSimilarity;
   }
 
-  // Apply information richness boost
-  // Profiles with more information get a boost (up to 20% increase)
-  const richnessBoost = 1 + richnessScore * 0.2;
-  const finalSimilarity = scaledSimilarity * richnessBoost;
+  // Apply information richness boost with exponential scaling
+  // Profiles with high richness get significantly more boost to overcome raw similarity differences
+  let richnessBoost;
+  if (richnessScore > 0.9) {
+    // Exceptionally complete profiles: up to 80% boost - these should rank very high
+    richnessBoost = 1 + Math.pow(richnessScore, 2.0) * 0.8;
+  } else if (richnessScore > 0.8) {
+    // Very complete profiles: up to 65% boost
+    richnessBoost = 1 + Math.pow(richnessScore, 1.8) * 0.65;
+  } else if (richnessScore > 0.6) {
+    // Good profiles: up to 45% boost
+    richnessBoost = 1 + Math.pow(richnessScore, 1.5) * 0.45;
+  } else if (richnessScore > 0.4) {
+    // Moderate profiles: up to 30% boost
+    richnessBoost = 1 + Math.pow(richnessScore, 1.3) * 0.3;
+  } else {
+    // Basic profiles: minimal boost (up to 18%)
+    richnessBoost = 1 + richnessScore * 0.18;
+  }
 
+  const finalSimilarity = scaledSimilarity * richnessBoost;
   return Math.max(0, Math.min(0.95, finalSimilarity));
 } // Calculate cosine similarity between two vectors
 function cosineSimilarity(a: number[], b: number[]): number {
@@ -236,10 +252,22 @@ export async function searchSimilarProfiles(
       .map((pe) => {
         const rawSim = cosineSimilarity(searchEmbedding, pe.embedding);
         const finalSim = enhancedCosineSimilarity(searchEmbedding, pe.embedding, pe.profile);
+
+        // Calculate intermediate scaled similarity for debugging
+        let scaledSim;
+        if (rawSim > 0.7) {
+          scaledSim = Math.min(0.95, rawSim * 1.1);
+        } else if (rawSim > 0.3) {
+          scaledSim = rawSim * 1.1;
+        } else {
+          scaledSim = rawSim;
+        }
+
         return {
           profile: pe.profile,
           similarity: finalSim,
           rawSimilarity: rawSim,
+          scaledSimilarity: scaledSim,
         };
       })
       .filter((result) => {
@@ -258,8 +286,19 @@ export async function searchSimilarProfiles(
       console.log('Detailed similarity analysis:');
       similarities.slice(0, 5).forEach((s) => {
         const richness = calculateInformationRichness(s.profile);
+        const richnessBoostValue =
+          richness > 0.9
+            ? 1 + Math.pow(richness, 2.0) * 0.8
+            : richness > 0.8
+              ? 1 + Math.pow(richness, 1.8) * 0.65
+              : richness > 0.6
+                ? 1 + Math.pow(richness, 1.5) * 0.45
+                : richness > 0.4
+                  ? 1 + Math.pow(richness, 1.3) * 0.3
+                  : 1 + richness * 0.18;
+        const boostPercentage = Math.round((richnessBoostValue - 1) * 100);
         console.log(
-          `${s.profile.User.name}: Raw: ${Math.round(s.rawSimilarity * 100)}% → Final: ${Math.round(s.similarity * 100)}% (richness: ${Math.round(richness * 100)}%)`
+          `${s.profile.User.name}: Raw: ${Math.round(s.rawSimilarity * 100)}% → Scaled: ${Math.round(s.scaledSimilarity * 100)}% → Final: ${Math.round(s.similarity * 100)}% (richness: ${Math.round(richness * 100)}%, boost: +${boostPercentage}%)`
         );
       });
     }
