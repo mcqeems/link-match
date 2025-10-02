@@ -27,10 +27,10 @@ export default async function HomePage() {
               Semantic Search untuk memahami kebutuhan peran dan profil talenta bukan sekadar kata kunci.
             </p>
             <div className="flex flex-wrap gap-3">
-              <Link href="/talents" className="btn btn-accent rounded-2xl md:min-w-[175px]">
+              <Link href="/sign-up" className="btn btn-accent rounded-2xl md:min-w-[175px]">
                 Mulai
               </Link>
-              <Link href="#how-it-works" className="btn btn-accent btn-outline rounded-2xl md:min-w-[175px]">
+              <Link href="/about" className="btn btn-accent btn-outline rounded-2xl md:min-w-[175px]">
                 Tentang
               </Link>
             </div>
