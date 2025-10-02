@@ -107,3 +107,24 @@ hr {
 }
 
 /* (Removed duplicated rules) */
+
+/* Particles fade mask effect */
+.particles-fade-mask {
+  position: relative;
+}
+
+.particles-fade-mask::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  background: 
+    /* Bottom fade */
+    linear-gradient(to top, #11171a 0%, transparent 20%),
+    /* Left fade */ linear-gradient(to right, #11171a 0%, transparent 15%),
+    /* Right fade */ linear-gradient(to left, #11171a 0%, transparent 15%);
+  z-index: 1;
+}

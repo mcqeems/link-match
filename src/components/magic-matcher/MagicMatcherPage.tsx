@@ -6,6 +6,7 @@ import { TalentCards } from './TalentCards';
 import { MatchHistory } from './MatchHistory';
 import { WelcomeSection } from './WelcomeSection';
 import { IconSparkles, IconHistory, IconSearch } from '@tabler/icons-react';
+import Particles from './Particles';
 
 export interface TalentMatch {
   id: number;
@@ -63,9 +64,24 @@ export function MagicMatcherPage() {
 
   return (
     <div className="min-h-dvh md:mt-8">
-      {/* Hero Section */}
-      <section className="hero bg-accent/20 text-base-content relative">
-        <div className="hero-content max-w-6xl mx-auto flex-col py-32 px-6">
+      {/* Hero Section with Particles Background */}
+      <section className="hero text-base-content relative overflow-hidden">
+        {/* Particles Background */}
+        <div className="absolute inset-0 w-full h-full">
+          <Particles
+            particleColors={['#2b5069', '#e5e7eb']}
+            particleCount={200}
+            particleSpread={10}
+            speed={0.1}
+            particleBaseSize={100}
+            moveParticlesOnHover={true}
+            alphaParticles={false}
+            disableRotation={false}
+          />
+        </div>
+
+        {/* Hero Content */}
+        <div className="hero-content max-w-6xl mx-auto flex-col py-32 px-6 relative z-10">
           <div className="text-center space-y-6">
             <div className="badge badge-outline">AI-Powered Talent Matching</div>
             <h1 className="text-4xl md:text-6xl font-bold leading-tight font-mono">Magic Matcher</h1>

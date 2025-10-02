@@ -10,7 +10,7 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'About',
   description:
-    'Pelajari misi, visi, dan teknologi di balik LinkMatch—platform pencocokan talenta dan recruiter berbasis AI.',
+    'Pelajari misi, visi, dan teknologi di balik LinkMatch platform pencocokan talenta dan recruiter berbasis AI.',
 };
 
 export default async function About() {
@@ -37,21 +37,21 @@ export default async function About() {
           <h1 className="text-3xl md:text-5xl font-bold font-mono">Tentang LinkMatch</h1>
           <p className="opacity-80 mt-3 max-w-3xl">
             LinkMatch mempertemukan Recruiter dan Talenta melalui pencarian semantik dan orkestrasi AI. Fokus kami
-            adalah relevansi, transparansi, dan efisiensi—agar keputusan bisa diambil lebih cepat dan tepat.
+            adalah relevansi, transparansi, dan efisiensi agar keputusan bisa diambil lebih cepat dan tepat.
           </p>
           <span className="divider"></span>
         </div>
       </section>
 
       {/* Visi & Misi (split layout) */}
-      <section id="visi-misi" className="py-16 px-6">
+      <section id="visi-misi" className="pt-2 pb-8 px-6">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="card h-full bg-accent/20 border border-gray-700">
             <div className="card-body">
               <h2 className="card-title">Visi</h2>
               <p className="opacity-75">
                 Menjadi jembatan paling tepercaya antara perusahaan dan talenta, dengan pengalaman pencarian yang
-                manusiawi—memahami konteks, potensi, dan preferensi.
+                manusiawi memahami konteks, potensi, dan preferensi.
               </p>
               <ul className="list-disc pl-5 space-y-1 opacity-80">
                 <li>Menonjolkan relevansi di atas kata kunci.</li>
@@ -164,7 +164,7 @@ export default async function About() {
               <input type="checkbox" />
               <div className="collapse-title text-lg font-medium">Apakah AI menggantikan proses interview?</div>
               <div className="collapse-content opacity-80">
-                <p>Tidak. AI membantu menyaring dan memberi rekomendasi — keputusan tetap pada manusia.</p>
+                <p>Tidak. AI membantu menyaring dan memberi rekomendasi keputusan tetap pada manusia.</p>
               </div>
             </div>
             <div className="collapse collapse-arrow bg-accent/20 border border-gray-700">

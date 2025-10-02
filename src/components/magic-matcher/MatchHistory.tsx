@@ -200,23 +200,6 @@ export function MatchHistory() {
                     <div className="flex-grow min-w-0">
                       <div className="flex items-start justify-between mb-2">
                         <div className="flex items-center gap-2">
-                          <div
-                            className={`badge badge-xs ${
-                              item.status === 'completed'
-                                ? 'badge-success'
-                                : item.status === 'failed'
-                                  ? 'badge-error'
-                                  : 'badge-warning'
-                            }`}
-                          >
-                            {item.status === 'completed'
-                              ? 'Selesai'
-                              : item.status === 'failed'
-                                ? 'Gagal'
-                                : item.status === 'processing'
-                                  ? 'Memproses'
-                                  : 'Menunggu'}
-                          </div>
                           <span className="text-xs opacity-60">{formatRelativeDate(item.created_at)}</span>
                         </div>
                         <button className="btn btn-ghost btn-xs gap-1">
@@ -292,7 +275,8 @@ export function MatchHistory() {
       {/* Modal for Match Details */}
       {isModalOpen && (
         <div className="modal modal-open">
-          <div className="modal-box w-11/12 max-w-2xl">
+          <div className="modal-backdrop bg-black/80"></div>
+          <div className="modal-box w-11/12 max-w-2xl relative z-10">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-bold text-lg flex items-center gap-2">
                 <IconSparkles className="w-5 h-5 text-primary" />
@@ -310,7 +294,7 @@ export function MatchHistory() {
             ) : matchDetails ? (
               <div className="space-y-6">
                 {/* Prompt */}
-                <div className="alert bg-accent">
+                <div className="alert bg-accent/20 border-0">
                   <div>
                     <h4 className="font-semibold mb-1">Pencarian:</h4>
                     <p className="text-sm">{matchDetails.match_request.prompt}</p>
@@ -318,7 +302,7 @@ export function MatchHistory() {
                 </div>
 
                 {/* Stats */}
-                <div className="stats shadow w-full">
+                <div className="stats bg-accent/20 shadow w-full">
                   <div className="stat">
                     <div className="stat-figure text-primary">
                       <IconSearch className="w-6 h-6" />

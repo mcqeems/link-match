@@ -24,7 +24,7 @@ export default async function HomePage() {
             <h1 className="text-4xl md:text-6xl font-bold leading-tight font-mono text-foreground">LinkMatch</h1>
             <p className="opacity-80 text-lg text-foreground">
               Platform yang mempertemukan Recruiter dan Talenta dengan pencocokan berbasis AI. LinkMatch memanfaatkan
-              Semantic Search untuk memahami kebutuhan peran dan profil talenta—bukan sekadar kata kunci.
+              Semantic Search untuk memahami kebutuhan peran dan profil talenta bukan sekadar kata kunci.
             </p>
             <div className="flex flex-wrap gap-3">
               <Link href="/talents" className="btn btn-accent rounded-2xl md:min-w-[175px]">
@@ -46,7 +46,7 @@ export default async function HomePage() {
             <h2 className="text-3xl md:text-4xl font-bold mt-3 font-mono">100% Gratis Digunakan</h2>
             <p className="opacity-75 mt-2 max-w-2xl mx-auto">
               Semua fitur inti LinkMatch dapat dipakai tanpa biaya. Rekruter bisa memposting kebutuhan dan mendapatkan
-              rekomendasi talenta, sementara talenta bisa membuat profil dan terlihat oleh pencarian—tanpa biaya
+              rekomendasi talenta, sementara talenta bisa membuat profil dan terlihat oleh pencarian tanpa biaya
               tersembunyi.
             </p>
           </div>
@@ -94,7 +94,7 @@ export default async function HomePage() {
                 <div className="collapse-title text-lg font-medium">Semantic Candidate Discovery</div>
                 <div className="collapse-content opacity-80">
                   <p>
-                    Kandidat ditemukan lewat semantic search—mencocokkan makna dan konteks, bukan sekadar <i>keyword</i>
+                    Kandidat ditemukan lewat semantic search mencocokkan makna dan konteks, bukan sekadar <i>keyword</i>
                     .
                   </p>
                 </div>
