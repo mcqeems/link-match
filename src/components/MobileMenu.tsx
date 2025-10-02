@@ -52,6 +52,24 @@ export default function MobileMenu({ session, onSignOut }: { session: any; onSig
         </div>
         <ul className="text-center p-4 space-y-2">
           {session && (
+            <Link href="/profile">
+              <div className="flex flex-col justify-center items-center px-1 py-2 gap-2">
+                <Image
+                  src={image_url || '/profile_image_default.png'}
+                  alt={name || 'Profile Picture'}
+                  width={50}
+                  height={50}
+                  className="rounded-full border border-gray-700"
+                />
+                <div className="flex flex-col">
+                  <p className="font-bold text-sm text-center">{name}</p>
+                  <p className="text-sm text-white/75 text-center">{role}</p>
+                </div>
+              </div>
+              <span className="divider" />
+            </Link>
+          )}
+          {session && (
             <>
               <li>
                 <Link href="/talents" onClick={() => setOpen(false)}>
@@ -121,23 +139,6 @@ export default function MobileMenu({ session, onSignOut }: { session: any; onSig
             </>
           )}
         </ul>
-        {session && (
-          <Link href="/profile">
-            <span className="divider" />
-            <div className="flex justify-between items-end p-4">
-              <Image
-                src={image_url || '/profile_image_default.png'}
-                alt={name || 'Profile Picture'}
-                width={50}
-                height={50}
-              />
-              <div className="flex flex-col gap-2">
-                <p className="font-bold text-left">{name}</p>
-                <p className="text-sm text-white/75 text-left">{role}</p>
-              </div>
-            </div>
-          </Link>
-        )}
       </div>
 
       {/* Overlay */}
