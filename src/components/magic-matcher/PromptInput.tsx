@@ -201,7 +201,7 @@ export function PromptInput({ onSearchComplete, isLoading, setIsLoading }: Promp
                   <span className="font-medium">AI sedang mencari kandidat yang cocok...</span>
                 </div>
                 <p className="text-sm opacity-75 mt-2">
-                  Ini mungkin membutuhkan beberapa saat saat kami mencari profil dan menghasilkan penjelasan
+                  Ini mungkin membutuhkan beberapa saat untuk kami mencari profil dan menghasilkan penjelasan.
                 </p>
               </div>
             </div>

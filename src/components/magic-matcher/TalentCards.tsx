@@ -272,7 +272,7 @@ export function TalentCards({ matches, matchRequest, onBackToSearch, onUpdateMat
   if (!currentMatch) return null;
 
   return (
-    <div className="max-w-2xl mx-auto px-4 sm:px-0">
+    <div className="w-full max-w-4xl mx-auto px-4 sm:px-6">
       {/* Header */}
       <div className="flex items-center justify-between mb-4 sm:mb-6">
         <button
@@ -298,7 +298,14 @@ export function TalentCards({ matches, matchRequest, onBackToSearch, onUpdateMat
       </div>
 
       {/* Card Stack Container */}
-      <div ref={containerRef} className="relative h-[500px] sm:h-[600px] overflow-hidden rounded-2xl">
+      <div
+        ref={containerRef}
+        className="relative w-full overflow-hidden rounded-2xl"
+        style={{
+          height: isMobile ? '500px' : `${Math.min(containerWidth, window.innerWidth - 32)}px`,
+          maxHeight: isMobile ? '500px' : '80vh',
+        }}
+      >
         {/* Next card (behind) */}
         {currentIndex + 1 < matches.length && (
           <div
@@ -344,10 +351,10 @@ export function TalentCards({ matches, matchRequest, onBackToSearch, onUpdateMat
           </div>
 
           {/* Card Content */}
-          <div className="p-4 sm:p-6 h-full flex flex-col">
+          <div className="p-4 sm:p-8 h-full flex flex-col">
             {/* Profile Image */}
-            <div className="flex-shrink-0 mb-3 sm:mb-4">
-              <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden mx-auto flex items-center justify-center">
+            <div className="flex-shrink-0 mb-4 sm:mb-6">
+              <div className="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 rounded-full overflow-hidden mx-auto flex items-center justify-center border-4 border-white/20 shadow-lg">
                 <img
                   src={currentMatch.talent.image_url || currentMatch.talent.image || '/profile_image_default.png'}
                   alt={currentMatch.talent.name}
@@ -357,63 +364,65 @@ export function TalentCards({ matches, matchRequest, onBackToSearch, onUpdateMat
             </div>
 
             {/* Basic Info */}
-            <div className="text-center mb-3 sm:mb-4">
-              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-1">
+            <div className="text-center mb-4 sm:mb-6">
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-2">
                 {currentMatch.talent.name}
               </h2>
               {currentMatch.talent.headline && (
-                <p className="text-gray-600 dark:text-gray-300 text-xs sm:text-sm line-clamp-2">
+                <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base md:text-lg line-clamp-2 max-w-md mx-auto">
                   {currentMatch.talent.headline}
                 </p>
               )}
               {currentMatch.talent.category && (
-                <span className="inline-block badge badge-info text-xs px-2 py-1 rounded-full mt-2">
-                  {currentMatch.talent.category}
+                <span className="inline-block badge bg-accent/40 border-0 text-sm mt-3">
+                  <p className="text-white/75">{currentMatch.talent.category}</p>
                 </span>
               )}
             </div>
 
             {/* Similarity Score */}
-            <div className="text-center mb-3 sm:mb-4">
-              <div className="inline-flex items-center bg-gradient-to-r badge badge-outline rounded-full px-3 py-1">
-                <span className="text-xs sm:text-sm font-semibold text-green-300">
+            <div className="text-center mb-4 sm:mb-6">
+              <div className="inline-flex items-center bg-gradient-to-r badge badge-outline rounded-full px-4 py-2">
+                <span className="text-sm sm:text-base md:text-lg font-semibold text-green-300">
                   {Math.round(currentMatch.similarity_score * 100)}% Cocok
                 </span>
               </div>
             </div>
 
             {/* AI Explanation */}
-            <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 mb-3 sm:mb-4 flex-grow overflow-y-auto">
-              <h3 className="font-semibold text-gray-900 dark:text-white text-xs sm:text-sm mb-2">
+            <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 sm:p-6 mb-4 sm:mb-6 flex-grow overflow-y-auto">
+              <h3 className="font-semibold text-gray-900 dark:text-white text-sm sm:text-base mb-3">
                 Mengapa kandidat ini cocok:
               </h3>
-              <p className="text-gray-600 dark:text-gray-300 text-xs sm:text-sm leading-relaxed">
+              <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base leading-relaxed">
                 {currentMatch.ai_explanation}
               </p>
             </div>
 
             {/* Skills */}
             {currentMatch.talent.skills.length > 0 && (
-              <div className="mb-4">
-                <h3 className="font-semibold text-gray-900 dark:text-white text-sm mb-2">Skills:</h3>
-                <div className="flex flex-wrap gap-1">
-                  {currentMatch.talent.skills.slice(0, 6).map((skill, index) => (
+              <div className="mb-4 sm:mb-6">
+                <h3 className="font-semibold text-gray-900 dark:text-white text-sm sm:text-base mb-3">Skills:</h3>
+                <div className="flex flex-wrap gap-2 justify-center">
+                  {currentMatch.talent.skills.slice(0, 8).map((skill, index) => (
                     <span
                       key={index}
-                      className="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 text-xs px-2 py-1 rounded-full"
+                      className="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 text-xs sm:text-sm px-3 py-2 rounded-full"
                     >
                       {skill}
                     </span>
                   ))}
-                  {currentMatch.talent.skills.length > 6 && (
-                    <span className="text-gray-500 text-xs">+{currentMatch.talent.skills.length - 6} more</span>
+                  {currentMatch.talent.skills.length > 8 && (
+                    <span className="text-gray-500 text-xs sm:text-sm">
+                      +{currentMatch.talent.skills.length - 8} more
+                    </span>
                   )}
                 </div>
               </div>
             )}
 
             {/* Links */}
-            <div className="flex justify-center space-x-4 mb-4">
+            <div className="flex justify-center space-x-6 sm:space-x-8 mb-4">
               {currentMatch.talent.linkedin && (
                 <a
                   href={currentMatch.talent.linkedin}
@@ -421,7 +430,7 @@ export function TalentCards({ matches, matchRequest, onBackToSearch, onUpdateMat
                   rel="noopener noreferrer"
                   className="text-blue-600 hover:text-blue-700 transition-colors"
                 >
-                  <IconBrandLinkedin className="w-5 h-5" />
+                  <IconBrandLinkedin className="w-6 h-6 sm:w-7 sm:h-7" />
                 </a>
               )}
               {currentMatch.talent.github && (
@@ -431,7 +440,7 @@ export function TalentCards({ matches, matchRequest, onBackToSearch, onUpdateMat
                   rel="noopener noreferrer"
                   className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
                 >
-                  <IconBrandGithub className="w-5 h-5" />
+                  <IconBrandGithub className="w-6 h-6 sm:w-7 sm:h-7" />
                 </a>
               )}
               {currentMatch.talent.website && (
@@ -441,7 +450,7 @@ export function TalentCards({ matches, matchRequest, onBackToSearch, onUpdateMat
                   rel="noopener noreferrer"
                   className="text-purple-600 hover:text-purple-700 transition-colors"
                 >
-                  <IconExternalLink className="w-5 h-5" />
+                  <IconExternalLink className="w-6 h-6 sm:w-7 sm:h-7" />
                 </a>
               )}
             </div>
@@ -450,27 +459,29 @@ export function TalentCards({ matches, matchRequest, onBackToSearch, onUpdateMat
       </div>
 
       {/* Action Buttons */}
-      <div className="flex justify-center gap-8 mt-8">
+      <div className="flex justify-center gap-12 sm:gap-16 mt-8">
         <button
           onClick={() => handleSwipe('left')}
           disabled={isSwaping}
-          className="btn btn-circle btn-lg btn-error shadow-lg hover:scale-105 disabled:scale-100"
+          className="btn btn-circle btn-lg md:btn-xl btn-error shadow-lg hover:scale-105 disabled:scale-100"
         >
-          <IconX className="w-6 h-6" />
+          <IconX className="w-6 h-6 md:w-8 md:h-8" />
         </button>
 
         <button
           onClick={() => handleSwipe('right')}
           disabled={isSwaping}
-          className="btn btn-circle btn-lg btn-success shadow-lg hover:scale-105 disabled:scale-100"
+          className="btn btn-circle btn-lg md:btn-xl btn-success shadow-lg hover:scale-105 disabled:scale-100"
         >
-          <IconThumbUp className="w-6 h-6" />
+          <IconThumbUp className="w-6 h-6 md:w-8 md:h-8" />
         </button>
       </div>
 
       {/* Instructions */}
       <div className="text-center mt-6">
-        <p className="text-sm text-gray-500 dark:text-gray-400">Geser kiri untuk lewati, kanan untuk menyukai</p>
+        <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400">
+          Geser kiri untuk lewati, kanan untuk menyukai
+        </p>
       </div>
     </div>
   );
