@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     template: 'LinkMatch | %s',
   },
   description:
-    'LinkMatch adalah platform pencocokan cerdas yang mempertemukan perekrut dengan talenta profesional secara cepat dan relevan menggunakan AI (AWS Bedrock + Semantic Search).',
+    'LinkMatch adalah platform pencocokan cerdas yang mempertemukan perekrut dengan talenta profesional secara cepat dan relevan menggunakan AI.',
   applicationName: 'LinkMatch',
   keywords: [
     'LinkMatch',
@@ -71,8 +71,7 @@ export const metadata: Metadata = {
     locale: 'id_ID',
     siteName: 'LinkMatch',
     title: 'LinkMatch — Platform Pencocokan Talenta & Recruiter',
-    description:
-      'Temukan talenta atau peluang kerja lebih cepat dan relevan dengan AI (AWS Bedrock + Semantic Search).',
+    description: 'Temukan talenta atau peluang kerja lebih cepat dan relevan dengan AI.',
     url: '/',
     images: [
       {
@@ -86,8 +85,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'LinkMatch — Platform Pencocokan Talenta & Recruiter',
-    description:
-      'Temukan talenta atau peluang kerja lebih cepat dan relevan dengan AI (AWS Bedrock + Semantic Search).',
+    description: 'Temukan talenta atau peluang kerja lebih cepat dan relevan dengan AI.',
     creator: '@linkmatch',
     site: '@linkmatch',
     images: ['/og-image.png'],
