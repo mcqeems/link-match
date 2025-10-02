@@ -75,7 +75,7 @@ export default async function HomePage() {
       </section>
 
       {/* AI Technology */}
-      <section className="py-16 px-6 bg-accent/20">
+      <section className="py-16 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-10">
             <div className="badge badge-outline">AI Technology</div>
