@@ -216,63 +216,61 @@ export function TalentCards({ matches, matchRequest, onBackToSearch, onUpdateMat
     const leftSwipes = matches.filter((m) => m.swipe?.direction === 'left').length;
 
     return (
-      <div className="text-center py-12">
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 max-w-lg mx-auto border border-gray-200 dark:border-gray-700">
-          <div className="mb-6">
-            <div className="w-20 h-20 bg-gradient-to-br from-pink-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
-              <IconHeart className="w-10 h-10 text-white" />
-            </div>
-
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">🎉 Selesai!</h2>
-            <p className="text-gray-600 dark:text-gray-300 mb-6">
-              Anda telah meninjau semua {matches.length} kandidat untuk pencarian Anda.
-            </p>
-          </div>
-
-          {/* Statistics */}
-          <div className="grid grid-cols-2 gap-4 mb-8">
-            <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
-              <div className="flex items-center justify-center mb-2">
-                <IconHeart className="w-6 h-6 text-green-600 mr-2" />
-                <span className="text-2xl font-bold text-green-600">{rightSwipes}</span>
+      <div className="flex justify-center py-12">
+        <div className="card bg-accent/10 border border-gray-700 w-full max-w-lg">
+          <div className="card-body text-center">
+            <div className="mb-6">
+              <div className="avatar">
+                <div className="w-20 rounded-full bg-gradient-to-br from-secondary to-primary flex items-center justify-center">
+                  <IconHeart className="w-10 h-10 text-white" />
+                </div>
               </div>
-              <p className="text-sm text-gray-600 dark:text-gray-300">Kandidat Disukai</p>
-            </div>
 
-            <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
-              <div className="flex items-center justify-center mb-2">
-                <IconX className="w-6 h-6 text-red-600 mr-2" />
-                <span className="text-2xl font-bold text-red-600">{leftSwipes}</span>
-              </div>
-              <p className="text-sm text-gray-600 dark:text-gray-300">Profil Dilewati</p>
-            </div>
-          </div>
-
-          {rightSwipes > 0 && (
-            <div className="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-4 mb-6">
-              <p className="text-purple-700 dark:text-purple-300 text-sm">
-                💬 Pilihan yang bagus! Anda sekarang dapat mengirim pesan kepada {rightSwipes} kandidat yang disukai
-                untuk memulai percakapan.
+              <h2 className="text-3xl font-bold mb-2 mt-4">🎉 Selesai!</h2>
+              <p className="opacity-75 mb-6">
+                Anda telah meninjau semua {matches.length} kandidat untuk pencarian Anda.
               </p>
             </div>
-          )}
 
-          <div className="space-y-3">
-            <button
-              onClick={onBackToSearch}
-              className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 transform hover:scale-105"
-            >
-              🔍 Mulai Pencarian Baru
-            </button>
+            {/* Statistics */}
+            <div className="stats stats-horizontal shadow mb-8">
+              <div className="stat">
+                <div className="stat-figure text-success">
+                  <IconHeart className="w-8 h-8" />
+                </div>
+                <div className="stat-value text-success">{rightSwipes}</div>
+                <div className="stat-title">Disukai</div>
+              </div>
+
+              <div className="stat">
+                <div className="stat-figure text-error">
+                  <IconX className="w-8 h-8" />
+                </div>
+                <div className="stat-value text-error">{leftSwipes}</div>
+                <div className="stat-title">Dilewati</div>
+              </div>
+            </div>
 
             {rightSwipes > 0 && (
-              <button
-                onClick={() => (window.location.href = '/messages')}
-                className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200"
-              >
-                💬 Buka Pesan
-              </button>
+              <div className="alert alert-info mb-6">
+                <span className="text-sm">
+                  💬 Pilihan yang bagus! Anda sekarang dapat mengirim pesan kepada {rightSwipes} kandidat yang disukai
+                  untuk memulai percakapan.
+                </span>
+              </div>
             )}
+
+            <div className="card-actions flex-col w-full gap-3">
+              <button onClick={onBackToSearch} className="btn btn-primary btn-wide">
+                🔍 Mulai Pencarian Baru
+              </button>
+
+              {rightSwipes > 0 && (
+                <button onClick={() => (window.location.href = '/messages')} className="btn btn-success btn-wide">
+                  💬 Buka Pesan
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -320,7 +318,7 @@ export function TalentCards({ matches, matchRequest, onBackToSearch, onUpdateMat
         {/* Current card */}
         <div
           ref={cardRef}
-          className="absolute inset-0 bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 cursor-grab active:cursor-grabbing select-none touch-none"
+          className="absolute inset-0 card bg-accent/10 border border-gray-700 shadow-xl cursor-grab active:cursor-grabbing select-none touch-none"
           style={{ ...getCardStyle(), zIndex: 2 }}
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
@@ -464,11 +462,11 @@ export function TalentCards({ matches, matchRequest, onBackToSearch, onUpdateMat
       </div>
 
       {/* Action Buttons */}
-      <div className="flex justify-center space-x-8 mt-8">
+      <div className="flex justify-center gap-8 mt-8">
         <button
           onClick={() => handleSwipe('left')}
           disabled={isSwaping}
-          className="bg-red-500 hover:bg-red-600 disabled:bg-gray-400 text-white rounded-full p-4 shadow-lg transition-all duration-200 transform hover:scale-105 disabled:scale-100"
+          className="btn btn-circle btn-lg btn-error shadow-lg hover:scale-105 disabled:scale-100"
         >
           <IconX className="w-6 h-6" />
         </button>
@@ -476,7 +474,7 @@ export function TalentCards({ matches, matchRequest, onBackToSearch, onUpdateMat
         <button
           onClick={() => handleSwipe('right')}
           disabled={isSwaping}
-          className="bg-green-500 hover:bg-green-600 disabled:bg-gray-400 text-white rounded-full p-4 shadow-lg transition-all duration-200 transform hover:scale-105 disabled:scale-100"
+          className="btn btn-circle btn-lg btn-success shadow-lg hover:scale-105 disabled:scale-100"
         >
           <IconHeart className="w-6 h-6" />
         </button>

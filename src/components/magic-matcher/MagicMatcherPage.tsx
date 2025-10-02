@@ -62,73 +62,89 @@ export function MagicMatcherPage() {
   };
 
   return (
-    <div className="min-h-screen mt-12 bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-blue-900 dark:to-indigo-900">
-      <div className="container mx-auto px-4 py-8">
-        {/* Navigation */}
-        <div className="flex justify-center mb-8">
-          <div className="bg-white dark:bg-gray-800 rounded-full p-1 shadow-lg">
-            <div className="flex space-x-1">
-              <button
-                onClick={() => setCurrentView('search')}
-                className={`flex items-center px-4 py-2 rounded-full transition-all ${
-                  currentView === 'search'
-                    ? 'bg-purple-600 text-white shadow-md'
-                    : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
-                }`}
-              >
-                <IconSearch className="w-4 h-4 mr-2" />
-                Search
-              </button>
-              <button
-                onClick={() => currentView !== 'search' && setCurrentView('cards')}
-                disabled={!matches.length}
-                className={`flex items-center px-4 py-2 rounded-full transition-all ${
-                  currentView === 'cards'
-                    ? 'bg-purple-600 text-white shadow-md'
-                    : matches.length
-                      ? 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
-                      : 'text-gray-400 cursor-not-allowed'
-                }`}
-              >
-                <IconSparkles className="w-4 h-4 mr-2" />
-                Matches ({matches.length})
-              </button>
-              <button
-                onClick={handleViewHistory}
-                className={`flex items-center px-4 py-2 rounded-full transition-all ${
-                  currentView === 'history'
-                    ? 'bg-purple-600 text-white shadow-md'
-                    : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
-                }`}
-              >
-                <IconHistory className="w-4 h-4 mr-2" />
-                History
-              </button>
-            </div>
+    <div className="min-h-dvh md:mt-8">
+      {/* Hero Section */}
+      <section className="hero bg-accent/20 text-base-content relative">
+        <div className="hero-content max-w-6xl mx-auto flex-col py-32 px-6">
+          <div className="text-center space-y-6">
+            <div className="badge badge-outline">AI-Powered Talent Matching</div>
+            <h1 className="text-4xl md:text-6xl font-bold leading-tight font-mono">Magic Matcher</h1>
+            <p className="opacity-80 text-lg max-w-2xl">
+              Temukan talenta yang tepat dengan kekuatan AI. Cukup deskripsikan kebutuhan Anda, dan biarkan Magic
+              Matcher menemukan kandidat terbaik menggunakan semantic search.
+            </p>
           </div>
         </div>
+      </section>
 
-        {/* Content */}
+      {/* Navigation Tabs */}
+      <section className="py-8 px-6">
         <div className="max-w-4xl mx-auto">
-          {currentView === 'search' && (
-            <>
-              <WelcomeSection />
-              <PromptInput onSearchComplete={handleSearchComplete} isLoading={isLoading} setIsLoading={setIsLoading} />
-            </>
-          )}
+          <div className="tabs tabs-boxed bg-accent/20 border border-gray-700 justify-center mb-8">
+            <button
+              onClick={() => setCurrentView('search')}
+              className={`tab tab-lg gap-2 ${currentView === 'search' ? 'tab-active' : ''}`}
+            >
+              <IconSearch className="w-5 h-5" />
+              Pencarian
+            </button>
+            <button
+              onClick={() => currentView !== 'search' && setCurrentView('cards')}
+              disabled={!matches.length}
+              className={`tab tab-lg gap-2 ${
+                currentView === 'cards' ? 'tab-active' : ''
+              } ${!matches.length ? 'tab-disabled' : ''}`}
+            >
+              <IconSparkles className="w-5 h-5" />
+              Hasil ({matches.length})
+            </button>
+            <button
+              onClick={handleViewHistory}
+              className={`tab tab-lg gap-2 ${currentView === 'history' ? 'tab-active' : ''}`}
+            >
+              <IconHistory className="w-5 h-5" />
+              Riwayat
+            </button>
+          </div>
 
-          {currentView === 'cards' && matches.length > 0 && matchRequest && (
-            <TalentCards
-              matches={matches}
-              matchRequest={matchRequest}
-              onBackToSearch={handleBackToSearch}
-              onUpdateMatch={setMatches}
-            />
-          )}
+          {/* Content Cards */}
+          <div className="space-y-8">
+            {currentView === 'search' && (
+              <div className="card bg-accent/20 border border-gray-700">
+                <div className="card-body space-y-8">
+                  <PromptInput
+                    onSearchComplete={handleSearchComplete}
+                    isLoading={isLoading}
+                    setIsLoading={setIsLoading}
+                  />
+                  <WelcomeSection />
+                </div>
+              </div>
+            )}
 
-          {currentView === 'history' && <MatchHistory />}
+            {currentView === 'cards' && matches.length > 0 && matchRequest && (
+              <div className="card bg-accent/20 border border-gray-700">
+                <div className="card-body">
+                  <TalentCards
+                    matches={matches}
+                    matchRequest={matchRequest}
+                    onBackToSearch={handleBackToSearch}
+                    onUpdateMatch={setMatches}
+                  />
+                </div>
+              </div>
+            )}
+
+            {currentView === 'history' && (
+              <div className="card bg-accent/20 border border-gray-700">
+                <div className="card-body">
+                  <MatchHistory />
+                </div>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 }

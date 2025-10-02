@@ -67,84 +67,80 @@ export function MatchHistory() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <IconLoader2 className="w-8 h-8 animate-spin text-purple-600" />
+        <span className="loading loading-spinner loading-md"></span>
       </div>
     );
   }
 
   if (history.length === 0) {
     return (
-      <div className="text-center py-12">
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 max-w-md mx-auto">
-          <IconSearch className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">No Search History</h2>
-          <p className="text-gray-600 dark:text-gray-300 mb-6">
-            You haven't made any magic matches yet. Start your first search to see results here.
-          </p>
+      <div className="flex justify-center py-12">
+        <div className="card bg-accent/10 border border-gray-700 w-full max-w-md">
+          <div className="card-body text-center">
+            <IconSearch className="w-16 h-16 text-base-content/40 mx-auto mb-4" />
+            <h2 className="card-title justify-center text-2xl mb-4">Belum Ada Riwayat</h2>
+            <p className="opacity-75 mb-6">
+              Anda belum melakukan pencarian magic matches. Mulai pencarian pertama untuk melihat hasilnya di sini.
+            </p>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="space-y-6">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* History List */}
         <div className="space-y-4">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Search History</h2>
+          <h2 className="text-2xl font-bold mb-6">Riwayat Pencarian</h2>
 
           {history.map((item) => (
             <div
               key={item.id}
-              className={`bg-white dark:bg-gray-800 rounded-xl shadow-md border-2 transition-all cursor-pointer ${
-                selectedMatch === item.id
-                  ? 'border-purple-500 shadow-lg'
-                  : 'border-transparent hover:border-gray-300 dark:hover:border-gray-600'
+              className={`card bg-accent/10 border cursor-pointer transition-all hover:shadow-lg ${
+                selectedMatch === item.id ? 'border-primary shadow-lg' : 'border-gray-700 hover:border-primary/50'
               }`}
               onClick={() => fetchMatchDetails(item.id)}
             >
-              <div className="p-5">
+              <div className="card-body p-5">
                 <div className="flex items-start justify-between mb-3">
-                  <div className="flex items-center space-x-2">
-                    <IconSparkles className="w-5 h-5 text-purple-600 flex-shrink-0" />
-                    <span
-                      className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        item.status === 'completed'
-                          ? 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300'
-                          : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300'
-                      }`}
+                  <div className="flex items-center gap-2">
+                    <IconSparkles className="w-5 h-5 text-secondary-content flex-shrink-0" />
+                    <div
+                      className={`badge badge-sm ${item.status === 'completed' ? 'badge-success' : 'badge-warning'}`}
                     >
-                      {item.status}
-                    </span>
+                      {item.status === 'completed' ? 'Selesai' : 'Proses'}
+                    </div>
                   </div>
 
-                  <div className="flex items-center text-gray-500 dark:text-gray-400 text-sm">
+                  <div className="flex items-center opacity-60 text-sm">
                     <IconCalendar className="w-4 h-4 mr-1" />
                     {formatDate(item.created_at)}
                   </div>
                 </div>
 
-                <p className="text-gray-900 dark:text-white font-medium mb-3 line-clamp-2">{item.prompt}</p>
+                <p className="font-medium mb-3 line-clamp-2">{item.prompt}</p>
 
                 <div className="flex items-center justify-between text-sm">
-                  <div className="flex items-center space-x-4">
-                    <span className="text-gray-600 dark:text-gray-300">{item.total_matches} matches</span>
+                  <div className="flex items-center gap-4">
+                    <span className="opacity-75">{item.total_matches} kandidat</span>
 
                     {item.swiped_count > 0 && (
-                      <div className="flex items-center space-x-2">
-                        <div className="flex items-center text-green-600">
-                          <IconHeart className="w-4 h-4 mr-1" />
+                      <div className="flex items-center gap-3">
+                        <div className="flex items-center text-success gap-1">
+                          <IconHeart className="w-4 h-4" />
                           {item.right_swipes}
                         </div>
-                        <div className="flex items-center text-red-600">
-                          <IconX className="w-4 h-4 mr-1" />
+                        <div className="flex items-center text-error gap-1">
+                          <IconX className="w-4 h-4" />
                           {item.swiped_count - item.right_swipes}
                         </div>
                       </div>
                     )}
                   </div>
 
-                  <div className="text-purple-600 dark:text-purple-400 text-sm font-medium">View Details →</div>
+                  <div className="text-accent text-sm font-medium">Lihat Detail →</div>
                 </div>
               </div>
             </div>
@@ -154,36 +150,34 @@ export function MatchHistory() {
         {/* Match Details */}
         <div className="lg:sticky lg:top-6">
           {loadingDetails ? (
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-8">
-              <div className="flex items-center justify-center">
-                <IconLoader2 className="w-8 h-8 animate-spin text-purple-600" />
+            <div className="card bg-accent/10 border border-gray-700">
+              <div className="card-body flex items-center justify-center">
+                <span className="loading loading-spinner loading-md"></span>
               </div>
             </div>
           ) : selectedMatch && matchDetails ? (
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md">
-              <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Match Details</h3>
-                <p className="text-gray-600 dark:text-gray-300 text-sm mt-1">{matchDetails.match_request.prompt}</p>
-              </div>
+            <div className="card bg-accent/10 border border-gray-700">
+              <div className="card-body">
+                <h3 className="card-title text-lg">Detail Hasil</h3>
+                <p className="opacity-75 text-sm">{matchDetails.match_request.prompt}</p>
 
-              <div className="p-6">
                 {/* Stats */}
-                <div className="grid grid-cols-3 gap-4 mb-6">
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-purple-600">{matchDetails.total_matches}</div>
-                    <div className="text-sm text-gray-600 dark:text-gray-300">Total Matches</div>
+                <div className="stats stats-vertical lg:stats-horizontal shadow mt-4">
+                  <div className="stat">
+                    <div className="stat-value text-primary text-xl">{matchDetails.total_matches}</div>
+                    <div className="stat-title text-xs">Total</div>
                   </div>
 
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-green-600">{matchDetails.right_swipes}</div>
-                    <div className="text-sm text-gray-600 dark:text-gray-300">Liked</div>
+                  <div className="stat">
+                    <div className="stat-value text-success text-xl">{matchDetails.right_swipes}</div>
+                    <div className="stat-title text-xs">Disukai</div>
                   </div>
 
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-gray-600">
+                  <div className="stat">
+                    <div className="stat-value text-error text-xl">
                       {matchDetails.swiped_count - matchDetails.right_swipes}
                     </div>
-                    <div className="text-sm text-gray-600 dark:text-gray-300">Passed</div>
+                    <div className="stat-title text-xs">Dilewati</div>
                   </div>
                 </div>
 
@@ -216,7 +210,7 @@ export function MatchHistory() {
                             {match.swipe && (
                               <span
                                 className={`p-1 rounded-full ${
-                                  match.swipe.direction === 'right' ? 'text-green-600' : 'text-red-600'
+                                  match.swipe.direction === 'right' ? 'text-green-600' : 'text-red-400'
                                 }`}
                               >
                                 {match.swipe.direction === 'right' ? (
