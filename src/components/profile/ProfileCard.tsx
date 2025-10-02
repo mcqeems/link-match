@@ -170,6 +170,16 @@ export default async function ProfileCard({ mode, uuid }: PropsTypes) {
             }
           />
         </div>
+        {mode === 'personal' &&
+          roles?.name === 'Talenta' &&
+          (!experiences || experiences.trim() === '') &&
+          (!description || description.trim() === '') && (
+            <div className="mt-8 alert bg-accent/20 border-gray-700">
+              <p className="text-center font-bold">
+                Untuk meningkatkan persentase Magic Matcher, Silahkan mengisi deskripsi profil anda secara lengkap.
+              </p>
+            </div>
+          )}
       </div>
     </div>
   );

@@ -19,11 +19,15 @@ export default function SignUpForm() {
       router.push('/');
       router.refresh();
     }
+    // Reset loading state when form action completes
+    setIsLoading(false);
   }, [state.success, router, toast]);
 
   useEffect(() => {
     if (state.error) {
       toast.error(state.error);
+      // Reset loading state on error
+      setIsLoading(false);
     }
   }, [state.error, toast]);
 
@@ -39,7 +43,7 @@ export default function SignUpForm() {
         className="space-y-4 flex flex-col w-full max-w-xl bg-secondary p-4 rounded-lg"
       >
         <label className="font-bold">Name</label>
-        <input className="input w-full" name="name" type="text" required />
+        <input className="input w-full" name="name" type="text" required minLength={6} />
 
         <label className="font-bold">Email</label>
         <input className="input w-full" name="email" type="email" required />

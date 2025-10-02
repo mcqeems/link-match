@@ -192,7 +192,7 @@ export default async function About() {
                   </div>
                 </div>
                 <div>
-                  <div className="font-semibold text-lg">Developer LinkMatch</div>
+                  <div className="font-semibold text-lg">Mustaqim Nawahhudi Ma'arif</div>
                   <div className="text-sm opacity-70">Full-stack Developer</div>
                 </div>
               </div>

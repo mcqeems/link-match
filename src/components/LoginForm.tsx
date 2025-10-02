@@ -19,11 +19,15 @@ export default function LoginForm() {
       router.push('/');
       router.refresh();
     }
+    // Reset loading state when form action completes
+    setIsLoading(false);
   }, [state.success, router, toast]);
 
   useEffect(() => {
     if (state.error) {
       toast.error(state.error);
+      // Reset loading state on error
+      setIsLoading(false);
     }
   }, [state.error, toast]);
 
