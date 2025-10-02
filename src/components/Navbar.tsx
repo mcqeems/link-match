@@ -64,7 +64,7 @@ export default async function Navbar() {
             <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
               <IconDotsVertical size={24} />
             </div>
-            <ul tabIndex={0} className="menu menu-sm dropdown-content bg-accent rounded-box z-1 mt-3 w-40 p-2">
+            <ul tabIndex={0} className="menu menu-sm dropdown-content bg-secondary rounded-box z-1 mt-3 w-40 p-2">
               <li>
                 <Link href="/talents">Cari Talenta</Link>
               </li>
