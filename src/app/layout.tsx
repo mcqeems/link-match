@@ -24,7 +24,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://linkmatch.qeem.site'),
   title: {
     default: 'LinkMatch',
     template: 'LinkMatch | %s',
@@ -96,6 +96,9 @@ export const metadata: Metadata = {
     apple: '/apple-touch-icon.png',
   },
   referrer: 'origin-when-cross-origin',
+  other: {
+    'dicoding:email': 'mcqeemsofficial@gmail.com',
+  },
 };
 
 export function generateViewport(): Viewport {
@@ -116,7 +119,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://linkmatch.qeem.site';
   const orgJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Organization',

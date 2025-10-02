@@ -121,21 +121,23 @@ export default function MobileMenu({ session, onSignOut }: { session: any; onSig
             </>
           )}
         </ul>
-        <Link href="/profile">
-          <span className="divider" />
-          <div className="flex justify-between items-end p-4">
-            <Image
-              src={image_url || '/profile_image_default.png'}
-              alt={name || 'Profile Picture'}
-              width={50}
-              height={50}
-            />
-            <div className="flex flex-col gap-2">
-              <p className="font-bold text-left">{name}</p>
-              <p className="text-sm text-white/75 text-left">{role}</p>
+        {session && (
+          <Link href="/profile">
+            <span className="divider" />
+            <div className="flex justify-between items-end p-4">
+              <Image
+                src={image_url || '/profile_image_default.png'}
+                alt={name || 'Profile Picture'}
+                width={50}
+                height={50}
+              />
+              <div className="flex flex-col gap-2">
+                <p className="font-bold text-left">{name}</p>
+                <p className="text-sm text-white/75 text-left">{role}</p>
+              </div>
             </div>
-          </div>
-        </Link>
+          </Link>
+        )}
       </div>
 
       {/* Overlay */}
