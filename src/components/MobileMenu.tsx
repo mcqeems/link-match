@@ -1,10 +1,27 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { fetchProfileInfo } from '@/lib/data';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function MobileMenu({ session, onSignOut }: { session: any; onSignOut: () => void }) {
   const [open, setOpen] = useState(false);
+  const [role, setRole] = useState('');
+  const [name, setName] = useState('');
+  const [image_url, setImage_url] = useState('');
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const profileFetch = await fetchProfileInfo();
+        setRole(profileFetch?.User.roles?.name ?? '');
+        setName(profileFetch?.User.name ?? '');
+        setImage_url(profileFetch?.User.image_url ?? '');
+      } catch (error) {}
+    };
+    fetchProfile();
+  }, [open]);
 
   return (
     <>
@@ -35,11 +52,20 @@ export default function MobileMenu({ session, onSignOut }: { session: any; onSig
         </div>
         <ul className="text-center p-4 space-y-2">
           {session && (
-            <li>
-              <Link href="/talents" onClick={() => setOpen(false)}>
-                Cari Talenta
-              </Link>
-            </li>
+            <>
+              <li>
+                <Link href="/talents" onClick={() => setOpen(false)}>
+                  Cari Talenta
+                </Link>
+              </li>
+              {role === 'Recruiter' && (
+                <li>
+                  <Link href="/magic-matcher" onClick={() => setOpen(false)}>
+                    Magic Matcher
+                  </Link>
+                </li>
+              )}
+            </>
           )}
 
           <li>
@@ -95,6 +121,21 @@ export default function MobileMenu({ session, onSignOut }: { session: any; onSig
             </>
           )}
         </ul>
+        <Link href="/profile">
+          <span className="divider" />
+          <div className="flex justify-between items-end p-4">
+            <Image
+              src={image_url || '/profile_image_default.png'}
+              alt={name || 'Profile Picture'}
+              width={50}
+              height={50}
+            />
+            <div className="flex flex-col gap-2">
+              <p className="font-bold text-left">{name}</p>
+              <p className="text-sm text-white/75 text-left">{role}</p>
+            </div>
+          </div>
+        </Link>
       </div>
 
       {/* Overlay */}

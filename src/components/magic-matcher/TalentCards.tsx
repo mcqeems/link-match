@@ -3,11 +3,14 @@
 import { useState, useRef, useEffect } from 'react';
 import {
   IconArrowLeft,
-  IconHeart,
   IconX,
   IconExternalLink,
   IconBrandLinkedin,
   IconBrandGithub,
+  IconThumbUp,
+  IconMoodSmileBeam,
+  IconSearch,
+  IconMessage,
 } from '@tabler/icons-react';
 import { TalentMatch, MatchRequest } from './MagicMatcherPage';
 
@@ -217,57 +220,46 @@ export function TalentCards({ matches, matchRequest, onBackToSearch, onUpdateMat
 
     return (
       <div className="flex justify-center py-12">
-        <div className="card bg-accent/10 border border-gray-700 w-full max-w-lg">
+        <div className="card bg-accent/10 border border-gray-700 w-full max-w-2xl">
           <div className="card-body text-center">
-            <div className="mb-6">
-              <div className="avatar">
-                <div className="w-20 rounded-full bg-gradient-to-br from-secondary to-primary flex items-center justify-center">
-                  <IconHeart className="w-10 h-10 text-white" />
-                </div>
-              </div>
-
-              <h2 className="text-3xl font-bold mb-2 mt-4">🎉 Selesai!</h2>
+            <div className="mb-6 flex justify-center items-center flex-col">
+              <IconMoodSmileBeam className="w-10 h-10 text-white" />
+              <h2 className="text-3xl font-bold mb-2 mt-4">Selesai!</h2>
               <p className="opacity-75 mb-6">
                 Anda telah meninjau semua {matches.length} kandidat untuk pencarian Anda.
               </p>
             </div>
 
             {/* Statistics */}
-            <div className="stats stats-horizontal shadow mb-8">
+            <div className="stats bg-accent/20 stats-horizontal shadow mb-8">
               <div className="stat">
-                <div className="stat-figure text-success">
-                  <IconHeart className="w-8 h-8" />
-                </div>
                 <div className="stat-value text-success">{rightSwipes}</div>
                 <div className="stat-title">Disukai</div>
               </div>
 
               <div className="stat">
-                <div className="stat-figure text-error">
-                  <IconX className="w-8 h-8" />
-                </div>
                 <div className="stat-value text-error">{leftSwipes}</div>
                 <div className="stat-title">Dilewati</div>
               </div>
             </div>
 
             {rightSwipes > 0 && (
-              <div className="alert alert-info mb-6">
-                <span className="text-sm">
-                  💬 Pilihan yang bagus! Anda sekarang dapat mengirim pesan kepada {rightSwipes} kandidat yang disukai
+              <div className="alert bg-info/20 border-0 mb-6">
+                <span className="text-sm text-center">
+                  Pilihan yang bagus! Anda sekarang dapat mengirim pesan kepada {rightSwipes} kandidat yang disukai
                   untuk memulai percakapan.
                 </span>
               </div>
             )}
 
             <div className="card-actions flex-col w-full gap-3">
-              <button onClick={onBackToSearch} className="btn btn-primary btn-wide">
-                🔍 Mulai Pencarian Baru
+              <button onClick={onBackToSearch} className="btn btn-primary w-full">
+                <IconSearch size={16} /> Mulai Pencarian Baru
               </button>
 
               {rightSwipes > 0 && (
-                <button onClick={() => (window.location.href = '/messages')} className="btn btn-success btn-wide">
-                  💬 Buka Pesan
+                <button onClick={() => (window.location.href = '/messages')} className="btn btn-success w-full">
+                  <IconMessage size={16} /> Buka Pesan
                 </button>
               )}
             </div>
@@ -280,7 +272,7 @@ export function TalentCards({ matches, matchRequest, onBackToSearch, onUpdateMat
   if (!currentMatch) return null;
 
   return (
-    <div className="max-w-md mx-auto px-4 sm:px-0">
+    <div className="max-w-2xl mx-auto px-4 sm:px-0">
       {/* Header */}
       <div className="flex items-center justify-between mb-4 sm:mb-6">
         <button
@@ -288,7 +280,7 @@ export function TalentCards({ matches, matchRequest, onBackToSearch, onUpdateMat
           className="flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
         >
           <IconArrowLeft className="w-5 h-5" />
-          <span className="hidden sm:inline">Back to Search</span>
+          <span className="hidden sm:inline">Kembali</span>
           <span className="sm:hidden">Back</span>
         </button>
 
@@ -300,7 +292,7 @@ export function TalentCards({ matches, matchRequest, onBackToSearch, onUpdateMat
       {/* Progress Bar */}
       <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mb-4 sm:mb-6">
         <div
-          className="bg-gradient-to-r from-purple-600 to-blue-600 h-2 rounded-full transition-all duration-300"
+          className="bg-gradient-to-r from-green-600 to-green-400 h-2 rounded-full transition-all duration-300"
           style={{ width: `${((currentIndex + 1) / matches.length) * 100}%` }}
         />
       </div>
@@ -336,7 +328,7 @@ export function TalentCards({ matches, matchRequest, onBackToSearch, onUpdateMat
             style={{ zIndex: 3 }}
           >
             <div className="bg-green-500 shadow-lg text-white rounded-full p-3 sm:p-4 transform rotate-12">
-              <IconHeart className="w-6 h-6 sm:w-8 sm:h-8" />
+              <IconThumbUp className="w-6 h-6 sm:w-8 sm:h-8" />
             </div>
           </div>
 
@@ -355,16 +347,12 @@ export function TalentCards({ matches, matchRequest, onBackToSearch, onUpdateMat
           <div className="p-4 sm:p-6 h-full flex flex-col">
             {/* Profile Image */}
             <div className="flex-shrink-0 mb-3 sm:mb-4">
-              <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden mx-auto bg-gradient-to-br from-purple-400 to-blue-400 flex items-center justify-center">
-                {currentMatch.talent.image_url || currentMatch.talent.image ? (
-                  <img
-                    src={currentMatch.talent.image_url || currentMatch.talent.image}
-                    alt={currentMatch.talent.name}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <span className="text-white font-bold text-lg sm:text-xl">{currentMatch.talent.name.charAt(0)}</span>
-                )}
+              <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden mx-auto flex items-center justify-center">
+                <img
+                  src={currentMatch.talent.image_url || currentMatch.talent.image || '/profile_image_default.png'}
+                  alt={currentMatch.talent.name}
+                  className="w-full h-full object-cover"
+                />
               </div>
             </div>
 
@@ -379,7 +367,7 @@ export function TalentCards({ matches, matchRequest, onBackToSearch, onUpdateMat
                 </p>
               )}
               {currentMatch.talent.category && (
-                <span className="inline-block bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 text-xs px-2 py-1 rounded-full mt-2">
+                <span className="inline-block badge badge-info text-xs px-2 py-1 rounded-full mt-2">
                   {currentMatch.talent.category}
                 </span>
               )}
@@ -387,8 +375,8 @@ export function TalentCards({ matches, matchRequest, onBackToSearch, onUpdateMat
 
             {/* Similarity Score */}
             <div className="text-center mb-3 sm:mb-4">
-              <div className="inline-flex items-center bg-gradient-to-r from-green-100 to-blue-100 dark:from-green-900 dark:to-blue-900 rounded-full px-3 py-1">
-                <span className="text-xs sm:text-sm font-semibold text-green-700 dark:text-green-300">
+              <div className="inline-flex items-center bg-gradient-to-r badge badge-outline rounded-full px-3 py-1">
+                <span className="text-xs sm:text-sm font-semibold text-green-300">
                   {Math.round(currentMatch.similarity_score * 100)}% Cocok
                 </span>
               </div>
@@ -476,7 +464,7 @@ export function TalentCards({ matches, matchRequest, onBackToSearch, onUpdateMat
           disabled={isSwaping}
           className="btn btn-circle btn-lg btn-success shadow-lg hover:scale-105 disabled:scale-100"
         >
-          <IconHeart className="w-6 h-6" />
+          <IconThumbUp className="w-6 h-6" />
         </button>
       </div>
 
