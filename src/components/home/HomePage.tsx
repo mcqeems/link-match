@@ -257,7 +257,7 @@ export default async function HomePage() {
                   </div>
                   <div>
                     <div className="font-semibold">Nur Ihsan</div>
-                    <div className="text-sm opacity-70">HRD di PT PPTIK UNIDA</div>
+                    <div className="text-sm opacity-70">Project Manager di PT PPTIK UNIDA</div>
                   </div>
                 </div>
                 <p className="mt-4 opacity-80">
@@ -331,7 +331,7 @@ export default async function HomePage() {
               <Link href="/sign-up" className="btn btn-accent">
                 Daftar
               </Link>
-              <Link href="/sign-up?type=recruiter" className="btn btn-accent btn-outline">
+              <Link href="/sign-in" className="btn btn-accent btn-outline">
                 Masuk
               </Link>
             </div>
