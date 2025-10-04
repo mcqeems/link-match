@@ -88,16 +88,6 @@ export function MatchHistory() {
     }
   };
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('id-ID', {
-      day: 'numeric',
-      month: 'short',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-  };
-
   const formatRelativeDate = (dateString: string) => {
     const date = new Date(dateString);
     const now = new Date();
@@ -153,7 +143,7 @@ export function MatchHistory() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+      <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between motion-preset-fade-md">
         <div>
           <h2 className="text-2xl font-bold">Riwayat</h2>
           <p className="opacity-75 text-sm">
@@ -179,7 +169,7 @@ export function MatchHistory() {
       {/* History List */}
       <div className="space-y-3">
         {filteredHistory.length === 0 ? (
-          <div className="card bg-accent/10 border border-gray-700">
+          <div className="card bg-accent/10 border border-gray-700 motion-preset-fade-md">
             <div className="card-body text-center py-8">
               <IconSearch className="w-12 h-12 opacity-50 mx-auto mb-3" />
               <h3 className="font-semibold mb-2">Tidak Ada Hasil</h3>
@@ -191,11 +181,11 @@ export function MatchHistory() {
             {displayedHistory.map((item) => (
               <div
                 key={item.id}
-                className="card bg-accent/10 border border-gray-700 hover:border-primary/50 transition-all cursor-pointer"
+                className="card bg-accent/10 border border-gray-700 hover:border-primary/50 transition-all cursor-pointer "
                 onClick={() => fetchMatchDetails(item.id)}
               >
-                <div className="card-body p-4">
-                  <div className="flex items-start gap-4">
+                <div className="card-body p-4 ">
+                  <div className="flex items-start gap-4 intersect-once intersect:motion-preset-slide-up">
                     {/* Content */}
                     <div className="flex-grow min-w-0">
                       <div className="flex items-start justify-between mb-2">

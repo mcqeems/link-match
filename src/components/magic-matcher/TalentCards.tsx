@@ -220,7 +220,7 @@ export function TalentCards({ matches, matchRequest, onBackToSearch, onUpdateMat
 
     return (
       <div className="flex justify-center py-12">
-        <div className="card bg-accent/10 border border-gray-700 w-full max-w-2xl">
+        <div className="card bg-accent/10 border border-gray-700 w-full max-w-2xl intersect-once intersect:motion-preset-fade-md">
           <div className="card-body text-center">
             <div className="mb-6 flex justify-center items-center flex-col">
               <IconMoodSmileBeam className="w-10 h-10 text-white" />
@@ -300,7 +300,7 @@ export function TalentCards({ matches, matchRequest, onBackToSearch, onUpdateMat
       {/* Card Stack Container */}
       <div
         ref={containerRef}
-        className="relative w-full overflow-hidden rounded-2xl"
+        className="relative w-full overflow-hidden rounded-2xl intersect-once intersect:motion-preset-fade-md"
         style={{
           height: isMobile ? '500px' : `${Math.min(containerWidth, window.innerWidth - 32)}px`,
           maxHeight: isMobile ? '500px' : '80vh',

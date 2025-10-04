@@ -279,8 +279,8 @@ export default function MessageThread({
             </button>
 
             {showMenu && (
-              <div className="absolute right-0 top-full mt-2 z-10 min-w-[200px]">
-                <div className="menu bg-secondary rounded-box shadow-lg">
+              <div className="absolute right-0 top-full mt-2 z-10 min-w-[200px] ">
+                <div className="menu bg-secondary rounded-box shadow-lg motion-preset-fade-md">
                   <li>
                     <button onClick={handleDeleteConversation} className="hover:bg-error/70 transition-colors">
                       <IconTrash size={16} />
@@ -297,7 +297,7 @@ export default function MessageThread({
       <div className="divider"></div>
 
       {/* Messages */}
-      <div ref={messagesContainerRef} className="flex-1 overflow-y-auto p-4">
+      <div ref={messagesContainerRef} className="flex-1 overflow-y-auto p-4 motion-preset-fade-md">
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center">
             <div className="avatar mb-4">
@@ -357,7 +357,7 @@ export default function MessageThread({
           onClick={() => setShowDeleteDrawer(false)}
         />
         {/* Centered modal */}
-        <div className="absolute inset-0 flex items-center justify-center">
+        <div className="absolute inset-0 flex items-center justify-center motion-preset-fade-md">
           <div
             className={`w-full max-w-md transform rounded-2xl bg-base-200 p-5 shadow-2xl transition-all duration-200 ease-out ${showDeleteDrawer ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
             role="dialog"

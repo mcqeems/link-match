@@ -76,7 +76,10 @@ export default async function Talents({ page = 1, category, q }: Props) {
                 : [];
 
             return (
-              <div key={p.User.id} className="card bg-secondary shadow-xl hover:shadow-2xl transition-shadow">
+              <div
+                key={p.User.id}
+                className="card bg-secondary shadow-xl hover:shadow-2xl transition-shadow intersect-once intersect:motion-preset-slide-up"
+              >
                 <div className="card-body">
                   <div className="flex items-center gap-4">
                     <div className="avatar">
@@ -126,7 +129,7 @@ export default async function Talents({ page = 1, category, q }: Props) {
       )}
 
       {data.totalPages > 1 && (
-        <div className="mt-8 flex justify-center">
+        <div className="mt-8 flex justify-center ">
           <div className="join">
             <Link
               href={hrefFor(Math.max(1, data.page - 1))}

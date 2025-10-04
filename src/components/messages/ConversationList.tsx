@@ -93,7 +93,7 @@ export default function ConversationList({
         </div>
 
         {/* Conversations List */}
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto motion-preset-fade-md">
           {conversations.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full p-8 text-center">
               <IconMessages size={64} className="mx-auto mb-4 opacity-50" />

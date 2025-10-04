@@ -49,7 +49,7 @@ export default function Form() {
 
   return (
     <div className="min-h-dvh py-16 px-6 md:mt-8 mt-4">
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-3xl mx-auto motion-translate-x-in-[0%] motion-translate-y-in-[15%] motion-opacity-in-[0%] motion-blur-in-[10px]">
         <div className="text-center mb-8">
           <h1 className="text-3xl md:text-4xl font-bold">Hubungi Kami</h1>
           <p className="opacity-75 mt-2">Kirimkan pesan singkat, kami akan merespons secepatnya.</p>

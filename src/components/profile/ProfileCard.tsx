@@ -84,7 +84,7 @@ export default async function ProfileCard({ mode, uuid }: PropsTypes) {
   // Connect handled by client island for notifications
 
   return (
-    <div className="card bg-secondary shadow-xl w-full max-w-4xl mx-auto">
+    <div className="card bg-secondary shadow-xl w-full max-w-4xl mx-auto motion-translate-x-in-[0%] motion-translate-y-in-[15%] motion-opacity-in-[0%] motion-blur-in-[10px]">
       <div className="card-body p-6 md:p-10">
         {/* Bagian Header Profil */}
         <div className="flex flex-col md:flex-row items-center md:items-start gap-6">

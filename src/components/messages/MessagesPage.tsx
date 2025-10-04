@@ -222,7 +222,7 @@ export default function MessagesPage({ initialConversations, currentUserId }: Me
               />
             )
           ) : (
-            <div className="flex-1 flex items-center justify-center bg-base-100">
+            <div className="flex-1 flex items-center justify-center bg-base-100 motion-preset-fade-md">
               <div className="text-center max-w-md mx-auto p-8">
                 <div className="mb-4 flex justify-center items-center">
                   <IconMessage size={84} />

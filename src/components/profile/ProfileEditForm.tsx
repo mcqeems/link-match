@@ -112,7 +112,7 @@ export default function ProfileEditForm({
   };
 
   return (
-    <div className="card bg-secondary shadow-xl w-full max-w-4xl mx-auto">
+    <div className="card bg-secondary shadow-xl w-full max-w-4xl mx-auto motion-translate-x-in-[0%] motion-translate-y-in-[15%] motion-opacity-in-[0%] motion-blur-in-[10px]">
       <div className="card-body p-6 md:p-10">
         {/* Header with Back Button */}
         <div className="flex items-center gap-4 mb-6">
