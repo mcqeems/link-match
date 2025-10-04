@@ -219,24 +219,19 @@ export default async function HomePage() {
               <div className="relative bg-accent/20 border border-gray-700 rounded-lg overflow-hidden shadow-lg">
                 <div className="aspect-video bg-gradient-to-br from-accent/30 to-accent/10 flex items-center justify-center">
                   {/* Placeholder for video - replace with actual video when available */}
-                  <div className="text-center">
+                  {/* <div className="text-center">
                     <IconSparkles size={64} className="mx-auto mb-4 text-accent" />
                     <p className="text-xl font-semibold">Demo Video Magic Matcher</p>
                     <p className="text-sm opacity-70 mt-2">Video akan tersedia segera</p>
-                  </div>
+                  </div> */}
 
                   {/* Uncomment this when you have the actual video */}
-                  {/* 
-                  <video 
-                    controls 
-                    className="w-full h-full object-cover"
-                    poster="/magic-matcher-preview.png"
-                  >
-                    <source src="/magic-matcher-demo.mp4" type="video/mp4" />
-                    <source src="/magic-matcher-demo.webm" type="video/webm" />
+
+                  <video controls className="w-full h-full object-cover" poster="/linkmatch-demo-thumbnail.webp">
+                    <source src="/linkmatch-demo.mp4" type="video/mp4" />
+                    <source src="/linkmatch-demo.webm" type="video/webm" />
                     Your browser does not support the video tag.
                   </video>
-                  */}
                 </div>
               </div>
             </div>
