@@ -4,6 +4,7 @@ import { signUpWithEmail } from '@/lib/actions';
 import { useRouter } from 'next/navigation';
 import { useToast } from './notifications/ToastProvider';
 import { useActionState, useEffect, useState } from 'react';
+import { IconEye, IconEyeOff } from '@tabler/icons-react';
 
 const initialState = { error: null as string | null, success: false };
 
@@ -11,7 +12,16 @@ export default function SignUpForm() {
   const router = useRouter();
   const [state, formAction] = useActionState(signUpWithEmail, initialState);
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const toast = useToast();
+
+  const togglePasswordInvisibily = () => {
+    if (showPassword) {
+      setShowPassword(false);
+    } else {
+      setShowPassword(true);
+    }
+  };
 
   useEffect(() => {
     if (state.success) {
@@ -49,7 +59,25 @@ export default function SignUpForm() {
         <input className="input w-full" name="email" type="email" required />
 
         <label className="font-bold">Password</label>
-        <input className="input w-full" name="password" type="password" required minLength={6} />
+        <div className="relative w-full">
+          <input
+            className="input w-full pr-12"
+            name="password"
+            type={showPassword ? 'text' : 'password'}
+            required
+            minLength={6}
+          />
+          <span
+            onClick={togglePasswordInvisibily}
+            className="absolute top-1/2 -translate-y-1/2 right-4 cursor-pointer z-10"
+          >
+            {showPassword ? (
+              <IconEyeOff className="text-white hover:text-white/75 transition-colors" />
+            ) : (
+              <IconEye className="text-white hover:text-white/75 transition-colors" />
+            )}
+          </span>
+        </div>
 
         <button
           className="btn btn-sm md:btn-md bg-primary hover:bg-primary/75 max-w-[200px] self-center"
