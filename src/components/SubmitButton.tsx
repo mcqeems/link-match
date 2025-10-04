@@ -24,6 +24,7 @@ export default function SubmitButton({
       className={`btn btn-accent btn-sm ${className}`}
       disabled={pending || disabled}
       aria-busy={pending}
+      title="Mengirim email kepada user ini."
     >
       {pending ? (
         <span className="inline-flex items-center gap-2">

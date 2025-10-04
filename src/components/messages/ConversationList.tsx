@@ -54,7 +54,7 @@ export default function ConversationList({
   if (isLoading) {
     return (
       <div className="flex flex-col h-full">
-        <div className="p-4 border-b border-base-300">
+        <div className="p-4 border-b border-accent">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-bold">Messages</h2>
             <div className="skeleton w-10 h-10 rounded-full"></div>
@@ -79,13 +79,13 @@ export default function ConversationList({
     <>
       <div className="flex flex-col h-full bg-base-200">
         {/* Header */}
-        <div className="p-4 border-b border-base-300 bg-base-100">
+        <div className="p-4 bg-base-100">
           <div className="flex justify-between items-center">
             <h2 className="text-xl font-bold flex items-center gap-2">
               <IconMessages size={24} />
               Messages
             </h2>
-            <button onClick={() => onNewConversation?.()} className="btn btn-accent btn-sm">
+            <button onClick={() => onNewConversation?.()} className="btn btn-success btn-sm">
               <IconPlus size={16} />
               Baru
             </button>
@@ -115,9 +115,7 @@ export default function ConversationList({
                   <Link
                     key={conversation.id}
                     href={`/messages?id=${conversation.id}`}
-                    className={`block p-4 hover:bg-base-100 transition-colors ${
-                      isActive ? 'bg-primary/10 border-r-2 border-primary' : ''
-                    }`}
+                    className={`block p-4 hover:bg-base-100 transition-colors ${isActive ? 'bg-primary/10 border-r-2 border-b-0 border-accent' : ''}`}
                   >
                     <div className="flex items-center space-x-3">
                       <div className="avatar">
