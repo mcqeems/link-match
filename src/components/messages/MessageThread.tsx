@@ -154,10 +154,10 @@ function MessageInput({ conversationId, onMessageSent }: MessageInputProps) {
         <button
           type="submit"
           disabled={!message.trim() || isPending || isPendingAction}
-          className={`btn btn-primary btn-square ${isPending || isPendingAction ? 'loading' : ''}`}
+          className="btn btn-primary btn-square"
         >
           {isPending || isPendingAction ? (
-            <span className="loading loading-spinner loading-xs"></span>
+            <span className="loading loading-dots loading-xs text-accent"></span>
           ) : (
             <IconSend size={20} />
           )}
@@ -182,11 +182,14 @@ export default function MessageThread({
 }: MessageThreadProps) {
   const toast = useToast();
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
   const [showMenu, setShowMenu] = useState(false);
   const [showDeleteDrawer, setShowDeleteDrawer] = useState(false);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+    }
   };
 
   useEffect(() => {
@@ -277,12 +280,9 @@ export default function MessageThread({
 
             {showMenu && (
               <div className="absolute right-0 top-full mt-2 z-10 min-w-[200px]">
-                <div className="menu bg-accent rounded-box shadow-lg">
+                <div className="menu bg-secondary rounded-box shadow-lg">
                   <li>
-                    <button
-                      onClick={handleDeleteConversation}
-                      className="text-red-200 hover:bg-error/75 transition-colors"
-                    >
+                    <button onClick={handleDeleteConversation} className="hover:bg-error/70 transition-colors">
                       <IconTrash size={16} />
                       Hapus Percakapan
                     </button>
@@ -297,7 +297,7 @@ export default function MessageThread({
       <div className="divider"></div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4">
+      <div ref={messagesContainerRef} className="flex-1 overflow-y-auto p-4">
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center">
             <div className="avatar mb-4">
