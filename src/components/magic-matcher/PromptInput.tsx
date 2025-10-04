@@ -83,7 +83,7 @@ export function PromptInput({ onSearchComplete, isLoading, setIsLoading }: Promp
       }
 
       const data = await response.json();
-      setSuccessMessage(`Refreshed embeddings for ${data.updated} profiles! ✨`);
+      setSuccessMessage(`Berhasil merefresh ${data.updated} profil!`);
 
       // Clear message after 3 seconds
       setTimeout(() => setSuccessMessage(''), 3000);
