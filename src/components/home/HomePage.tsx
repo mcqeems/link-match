@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import Image from 'next/image';
 import Squares from '@/components/SquaresBG';
@@ -33,42 +35,6 @@ export default async function HomePage() {
               <Link href="/about" className="btn btn-accent btn-outline rounded-2xl md:min-w-[175px]">
                 Tentang
               </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 100% Free to Use */}
-      <section className="py-16 px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-10">
-            <div className="badge badge-success badge-outline">Tidak ada biaya tambahan</div>
-            <h2 className="text-3xl md:text-4xl font-bold mt-3 font-mono">100% Gratis Digunakan</h2>
-            <p className="opacity-75 mt-2 max-w-2xl mx-auto">
-              Semua fitur inti LinkMatch dapat dipakai tanpa biaya. Rekruter bisa memposting kebutuhan dan mendapatkan
-              rekomendasi talenta, sementara talenta bisa membuat profil dan terlihat oleh pencarian tanpa biaya
-              tersembunyi.
-            </p>
-          </div>
-
-          <div className="flex justify-center items-center">
-            <div className="card bg-accent/20 border border-gray-700 w-full md:max-w-[350px]">
-              <div className="card-body">
-                <h3 className="card-title">Gratis Selamanya</h3>
-                <p className="opacity-90">Mulai dalam hitungan detik dan nikmati semua kemampuan utama.</p>
-                <div className="stats bg-accent/20 text-accent-content mt-2">
-                  <div className="stat">
-                    <div className="stat-title">Biaya Bulanan</div>
-                    <div className="stat-value text-blue-200">Rp 0</div>
-                    <div className="stat-desc">Tanpa kartu kredit. Tanpa batasan dasar.</div>
-                  </div>
-                </div>
-                <div className="card-actions mt-4">
-                  <Link href="/sign-up" className="btn btn-secondary">
-                    Mulai Sekarang
-                  </Link>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -319,10 +285,46 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* 100% Free to Use */}
+      <section className="py-16 px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-10">
+            <div className="badge badge-success badge-outline">Tidak ada biaya tambahan</div>
+            <h2 className="text-3xl md:text-4xl font-bold mt-3 font-mono">100% Gratis Digunakan</h2>
+            <p className="opacity-75 mt-2 max-w-2xl mx-auto">
+              Semua fitur inti LinkMatch dapat dipakai tanpa biaya. Rekruter bisa memposting kebutuhan dan mendapatkan
+              rekomendasi talenta, sementara talenta bisa membuat profil dan terlihat oleh pencarian tanpa biaya
+              tersembunyi.
+            </p>
+          </div>
+
+          <div className="flex justify-center items-center">
+            <div className="card bg-accent/20 border border-gray-700 w-full md:max-w-[350px]">
+              <div className="card-body">
+                <h3 className="card-title">Gratis Selamanya</h3>
+                <p className="opacity-90">Mulai dalam hitungan detik dan nikmati semua kemampuan utama.</p>
+                <div className="stats bg-accent/20 text-accent-content mt-2">
+                  <div className="stat">
+                    <div className="stat-title">Biaya Bulanan</div>
+                    <div className="stat-value text-blue-200">Rp 0</div>
+                    <div className="stat-desc">Tanpa kartu kredit. Tanpa batasan dasar.</div>
+                  </div>
+                </div>
+                <div className="card-actions mt-4">
+                  <Link href="/sign-up" className="btn btn-secondary">
+                    Mulai Sekarang
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Call to Action */}
       <section className="py-16 px-6">
         <div className="max-w-7xl w-full mx-auto">
-          <div className="md:alert md:bg-accent/20/50 flex flex-col rounded-lg bg-accent/20/50 shadow-lg p-4 gap-2">
+          <div className="md:alert flex flex-col rounded-lg shadow-lg p-4 bg-accent/20 md:bg-accent/20 gap-2">
             <div className="flex-1">
               <h3 className="font-bold text-2xl">Siap memulai?</h3>
               <div className="text-sm opacity-90">Bergabung sekarang dan temukan kecocokan terbaik Anda.</div>
