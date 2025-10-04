@@ -224,6 +224,12 @@ export default function MessageThread({
             <IconUserCircle size={64} className="mx-auto mb-4 opacity-50" />
             <h3 className="text-lg font-semibold mb-2">Percakapan tidak ditemukan</h3>
             <p className="text-base-content/70">Pilih percakapan dari daftar atau mulai percakapan baru</p>
+            {onBack && (
+              <button onClick={onBack} className="btn btn-outline btn-primary btn-sm space-x-1 lg:hidden mt-4">
+                <IconArrowLeft size={20} />
+                <p>Kembali</p>
+              </button>
+            )}
           </div>
         </div>
       </div>
