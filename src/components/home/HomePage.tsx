@@ -20,7 +20,10 @@ export default async function HomePage() {
           fadeBottomPx={140}
           fadeSidesPx={24}
         />
-        <div className="hero-content max-w-4xl mx-auto flex-col lg:flex-row gap-10 py-64 px-6">
+        <div
+          className="hero-content max-w-4xl mx-auto flex-col lg:flex-row gap-10 py-64 px-6 motion-translate-x-in-[0%]  motion-opacity-in-[0%] motion-blur-in-[10px] 
+"
+        >
           <div className="flex-1 space-y-6 flex flex-col justify-center items-center text-center">
             <div className="badge badge-outline">Smart Talent Matching</div>
             <h1 className="text-4xl md:text-6xl font-bold leading-tight font-mono text-foreground">LinkMatch</h1>
@@ -42,7 +45,7 @@ export default async function HomePage() {
 
       {/* AI Technology */}
       <section className="py-16 px-6">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto intersect-once intersect:motion-preset-slide-up">
           <div className="text-center mb-10">
             <div className="badge badge-outline">AI Technology</div>
             <h2 className="text-3xl md:text-4xl font-bold mt-3 font-mono">Powered by AWS Bedrock</h2>
@@ -105,7 +108,7 @@ export default async function HomePage() {
 
       {/* Feature Highlights */}
       <section className="py-16 px-6">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto intersect-once intersect:motion-preset-slide-up">
           <div className="text-center mb-10">
             <h2 className="text-3xl md:text-4xl font-bold font-mono">Kenapa LinkMatch?</h2>
             <p className="opacity-75 mt-2 max-w-2xl mx-auto">
@@ -157,7 +160,7 @@ export default async function HomePage() {
 
       {/* How It Works */}
       <section id="how-it-works" className="bg-accent/20/20 py-16 px-6">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto intersect-once intersect:motion-preset-slide-up">
           <div className="text-center mb-10">
             <h2 className="text-3xl md:text-4xl font-bold font-mono">Bagaimana Cara Kerjanya?</h2>
             <p className="opacity-75 mt-2 max-w-2xl mx-auto">
@@ -200,7 +203,7 @@ export default async function HomePage() {
 
       {/* Demo Section */}
       <section className="py-16 px-6">
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-5xl mx-auto intersect-once intersect:motion-preset-slide-up">
           <div className="text-center mb-10">
             <div className="badge badge-outline">Live Demo</div>
             <h2 className="text-3xl md:text-4xl font-bold mt-3 font-mono">Magic Matcher dalam Aksi</h2>
@@ -328,7 +331,7 @@ export default async function HomePage() {
 
       {/* Testimonials */}
       <section className="py-16 px-6">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto intersect-once intersect:motion-preset-slide-up">
           <div className="text-center mb-10">
             <h2 className="text-3xl md:text-4xl font-bold font-mono">Testimoni</h2>
             <p className="opacity-75 mt-2 max-w-2xl mx-auto">Cerita dari pengguna yang telah merasakan manfaatnya.</p>
@@ -415,7 +418,7 @@ export default async function HomePage() {
 
       {/* 100% Free to Use */}
       <section className="py-16 px-6">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-6xl mx-auto intersect-once intersect:motion-preset-slide-up">
           <div className="text-center mb-10">
             <div className="badge badge-success badge-outline">Tidak ada biaya tambahan</div>
             <h2 className="text-3xl md:text-4xl font-bold mt-3 font-mono">100% Gratis Digunakan</h2>
@@ -451,7 +454,7 @@ export default async function HomePage() {
 
       {/* Call to Action */}
       <section className="py-16 px-6">
-        <div className="max-w-7xl w-full mx-auto">
+        <div className="max-w-7xl w-full mx-auto intersect-once intersect:motion-preset-slide-up">
           <div className="md:alert flex flex-col rounded-lg shadow-lg p-4 bg-accent/20 md:bg-accent/20 gap-2">
             <div className="flex-1">
               <h3 className="font-bold text-2xl">Siap memulai?</h3>

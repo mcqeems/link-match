@@ -4,6 +4,7 @@ import { fetchProfileInfo } from '@/lib/data';
 import { headers } from 'next/headers';
 import { auth } from '@/lib/auth';
 import type { Metadata } from 'next';
+import ObserverProvider from '@/components/ObserverProvider';
 
 export const metadata: Metadata = {
   title: 'Home | LinkMatch',
@@ -25,5 +26,9 @@ export default async function Home() {
     }
   }
 
-  return <HomePage />;
+  return (
+    <ObserverProvider>
+      <HomePage />
+    </ObserverProvider>
+  );
 }

@@ -1,5 +1,7 @@
 @import 'tailwindcss';
 @plugin "daisyui";
+@plugin "tailwindcss-motion";
+@plugin "tailwindcss-intersect";
 
 /* Global dark palette — DaisyUI token names included */
 :root {
