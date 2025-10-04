@@ -156,11 +156,25 @@ export function PromptInput({ onSearchComplete, isLoading, setIsLoading }: Promp
             </div>
           )}
 
+          {isLoading && (
+            <div className="card bg-info/20 border border-info/30 mt-2">
+              <div className="card-body text-center">
+                <div className="flex items-center justify-center gap-3 text-info">
+                  <span className="loading loading-spinner loading-md text-foreground" />
+                  <span className="font-medium">AI sedang mencari kandidat yang cocok...</span>
+                </div>
+                <p className="text-sm opacity-75 mt-2">
+                  Ini mungkin membutuhkan beberapa saat untuk kami mencari profil dan menghasilkan penjelasan.
+                </p>
+              </div>
+            </div>
+          )}
+
           <div className="card-actions justify-center mt-6">
             <button
               onClick={handleSearch}
               disabled={isLoading || !prompt.trim()}
-              className="btn btn-success btn-wide gap-2"
+              className="btn btn-success md:btn-wide w-full gap-2"
             >
               {isLoading ? (
                 <>
@@ -178,7 +192,7 @@ export function PromptInput({ onSearchComplete, isLoading, setIsLoading }: Promp
             <button
               onClick={handleRefreshData}
               disabled={isRefreshing || isLoading}
-              className="btn btn-outline btn-info gap-2"
+              className="btn btn-outline btn-info gap-2 md:btn-wide w-full"
             >
               {isRefreshing ? (
                 <>
@@ -193,19 +207,7 @@ export function PromptInput({ onSearchComplete, isLoading, setIsLoading }: Promp
               )}
             </button>
           </div>
-          {isLoading && (
-            <div className="card bg-info/20 border border-info/30 mt-2">
-              <div className="card-body text-center">
-                <div className="flex items-center justify-center gap-3 text-info">
-                  <span className="loading loading-spinner loading-md text-foreground" />
-                  <span className="font-medium">AI sedang mencari kandidat yang cocok...</span>
-                </div>
-                <p className="text-sm opacity-75 mt-2">
-                  Ini mungkin membutuhkan beberapa saat untuk kami mencari profil dan menghasilkan penjelasan.
-                </p>
-              </div>
-            </div>
-          )}
+
           <div className="flex items-center justify-center mt-4">
             <p className="text-white/75 text-center text-xs">
               Gunakan refresh data sebelum memakai magic matcher untuk hasil yang lebih akurat.
