@@ -314,9 +314,6 @@ export default async function HomePage() {
                   <div className="text-center space-y-3">
                     <p className="text-sm opacity-75">Siap mencoba Magic Matcher?</p>
                     <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                      <Link href="/magic-matcher" className="btn btn-accent">
-                        Coba Magic Matcher
-                      </Link>
                       <Link href="/sign-up" className="btn btn-accent btn-outline">
                         Daftar Gratis
                       </Link>
