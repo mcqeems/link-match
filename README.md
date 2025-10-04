@@ -1,5 +1,3 @@
-# LinkMatch 🤝
-
 <div align="center">
   <img src="public/LinkMatch_HD.png" alt="LinkMatch Logo" width="300"/>
   
