@@ -196,7 +196,7 @@ export function PromptInput({ onSearchComplete, isLoading, setIsLoading }: Promp
             >
               {isRefreshing ? (
                 <>
-                  <IconLoader2 className="w-4 h-4 animate-spin" />
+                  <span className=" loading loading-spinner loading-xs" />
                   Refresh...
                 </>
               ) : (
