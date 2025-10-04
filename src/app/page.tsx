@@ -6,7 +6,7 @@ import { auth } from '@/lib/auth';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Home',
+  title: 'Home | LinkMatch',
   description:
     'Selamat datang di LinkMatch — platform pencocokan cerdas untuk mempertemukan recruiter dan talenta profesional dengan AI.',
 };

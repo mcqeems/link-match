@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://linkmatch.qeem.site'),
   title: {
     default: 'LinkMatch',
-    template: 'LinkMatch | %s',
+    template: '%s | LinkMatch',
   },
   description:
     'LinkMatch adalah platform pencocokan cerdas yang mempertemukan perekrut dengan talenta profesional secara cepat dan relevan menggunakan AI.',

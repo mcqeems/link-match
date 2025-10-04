@@ -3,6 +3,12 @@ import { headers } from 'next/headers';
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { fetchProfileInfo } from '@/lib/data';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'View Profile',
+  description: 'Perbarui profil LinkMatch Anda: headline, kategori, dan informasi penting lainnya.',
+};
 
 export default async function PublicProfile({ params }: { params: Promise<{ uuid: string }> }) {
   const currentHeaders = await headers();
