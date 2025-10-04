@@ -198,6 +198,134 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* Demo Section */}
+      <section className="py-16 px-6">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-10">
+            <div className="badge badge-outline">Live Demo</div>
+            <h2 className="text-3xl md:text-4xl font-bold mt-3 font-mono">Magic Matcher dalam Aksi</h2>
+            <p className="opacity-75 mt-2 max-w-2xl mx-auto">
+              Lihat bagaimana Magic Matcher menggunakan AI untuk menemukan kandidat yang tepat hanya dengan deskripsi
+              bahasa alami. Cukup tuliskan kebutuhan Anda, dan biarkan AI bekerja.
+            </p>
+          </div>
+
+          <div className="flex flex-col items-center space-y-8">
+            {/* Video Demo - Centered and Bigger */}
+            <div className="w-full max-w-4xl">
+              <div className="relative bg-accent/20 border border-gray-700 rounded-lg overflow-hidden shadow-lg">
+                <div className="aspect-video bg-gradient-to-br from-accent/30 to-accent/10 flex items-center justify-center">
+                  {/* Placeholder for video - replace with actual video when available */}
+                  <div className="text-center">
+                    <IconSparkles size={64} className="mx-auto mb-4 text-accent" />
+                    <p className="text-xl font-semibold">Demo Video Magic Matcher</p>
+                    <p className="text-sm opacity-70 mt-2">Video akan tersedia segera</p>
+                  </div>
+
+                  {/* Uncomment this when you have the actual video */}
+                  {/* 
+                  <video 
+                    controls 
+                    className="w-full h-full object-cover"
+                    poster="/magic-matcher-preview.png"
+                  >
+                    <source src="/magic-matcher-demo.mp4" type="video/mp4" />
+                    <source src="/magic-matcher-demo.webm" type="video/webm" />
+                    Your browser does not support the video tag.
+                  </video>
+                  */}
+                </div>
+              </div>
+            </div>
+
+            {/* Demo Features - Below Video */}
+            <div className="w-full max-w-4xl">
+              <div className="grid md:grid-cols-2 gap-8">
+                {/* Left Column - Steps */}
+                <div className="space-y-6">
+                  <h3 className="text-xl font-semibold text-center md:text-left">Cara Kerja Magic Matcher</h3>
+                  <div className="space-y-4">
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 bg-accent rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-sm font-bold">1</span>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-lg">Input Bahasa Alami</h4>
+                        <p className="opacity-75 text-sm">
+                          "Saya butuh React developer senior dengan pengalaman TypeScript dan Next.js untuk startup
+                          fintech"
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 bg-accent rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-sm font-bold">2</span>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-lg">AI Processing</h4>
+                        <p className="opacity-75 text-sm">
+                          AI menganalisis kebutuhan dan mencocokkan dengan profil talenta menggunakan semantic search
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 bg-accent rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-sm font-bold">3</span>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-lg">Swipe & Match</h4>
+                        <p className="opacity-75 text-sm">
+                          Geser kandidat seperti Tinder dengan penjelasan AI mengapa mereka cocok untuk posisi Anda
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right Column - Features & CTA */}
+                <div className="space-y-6">
+                  <div className="bg-accent/20 border border-gray-700 rounded-lg p-6">
+                    <h5 className="font-semibold mb-4 text-center">Fitur Unggulan</h5>
+                    <div className="grid grid-cols-2 gap-3 text-sm">
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-accent rounded-full"></div>
+                        <span>Semantic Search</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-accent rounded-full"></div>
+                        <span>AI Explanations</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-accent rounded-full"></div>
+                        <span>Real-time Matching</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-accent rounded-full"></div>
+                        <span>Match History</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="text-center space-y-3">
+                    <p className="text-sm opacity-75">Siap mencoba Magic Matcher?</p>
+                    <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                      <Link href="/magic-matcher" className="btn btn-accent">
+                        Coba Magic Matcher
+                      </Link>
+                      <Link href="/sign-up" className="btn btn-accent btn-outline">
+                        Daftar Gratis
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Testimonials */}
       <section className="py-16 px-6">
         <div className="max-w-7xl mx-auto">
