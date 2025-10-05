@@ -1,7 +1,6 @@
 'use client';
 
 import { useFormStatus } from 'react-dom';
-import { IconLoader2 } from '@tabler/icons-react';
 import type { PropsWithChildren } from 'react';
 
 type Props = {
@@ -28,7 +27,8 @@ export default function SubmitButton({
     >
       {pending ? (
         <span className="inline-flex items-center gap-2">
-          <span className="loading loading-spinner loading-sm"></span> {pendingText}
+          <span className="loading loading-spinner loading-sm text-white/75"></span>{' '}
+          <p className="text-white/75">{pendingText}</p>
         </span>
       ) : (
         children

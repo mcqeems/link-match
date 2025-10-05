@@ -5,8 +5,6 @@ import {
   IconSparkles,
   IconHeart,
   IconX,
-  IconCalendar,
-  IconLoader2,
   IconSearch,
   IconChevronDown,
   IconChevronUp,

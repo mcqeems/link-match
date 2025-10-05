@@ -320,12 +320,19 @@ export async function createOrFindConversation(
       return { conversationId: 0, error: 'Cannot create conversation with yourself' };
     }
 
-    // Check if conversation already exists
+    // Check if conversation already exists between these two users
     const existingConversation = await prisma.conversations.findFirst({
       where: {
         conversation_participants: {
-          every: {
-            OR: [{ user_id: session.user.id }, { user_id: otherUserId }],
+          some: {
+            user_id: session.user.id,
+          },
+        },
+        AND: {
+          conversation_participants: {
+            some: {
+              user_id: otherUserId,
+            },
           },
         },
       },
@@ -338,6 +345,9 @@ export async function createOrFindConversation(
     if (existingConversation && existingConversation.conversation_participants.length === 2) {
       const participantIds = existingConversation.conversation_participants.map((p) => p.user_id);
       if (participantIds.includes(session.user.id) && participantIds.includes(otherUserId)) {
+        console.log(
+          `Found existing conversation ${existingConversation.id} between users ${session.user.id} and ${otherUserId}`
+        );
         return { conversationId: existingConversation.id, error: null };
       }
     }
@@ -377,6 +387,7 @@ export async function createOrFindConversation(
       });
 
       created = true;
+      console.log(`Created new conversation ${newConversation.id} between users ${session.user.id} and ${otherUserId}`);
       return newConversation;
     });
 
@@ -553,5 +564,32 @@ export async function requestConnectionAction(
   } catch (e) {
     const msg = e instanceof Error ? e.message : 'Gagal mengirim permintaan koneksi';
     return { success: false, error: msg };
+  }
+}
+
+/**
+ * Create or find conversation and redirect to messages
+ */
+export async function createConversationAndRedirect(otherUserId: string) {
+  try {
+    const result = await createOrFindConversation(otherUserId);
+
+    if (result.error) {
+      console.error('Error creating conversation:', result.error);
+      // If there's an error, just redirect to messages page
+      redirect('/messages');
+    } else {
+      // Redirect to messages page with the conversation ID as a query parameter
+      redirect(`/messages?id=${result.conversationId}`);
+    }
+  } catch (error) {
+    // Check if this is a Next.js redirect (which is normal behavior)
+    if (error instanceof Error && error.message === 'NEXT_REDIRECT') {
+      // This is a normal redirect, re-throw it
+      throw error;
+    }
+    console.error('Error in createConversationAndRedirect:', error);
+    // Fallback to just going to messages page
+    redirect('/messages');
   }
 }

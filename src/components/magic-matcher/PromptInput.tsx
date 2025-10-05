@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { IconSearch, IconSparkles, IconLoader2, IconRefresh } from '@tabler/icons-react';
+import { IconSearch, IconSparkles, IconRefresh } from '@tabler/icons-react';
 import { TalentMatch, MatchRequest } from './MagicMatcherPage';
 
 interface PromptInputProps {
@@ -178,7 +178,7 @@ export function PromptInput({ onSearchComplete, isLoading, setIsLoading }: Promp
             >
               {isLoading ? (
                 <>
-                  <IconLoader2 className="w-5 h-5 animate-spin" />
+                  <span className="loading loading-spinner loading-xs" />
                   {successMessage ? 'Menyiapkan hasil...' : 'Mencari kandidat...'}
                 </>
               ) : (

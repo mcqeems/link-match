@@ -12,12 +12,12 @@ import {
   IconEdit,
   IconUserCircle,
   IconMailUp,
-  IconMessage,
 } from '@tabler/icons-react';
 import { headers } from 'next/headers';
 import { auth } from '@/lib/auth';
 import ExpandableText from './ExpandableText';
 import ConnectButton from './ConnectButton';
+import MessageButton from './MessageButton';
 
 interface PropsTypes {
   mode: 'personal' | 'public';
@@ -112,10 +112,7 @@ export default async function ProfileCard({ mode, uuid }: PropsTypes) {
               {mode === 'public' && session && (
                 <div className="hidden md:flex md:flex-row md:gap-4">
                   <ConnectButton otherUserId={User.id} />
-                  <Link href="/messages" className="btn btn-accent btn-sm">
-                    <IconMessage size={16} />
-                    Kirim Pesan
-                  </Link>
+                  <MessageButton otherUserId={User.id} />
                 </div>
               )}
             </div>
@@ -131,10 +128,7 @@ export default async function ProfileCard({ mode, uuid }: PropsTypes) {
             {mode === 'public' && session && (
               <div className="flex flex-row mt-2 md:hidden gap-2">
                 <ConnectButton otherUserId={User.id} />
-                <Link href="/messages" className="btn btn-accent btn-sm">
-                  <IconMessage size={16} />
-                  Kirim Pesan
-                </Link>
+                <MessageButton otherUserId={User.id} />
               </div>
             )}
           </div>
