@@ -13,6 +13,7 @@ interface ConversationListProps {
   onDeleteConversation?: (conversationId: number) => void;
   onNewConversation?: () => void;
   isLoading?: boolean;
+  unreadCounts?: { [conversationId: number]: number };
 }
 
 export default function ConversationList({
@@ -20,6 +21,7 @@ export default function ConversationList({
   onDeleteConversation,
   onNewConversation,
   isLoading = false,
+  unreadCounts = {},
 }: ConversationListProps) {
   const searchParams = useSearchParams();
   const activeConversationId = searchParams.get('id');
@@ -110,6 +112,7 @@ export default function ConversationList({
                 const isActive = activeConversationId === conversation.id.toString();
                 const otherUser = conversation.otherParticipant;
                 const lastMessage = conversation.lastMessage;
+                const unreadCount = unreadCounts[conversation.id] || 0;
 
                 return (
                   <Link
@@ -118,7 +121,7 @@ export default function ConversationList({
                     className={`block p-4 hover:bg-base-100 transition-colors ${isActive ? 'bg-primary/10 border-r-2 border-b-0 border-accent' : ''}`}
                   >
                     <div className="flex items-center space-x-3">
-                      <div className="avatar">
+                      <div className="avatar relative">
                         <div className="w-12 h-12 rounded-full">
                           <Image
                             src={otherUser?.image_url || '/profile_image_default.png'}
@@ -128,11 +131,18 @@ export default function ConversationList({
                             className="object-cover"
                           />
                         </div>
+                        {unreadCount > 0 && (
+                          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1">
+                            {unreadCount > 99 ? '99+' : unreadCount}
+                          </span>
+                        )}
                       </div>
 
                       <div className="flex-1 min-w-0">
                         <div className="flex justify-between items-start mb-1">
-                          <h3 className="font-semibold text-sm truncate">{otherUser?.name || 'Unknown User'}</h3>
+                          <h3 className={`font-semibold text-sm truncate ${unreadCount > 0 ? 'text-white' : ''}`}>
+                            {otherUser?.name || 'Unknown User'}
+                          </h3>
                           {lastMessage && (
                             <span className="text-xs text-base-content/60 ml-2 flex-shrink-0">
                               {formatMessageTime(lastMessage.created_at)}

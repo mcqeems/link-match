@@ -5,8 +5,13 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import ConversationList from './ConversationList';
 import MessageThread from './MessageThread';
 import UserSearch from './UserSearch';
-import { fetchUserConversations, fetchConversationMessages, fetchConversationDetails } from '@/lib/data';
-import { deleteConversation } from '@/lib/actions';
+import {
+  fetchUserConversations,
+  fetchConversationMessages,
+  fetchConversationDetails,
+  getUnreadMessageCountsByConversation,
+} from '@/lib/data';
+import { deleteConversation, markMessagesAsRead } from '@/lib/actions';
 import type { Conversation, Message, User } from './types';
 import { IconMessage } from '@tabler/icons-react';
 
@@ -24,6 +29,7 @@ export default function MessagesPage({ initialConversations, currentUserId }: Me
   const [showMobileConversations, setShowMobileConversations] = useState(true);
   const [showUserSearch, setShowUserSearch] = useState(false);
   const [isPollingMessages, setIsPollingMessages] = useState(false);
+  const [unreadCounts, setUnreadCounts] = useState<{ [conversationId: number]: number }>({});
   const currentMessagesRef = useRef<Message[]>([]);
 
   const searchParams = useSearchParams();
@@ -63,6 +69,19 @@ export default function MessagesPage({ initialConversations, currentUserId }: Me
         setMessages(conversationMessages as Message[]);
         currentMessagesRef.current = conversationMessages as Message[];
         setOtherUser(otherParticipant?.User || null);
+
+        // Mark messages as read for this conversation
+        markMessagesAsRead(id)
+          .then(() => {
+            // Update local unread counts to reflect the change immediately
+            setUnreadCounts((prev) => ({
+              ...prev,
+              [id]: 0,
+            }));
+          })
+          .catch((error) => {
+            console.error('Error marking messages as read:', error);
+          });
       } catch (error) {
         console.error('Error loading conversation:', error);
         // Handle error - maybe show a toast or redirect
@@ -75,19 +94,26 @@ export default function MessagesPage({ initialConversations, currentUserId }: Me
     loadConversationData();
   }, [conversationId, currentUserId, router]);
 
-  // Refresh conversations periodically (simple polling for now)
+  // Refresh conversations and unread counts periodically
   useEffect(() => {
-    const refreshConversations = async () => {
+    const refreshData = async () => {
       try {
-        const updatedConversations = await fetchUserConversations();
+        const [updatedConversations, updatedUnreadCounts] = await Promise.all([
+          fetchUserConversations(),
+          getUnreadMessageCountsByConversation(),
+        ]);
         setConversations(updatedConversations as unknown as Conversation[]);
+        setUnreadCounts(updatedUnreadCounts);
       } catch (error) {
         console.error('Error refreshing conversations:', error);
       }
     };
 
+    // Initial load of unread counts
+    refreshData();
+
     // Refresh every 30 seconds
-    const interval = setInterval(refreshConversations, 30000);
+    const interval = setInterval(refreshData, 30000);
     return () => clearInterval(interval);
   }, []);
 
@@ -191,6 +217,7 @@ export default function MessagesPage({ initialConversations, currentUserId }: Me
             onDeleteConversation={handleDeleteConversation}
             onNewConversation={() => setShowUserSearch(true)}
             isLoading={false}
+            unreadCounts={unreadCounts}
           />
         </div>
 

@@ -502,3 +502,97 @@ export async function findExistingConversation(otherUserId: string) {
     return null;
   }
 }
+
+/**
+ * Get count of unread messages for the current user
+ */
+export async function getUnreadMessageCount() {
+  const currentHeaders = await headers();
+  const session = await auth.api.getSession({
+    headers: currentHeaders,
+  });
+
+  if (!session?.user?.id) {
+    return 0;
+  }
+
+  try {
+    // Get all messages in conversations where user is a participant
+    // and the message is not from the user themselves
+    // and the message has not been marked as read by the user
+    const unreadCount = await prisma.messages.count({
+      where: {
+        sender_id: {
+          not: session.user.id, // Not sent by current user
+        },
+        conversations: {
+          conversation_participants: {
+            some: {
+              user_id: session.user.id, // User is participant
+            },
+          },
+        },
+        message_reads: {
+          none: {
+            user_id: session.user.id, // No read record for current user
+          },
+        },
+      },
+    });
+
+    return unreadCount;
+  } catch (error) {
+    console.error('Error getting unread message count:', error);
+    return 0;
+  }
+}
+
+/**
+ * Get unread message count per conversation for the current user
+ */
+export async function getUnreadMessageCountsByConversation() {
+  const currentHeaders = await headers();
+  const session = await auth.api.getSession({
+    headers: currentHeaders,
+  });
+
+  if (!session?.user?.id) {
+    return {};
+  }
+
+  try {
+    const conversations = await prisma.conversations.findMany({
+      where: {
+        conversation_participants: {
+          some: {
+            user_id: session.user.id,
+          },
+        },
+      },
+      include: {
+        messages: {
+          where: {
+            sender_id: {
+              not: session.user.id,
+            },
+            message_reads: {
+              none: {
+                user_id: session.user.id,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    const unreadCounts: { [conversationId: number]: number } = {};
+    conversations.forEach((conversation) => {
+      unreadCounts[conversation.id] = conversation.messages.length;
+    });
+
+    return unreadCounts;
+  } catch (error) {
+    console.error('Error getting unread counts by conversation:', error);
+    return {};
+  }
+}

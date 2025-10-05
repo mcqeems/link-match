@@ -70,7 +70,7 @@ function MessageBubble({ message, isOwnMessage, showAvatar = true }: MessageBubb
           <div
             className={`
               px-4 py-2 rounded-2xl break-words
-              ${isOwnMessage ? 'bg-primary text-primary-content' : 'bg-base-200 text-base-content'}
+              ${isOwnMessage ? 'bg-primary text-primary-content' : 'bg-secondary text-base-content'}
             `}
           >
             <p className="text-sm whitespace-pre-wrap">{message.content}</p>

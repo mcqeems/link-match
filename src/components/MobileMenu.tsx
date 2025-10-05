@@ -5,7 +5,15 @@ import { fetchProfileInfo } from '@/lib/data';
 import Link from 'next/link';
 import Image from 'next/image';
 
-export default function MobileMenu({ session, onSignOut }: { session: any; onSignOut: () => void }) {
+export default function MobileMenu({
+  session,
+  onSignOut,
+  unreadCount = 0,
+}: {
+  session: any;
+  onSignOut: () => void;
+  unreadCount?: number;
+}) {
   const [open, setOpen] = useState(false);
   const [role, setRole] = useState('');
   const [name, setName] = useState('');
@@ -108,8 +116,13 @@ export default function MobileMenu({ session, onSignOut }: { session: any; onSig
                 </Link>
               </li>
               <li>
-                <Link href="/messages" onClick={() => setOpen(false)}>
-                  Messages
+                <Link href="/messages" onClick={() => setOpen(false)} className="flex items-center justify-between">
+                  <span>Messages</span>
+                  {unreadCount > 0 && (
+                    <span className="bg-red-500 text-white text-xs rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1">
+                      {unreadCount > 99 ? '99+' : unreadCount}
+                    </span>
+                  )}
                 </Link>
               </li>
               <li>

@@ -1,11 +1,11 @@
-import { fetchProfileInfo } from '@/lib/data';
+import { fetchProfileInfo, getUnreadMessageCount } from '@/lib/data';
 import { signOut } from '@/lib/actions';
 import { headers } from 'next/headers';
 import { auth } from '@/lib/auth';
 import Link from 'next/link';
 import Image from 'next/image';
 import MobileMenu from './MobileMenu';
-import { IconDotsVertical } from '@tabler/icons-react';
+import NavbarMenuButton from './NavbarMenuButton';
 
 export default async function Navbar() {
   const currentHeaders = await headers();
@@ -16,12 +16,16 @@ export default async function Navbar() {
   let profileImage = '/profile_image_default.png';
   let profileName = '';
   let profileRole = '';
+  let unreadCount = 0;
 
   if (session) {
     const profileInfo = await fetchProfileInfo();
     profileName = profileInfo?.User.name || '';
     profileRole = profileInfo?.User.roles?.name || '';
     profileImage = profileInfo?.User.image_url || '/profile_image_default.png';
+
+    // Get unread message count
+    unreadCount = await getUnreadMessageCount();
   }
 
   return (
@@ -63,34 +67,7 @@ export default async function Navbar() {
         )}
 
         {session ? (
-          <div className="dropdown dropdown-end">
-            <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
-              <IconDotsVertical size={24} />
-            </div>
-            <ul tabIndex={0} className="menu menu-sm dropdown-content bg-secondary rounded-box z-1 mt-3 w-40 p-2">
-              <li>
-                <Link href="/talents">Cari Talenta</Link>
-              </li>
-              <li>
-                <Link href="/magic-matcher">Magic Matcher</Link>
-              </li>
-              <li>
-                <Link href="/messages">Messages</Link>
-              </li>
-              <li>
-                <Link href="/profile">Profile</Link>
-              </li>
-              <li>
-                <Link href="/about">Tentang</Link>
-              </li>
-              <li>
-                <Link href="/contact">Hubungi Kami</Link>
-              </li>
-              <li>
-                <button onClick={signOut}>Logout</button>
-              </li>
-            </ul>
-          </div>
+          <NavbarMenuButton hasUnreadMessages={unreadCount > 0} unreadCount={unreadCount} onSignOut={signOut} />
         ) : (
           <div className="flex flex-row gap-2">
             <Link href="/sign-up">
@@ -104,7 +81,7 @@ export default async function Navbar() {
       </div>
 
       {/* Mobile Menu (Client) */}
-      <MobileMenu session={session} onSignOut={signOut} />
+      <MobileMenu session={session} onSignOut={signOut} unreadCount={unreadCount} />
     </nav>
   );
 }

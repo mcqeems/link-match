@@ -593,3 +593,98 @@ export async function createConversationAndRedirect(otherUserId: string) {
     redirect('/messages');
   }
 }
+
+/**
+ * Mark messages as read for a conversation
+ */
+export async function markMessagesAsRead(conversationId: number) {
+  try {
+    const session = await authenticateUser();
+
+    // Get all unread messages in this conversation that were not sent by current user
+    const unreadMessages = await prisma.messages.findMany({
+      where: {
+        conversation_id: conversationId,
+        sender_id: {
+          not: session.user.id,
+        },
+        message_reads: {
+          none: {
+            user_id: session.user.id,
+          },
+        },
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (unreadMessages.length > 0) {
+      // Create read records for all unread messages
+      await prisma.message_reads.createMany({
+        data: unreadMessages.map((message) => ({
+          message_id: message.id,
+          user_id: session.user.id,
+        })),
+        skipDuplicates: true,
+      });
+
+      console.log(`Marked ${unreadMessages.length} messages as read in conversation ${conversationId}`);
+    }
+
+    return { success: true };
+  } catch (error) {
+    console.error('Error marking messages as read:', error);
+    return { success: false };
+  }
+}
+
+/**
+ * Mark all messages as read for current user (across all conversations)
+ */
+export async function markAllMessagesAsRead() {
+  try {
+    const session = await authenticateUser();
+
+    // Get all unread messages for the user
+    const unreadMessages = await prisma.messages.findMany({
+      where: {
+        sender_id: {
+          not: session.user.id,
+        },
+        conversations: {
+          conversation_participants: {
+            some: {
+              user_id: session.user.id,
+            },
+          },
+        },
+        message_reads: {
+          none: {
+            user_id: session.user.id,
+          },
+        },
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (unreadMessages.length > 0) {
+      await prisma.message_reads.createMany({
+        data: unreadMessages.map((message) => ({
+          message_id: message.id,
+          user_id: session.user.id,
+        })),
+        skipDuplicates: true,
+      });
+
+      console.log(`Marked ${unreadMessages.length} messages as read for user ${session.user.id}`);
+    }
+
+    return { success: true };
+  } catch (error) {
+    console.error('Error marking all messages as read:', error);
+    return { success: false };
+  }
+}
