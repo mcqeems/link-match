@@ -29,10 +29,6 @@ export default async function TalentsPage({
     }
   }
 
-  if (!session) {
-    redirect('/');
-  }
-
   const page = Number(param?.page ?? 1) || 1;
   const category = param?.category ? Number(param.category) : undefined;
   const q = param?.q ?? undefined;

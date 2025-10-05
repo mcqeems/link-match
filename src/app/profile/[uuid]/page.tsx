@@ -16,10 +16,6 @@ export default async function PublicProfile({ params }: { params: Promise<{ uuid
     headers: currentHeaders,
   });
 
-  if (!session) {
-    redirect('/');
-  }
-
   if (session) {
     const profileInfo = await fetchProfileInfo();
     const role = profileInfo?.User.roles?.name;

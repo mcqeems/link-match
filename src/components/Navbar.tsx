@@ -51,6 +51,9 @@ export default async function Navbar() {
         ) : (
           <ul className="menu menu-horizontal px-1">
             <li>
+              <Link href="/talents">Talenta</Link>
+            </li>
+            <li>
               <Link href="/about">Tentang</Link>
             </li>
             <li>
