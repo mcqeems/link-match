@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { analyzePromptForTalentSearch, generateMatchAnalysis } from '@/lib/bedrock';
 import { searchSimilarProfiles } from '@/lib/semantic-search';
-import { PrismaClient } from '@/generated/prisma';
+import { prisma } from '@/lib/prisma';
 import { auth } from '@/lib/auth';
-
-const prisma = new PrismaClient();
 
 export async function POST(request: NextRequest) {
   try {

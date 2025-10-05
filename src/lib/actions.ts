@@ -4,14 +4,12 @@ import { auth } from './auth';
 import { redirect } from 'next/navigation';
 import { headers } from 'next/headers';
 import { BetterAuthError } from 'better-auth';
-import { PrismaClient } from '../generated/prisma';
+import { prisma } from './prisma';
 import { getCategories } from './data';
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import { sendConnectionRequestEmail } from './email';
 
 type FormState = { error: string | null; success: boolean };
-
-const prisma = new PrismaClient();
 
 const s3Client = new S3Client({
   region: process.env.AWS_REGION,

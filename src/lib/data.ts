@@ -1,10 +1,8 @@
 'use server';
 
-import { PrismaClient } from '../generated/prisma';
+import { prisma } from './prisma';
 import { auth } from './auth';
 import { headers } from 'next/headers';
-
-const prisma = new PrismaClient();
 
 // Use this if you want to see delay
 // function wait(ms: number) {

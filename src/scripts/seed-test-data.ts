@@ -1,6 +1,4 @@
-import { PrismaClient } from '../generated/prisma';
-
-const prisma = new PrismaClient();
+import { prisma } from '../lib/prisma';
 
 async function seedTestData() {
   console.log('Creating test data for Magic Matcher...');

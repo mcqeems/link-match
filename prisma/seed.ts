@@ -1,7 +1,4 @@
-import { PrismaClient } from '../src/generated/prisma';
-
-// Inisialisasi Prisma Client
-const prisma = new PrismaClient();
+import { prisma } from '../src/lib/prisma';
 
 // Data kategori tanpa id dan created_at
 const categoriesData = [

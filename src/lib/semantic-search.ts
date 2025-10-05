@@ -1,7 +1,5 @@
 import { generateEmbedding } from './bedrock';
-import { PrismaClient } from '../generated/prisma';
-
-const prisma = new PrismaClient();
+import { prisma } from './prisma';
 
 // Calculate information richness score based on profile completeness
 function calculateInformationRichness(profile: any): number {
