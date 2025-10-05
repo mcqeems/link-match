@@ -79,8 +79,8 @@ export default function UserSearch({ isOpen, onClose }: UserSearchProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <div className="bg-base-100 rounded-lg p-6 w-full max-w-md max-h-[80vh] overflow-hidden flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 motion-preset-fade-md">
+      <div className="bg-base-100 rounded-lg p-6 w-full max-w-md max-h-[80vh] overflow-hidden flex flex-col motion-preset-expand">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-lg font-semibold">Mulai Percakapan Baru</h3>
           <button onClick={handleClose} className="btn btn-ghost btn-sm btn-circle">
