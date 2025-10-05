@@ -159,7 +159,7 @@ export default function ProfileEditForm({
                   </div>
                 </div>
                 <div className="flex flex-col gap-2 w-full max-w-fit">
-                  <div className="badge badge-accent self-center mb-2">Foto Profil</div>
+                  <div className="badge badge-accent text-white self-center mb-2">Foto Profil</div>
                   <input
                     type="file"
                     name="image"

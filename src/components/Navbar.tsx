@@ -71,12 +71,9 @@ export default async function Navbar() {
               <li>
                 <Link href="/talents">Cari Talenta</Link>
               </li>
-              {profileRole === 'Recruiter' && (
-                <li>
-                  <Link href="/magic-matcher">Magic Matcher</Link>
-                </li>
-              )}
-
+              <li>
+                <Link href="/magic-matcher">Magic Matcher</Link>
+              </li>
               <li>
                 <Link href="/messages">Messages</Link>
               </li>
