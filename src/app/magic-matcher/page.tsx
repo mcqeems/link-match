@@ -18,7 +18,7 @@ export default async function MagicMatcher() {
   });
 
   if (!session) {
-    redirect('/');
+    redirect('/sign-in');
   }
 
   if (session) {

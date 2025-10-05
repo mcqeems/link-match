@@ -17,7 +17,7 @@ export default async function Profile() {
   });
 
   if (!session) {
-    redirect('/');
+    redirect('/sign-in');
   }
 
   if (session) {

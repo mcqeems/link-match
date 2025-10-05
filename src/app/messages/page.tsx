@@ -17,7 +17,7 @@ export default async function Messages() {
   });
 
   if (!session) {
-    redirect('/');
+    redirect('/sign-in');
   }
 
   const profileInfo = await fetchProfileInfo();
