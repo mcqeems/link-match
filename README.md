@@ -1,8 +1,8 @@
 <div align="center">
   <img src="public/LinkMatch_HD.png" alt="LinkMatch Logo" width="300"/>
   
-  <p><strong>Platform Jaringan Profesional Bertenaga AI</strong></p>
-  <p>Pencocokan talenta cerdas menggunakan AWS Bedrock dan teknologi pencarian semantik</p>
+  <p><strong>LinkMatch</strong></p>
+  <p>Smart Talent Matching Platform</p>
   
   [![Next.js](https://img.shields.io/badge/Next.js-15.5.3-black)](https://nextjs.org/)
   [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
