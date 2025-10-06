@@ -80,22 +80,19 @@ export default function MobileMenu({
               <span className="divider" />
             </Link>
           )}
-          {session && (
-            <>
-              <li>
-                <Link href="/talents" onClick={() => setOpen(false)}>
-                  Cari Talenta
-                </Link>
-              </li>
-              {role === 'Recruiter' && (
-                <li>
-                  <Link href="/magic-matcher" onClick={() => setOpen(false)}>
-                    Magic Matcher
-                  </Link>
-                </li>
-              )}
-            </>
+          {session && role === 'Recruiter' && (
+            <li>
+              <Link href="/magic-matcher" onClick={() => setOpen(false)}>
+                Magic Matcher
+              </Link>
+            </li>
           )}
+
+          <li>
+            <Link href="/talents" onClick={() => setOpen(false)}>
+              Cari Talenta
+            </Link>
+          </li>
 
           <li>
             <Link href="/about" onClick={() => setOpen(false)}>
