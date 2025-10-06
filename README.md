@@ -21,11 +21,11 @@ Platform ini menjembatani kesenjangan antara pencarian kerja tradisional dan pen
 
 ### 🤖 AI Magic Matcher
 
-- **Pencarian Bahasa Alami**: Deskripsikan kandidat ideal Anda dalam bahasa Indonesia
+- **Pencarian Bahasa Alami**: Deskripsikan kandidat ideal Anda.
 - **Pemahaman Semantik**: AI memahami konteks dan makna, bukan hanya kata kunci
 - **Interface Gaya Tinder**: Geser kandidat dengan animasi yang halus
 - **Penjelasan Kecocokan**: Penjelasan yang dihasilkan AI mengapa setiap kandidat cocok
-- **Skor Kesamaan**: Pencocokan berbasis persentase dengan algoritma canggih
+- **Skor Kesamaan**: Pencocokan berbasis persentase dengan algoritma semantic (embedding).
 - **Riwayat Kecocokan**: Pelacakan lengkap pencarian dan keputusan
 
 ### 👤 Manajemen Profil Komprehensif
@@ -60,11 +60,10 @@ Platform ini menjembatani kesenjangan antara pencarian kerja tradisional dan pen
 ### 📱 Pengalaman Pengguna Modern
 
 - **Desain Responsif**: Pengalaman sempurna di semua perangkat
-- **Mode Gelap/Terang**: Pergantian tema dengan next-themes
 - **UI Interaktif**: Animasi dan transisi yang halus
 - **Aksesibilitas**: Dibangun dengan praktik terbaik aksesibilitas
 
-## � Stack Teknologi
+## Tech Stack
 
 ### Frontend
 
@@ -83,13 +82,6 @@ Platform ini menjembatani kesenjangan antara pencarian kerja tradisional dan pen
 - **Prisma 6.16.2** - Klien database type-safe
 - **PostgreSQL** - Database utama
 - **Better Auth 1.3.13** - Sistem autentikasi
-
-### Alat Pengembangan
-
-- **TypeScript** - Type safety dan pengalaman developer
-- **ESLint** - Code linting dan formatting
-- **Prisma Studio** - Manajemen database
-- **TSX** - Eksekusi TypeScript untuk script
 
 ## 🚀 Memulai
 
@@ -294,16 +286,6 @@ Ambil informasi kecocokan detail.
 
 Dapatkan riwayat pencarian dan kecocokan pengguna.
 
-### Profile Endpoints
-
-#### `GET /api/profiles`
-
-Ambil profil pengguna dengan opsi filtering.
-
-#### `PUT /api/profiles/:id`
-
-Update informasi profil pengguna.
-
 ## 🌐 Deployment
 
 ### Deployment Vercel (Direkomendasikan)
@@ -429,27 +411,9 @@ Ketika melaporkan bug, mohon sertakan:
 - Screenshot (jika berlaku)
 - Detail environment
 
-## 📄 Lisensi
-
-Proyek ini dilisensikan di bawah Lisensi MIT - lihat file [LICENSE](LICENSE) untuk detail.
-
-## 🙏 Penghargaan
-
-- **AWS Bedrock** untuk menyediakan kemampuan AI yang kuat
-- **Tim Next.js** untuk framework React yang luar biasa
-- **Tim Prisma** untuk toolkit database yang sangat baik
-- **Vercel** untuk platform deployment yang mulus
-- **Komunitas Open Source** untuk tools dan library yang luar biasa
-
-## 📞 Dukungan
+## Dukungan
 
 - **GitHub Issues**: [Laporkan bug atau minta fitur](https://github.com/mcqeems/link-match/issues)
 - **Dokumentasi**: Periksa README ini dan komentar kode
-- **Komunitas**: Bergabunglah dengan diskusi kami di GitHub Discussions
 
 ---
-
-<div align="center">
-  <p>Dibuat dengan ❤️ untuk AWS Hackathon</p>
-  <p>© 2025 Tim LinkMatch. Semua hak dilindungi.</p>
-</div>
